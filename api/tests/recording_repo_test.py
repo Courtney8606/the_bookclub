@@ -1,69 +1,48 @@
-from lib.space_repository import *
-from lib.space import *
+from lib.recording_repo import *
+from lib.recording import *
 
-#When we call SpacesRepository#all
+#When we call RecordingRepository#all
 #We get a list of spaces objects reflecting the seed data.
 
-# Create new recording without id 
-# get all recordings
-#  get all recordings from parent_id
-#  get all recordings from reader_id
-#  delete recording from recording_id
-
-def test_get_all_records_from_spaces(db_connection): 
-    db_connection.seed("seeds/main_seed.sql") 
-    repository = SpaceRepository(db_connection)
+def test_get_all_records_from_recordings(db_connection): 
+    db_connection.seed("../seeds/bookclub.sql") 
+    repository = RecordingRepository(db_connection)
     result = repository.all()
     assert result == [
-        Space(1, 'Bob House', 'Brighton', '3 bedrooms, 2 bathrooms, Victorian-era property', 300, 'Bob', 1),
-        Space(2, 'Jim House', 'London', '3 bedrooms, 3 bathrooms, Modern property', 350, 'Jim', 2),
-        Space(3, 'Jane House', 'Newcastle', '4 bedrooms, 2 bathrooms, Georgian-era property', 450, 'Jane', 1),
-        Space(4, 'Megan House', 'Exmouth', '5 bedrooms, 5 bathrooms, Contemporary property', 600, 'Megan', 3),
-        Space(5, 'Phil House', 'Manchester', '2 bedrooms, 1 bathrooms, Barn-style property', 200, 'Phil', 4)
+{"ID": 1, "audio_file":"Test.mp3", "title": "The big surprise", "parent_id": 1,  "reader_id": 2},
+{"ID": 2,"audio_file":'Test2.mp3', "title":'Teddy bear picnic', "parent_id": 1, "reader_id":2},
+{"ID":3, "audio_file":"Test3.mp3", "title":'A dragon for tea', "parent_id":2, "reader_id":3},
+{"ID": 4, "audio_file": "Test4.mp3", "title": "Lions, tigers and bears, oh my!", "parent_id":2, "reader_id":3}
     ]
 
-def test_find_single_property_by_location(db_connection):
-    db_connection.seed("seeds/main_seed.sql")
-    repository = SpaceRepository(db_connection)
-    space = repository.find_by_location('Brighton')
-    assert space == Space(1, 'Bob House', 'Brighton', '3 bedrooms, 2 bathrooms, Victorian-era property', 300, 'Bob', 1)
+def test_find_recordings_by_column_parent_id(db_connection):
+    db_connection.seed("../seeds/bookclub.sql") 
+    repository = RecordingRepository(db_connection)
+    recording = repository.find_by_parent_id(2)
+    assert recording == [
+    {"ID":3, "audio_file":"Test3.mp3", "title":'A dragon for tea', "parent_id":2, "reader_id":3},
+    {"ID": 4, "audio_file": "Test4.mp3", "title": "Lions, tigers and bears, oh my!", "parent_id":2, "reader_id":3}
+        ]
 
-def test_find_single_property_by_name(db_connection):
-    db_connection.seed("seeds/main_seed.sql")
-    repository = SpaceRepository(db_connection)
-    space = repository.find_by_property_name('Bob House')
-    assert space == Space(1, 'Bob House', 'Brighton', '3 bedrooms, 2 bathrooms, Victorian-era property', 300, 'Bob', 1)
-
-# def test_find_single_property_by_column(db_connection):
-#     db_connection.seed("seeds/main_seed.sql")
-#     repository = SpaceRepository(db_connection)
-#     space = repository.find_by_column_name('location', 'Brighton')
-#     assert space == Space(1, 'Bob House', 'Brighton', '3 bedrooms, 2 bathrooms, Victorian-era property', 300, 'Bob')
-
-def test_create_space(db_connection):
-    db_connection.seed("seeds/main_seed.sql")
-    repository = SpaceRepository(db_connection)
-    repository.create(Space(6, 'Mati House', 'Scarborough', '1 bedroom, 1 bathroom, Modern Property', 200, 'Mati', 4))
-
-    result = repository.all()
-    assert result == [
-        Space(1, 'Bob House', 'Brighton', '3 bedrooms, 2 bathrooms, Victorian-era property', 300, 'Bob', 1),
-        Space(2, 'Jim House', 'London', '3 bedrooms, 3 bathrooms, Modern property', 350, 'Jim', 2),
-        Space(3, 'Jane House', 'Newcastle', '4 bedrooms, 2 bathrooms, Georgian-era property', 450, 'Jane', 1),
-        Space(4, 'Megan House', 'Exmouth', '5 bedrooms, 5 bathrooms, Contemporary property', 600, 'Megan', 3),
-        Space(5, 'Phil House', 'Manchester', '2 bedrooms, 1 bathrooms, Barn-style property', 200, 'Phil', 4),
-        Space(6, 'Mati House', 'Scarborough', '1 bedroom, 1 bathroom, Modern Property', 200, 'Mati', 4),
-    ]
-
-def test_delete_space(db_connection):
-    db_connection.seed("seeds/main_seed.sql")
-    repository = SpaceRepository(db_connection)
-    repository.delete('Bob House') # Deletes Bob's House
+def test_find_recordings_by_column_reader_id(db_connection):
+    db_connection.seed("../seeds/bookclub.sql") 
+    repository = RecordingRepository(db_connection)
+    recording = repository.find_by_reader_id(2)
+    assert recording == [
+    {"ID": 1, "audio_file":"Test.mp3", "title": "The big surprise", "parent_id": 1,  "reader_id": 2},
+    {"ID": 2,"audio_file":'Test2.mp3', "title":'Teddy bear picnic', "parent_id": 1, "reader_id":2}
+        ]
     
+def test_create_space(db_connection):
+    db_connection.seed("../seeds/bookclub.sql")
+    repository = RecordingRepository(db_connection)
+    repository.create(Recording(None, 'Test5.mp3', 'The Very Hungry Caterpillar', 1, 2))
+
     result = repository.all()
     assert result == [
-        Space(2, 'Jim House', 'London', '3 bedrooms, 3 bathrooms, Modern property', 350, 'Jim', 2),
-        Space(3, 'Jane House', 'Newcastle', '4 bedrooms, 2 bathrooms, Georgian-era property', 450, 'Jane', 1),
-        Space(4, 'Megan House', 'Exmouth', '5 bedrooms, 5 bathrooms, Contemporary property', 600, 'Megan', 3),
-        Space(5, 'Phil House', 'Manchester', '2 bedrooms, 1 bathrooms, Barn-style property', 200, 'Phil', 4)
+{"ID": 1, "audio_file":"Test.mp3", "title": "The big surprise", "parent_id": 1,  "reader_id": 2},
+{"ID": 2,"audio_file":'Test2.mp3', "title":'Teddy bear picnic', "parent_id": 1, "reader_id":2},
+{"ID":3, "audio_file":"Test3.mp3", "title":'A dragon for tea', "parent_id":2, "reader_id":3},
+{"ID": 4, "audio_file": "Test4.mp3", "title": "Lions, tigers and bears, oh my!", "parent_id":2, "reader_id":3},
+{"ID": 5, "audio_file":'Test5.mp3', "title": 'The Very Hungry Caterpillar', "parent_id": 1, "reader_id": 2}
     ]
