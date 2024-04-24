@@ -25,6 +25,7 @@ CREATE TABLE test (
     id SERIAL PRIMARY KEY,
     title VARCHAR( 100 ) NOT NULL
 );
+-- need to remove test table
 
 CREATE TYPE user_role AS ENUM ('child', 'parent');
 
@@ -36,7 +37,8 @@ CREATE TABLE users (
     password VARCHAR( 100 ) NOT NULL,
     child VARCHAR( 100 ),
     role user_role,
-    connections INTEGER[]
+    connections INTEGER[] 
+    -- connections input above - tbc as we build this out
 );
 
 CREATE TYPE status_type AS ENUM ('pending', 'approved', 'rejected');
@@ -53,6 +55,7 @@ CREATE SEQUENCE IF NOT EXISTS recordings_id_seq;
 CREATE TABLE recordings (
     id SERIAL PRIMARY KEY,
     audio_file VARCHAR( 100 ) NOT NULL,
+    -- audio file type tbc
     title VARCHAR( 100 ) NOT NULL,
     parent_id INTEGER REFERENCES users(id),
     reader_id INTEGER REFERENCES users(id)
