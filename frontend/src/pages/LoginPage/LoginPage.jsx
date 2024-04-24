@@ -30,12 +30,11 @@ export const LoginPage = () => {
     event.preventDefault();
     try {
       const response = await login(username, password);
-      console.log(username);
-      console.log(password);
       if (response.status != 200) {
         console.log("Error returning data");
       } else {
         const data = await response.json();
+        localStorage.setItem("username", data["username"]);
         navigate("/");
       }
     } catch (err) {
