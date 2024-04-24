@@ -32,7 +32,7 @@ def post_user():
     return jsonify(result)
 
 # get recordings by username
-app.route('/recordings/parent/<username>', methods=['GET'])
+@app.route('/recordings/parent/<username>', methods=['GET'])
 def get_recording_by_parent(username):
     connection = get_flask_database_connection(app)
     recording_repository = RecordingRepository(connection)

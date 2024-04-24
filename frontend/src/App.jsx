@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
+import { ReaderPage } from "./pages/ReaderPage";
+import { ParentPage } from "./pages/ParentPage";
 
 function App() {
   const [array, setArray] = useState([]);
@@ -39,6 +41,10 @@ function App() {
           </div>
         ))}
       </>
+      <Routes>
+        <Route path="/reader" element={<ReaderPage/>} />
+        <Route path="/parent" element={<ParentPage/>} />
+      </Routes>
     </BrowserRouter>
   );
 }
