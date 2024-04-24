@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const ReaderPage = () => {
-    const username = "montoya"
+    const username = localStorage.getItem("username");
     const [recordings, setRecordings] = useState([]);
     const navigate = useNavigate();
 
