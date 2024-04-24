@@ -1,18 +1,18 @@
 Set up instructions
 
-cd into frontend folder
-run npm install
-run npm install react-router-dom@latest
-run npm dev to start frontend server
-cd into api folder
-run pipenv install
-run pipenv shell
-run pipenv install Flask
-run pipenv install psycopg
-Create databases in your terminal: createdb bookclub & createdb test_bookclub
-Seed databases: psql bookclub < seeds/bookclub.sql; psql test_bookclub < seeds/bookclub.sql
-run python app.py to start the backend server
-navigate to http://localhost:5173/
+1) cd into frontend folder
+2) run npm install
+3) run npm install react-router-dom@latest
+4) run npm dev to start frontend server
+5) cd into api folder
+6) run pipenv install
+7) run pipenv shell
+8) run pipenv install Flask
+9) run pipenv install psycopg
+10) Create databases in your terminal: createdb bookclub & createdb test_bookclub
+11) Seed databases: psql bookclub < seeds/bookclub.sql; psql test_bookclub < seeds/bookclub.sql
+12) run python app.py to start the backend server
+13) navigate to http://localhost:5173/
 
 # React + Vite
 
