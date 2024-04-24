@@ -33,7 +33,7 @@ def get_user(id):
     result = user_repository.find_id(id)
     return jsonify(result)
 
-@app.route('/users/create', methods=['POST'])
+@app.route('/signup', methods=['POST'])
 def post_user():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
@@ -43,30 +43,6 @@ def post_user():
     user = User(None, username, email, password, None, None, None)
     user_repository.create(user)
     result = user_repository.find_all()[-1]
-    return jsonify(result)
-
-
-
-
-
-@app.route("/api/users", methods=['GET'])
-def users():
-    return jsonify(
-        {
-            "users": [
-                'Courtney',
-                'Mustafa'
-            ]
-        }
-    )
-
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    connection = get_flask_database_connection(app)
-    title = "Test title"
-    connection.execute('INSERT INTO test (title) VALUES (%s)', [title])
-    rows = connection.execute('SELECT * from test')
-    result = [{'id': row['id'], 'title': row['title']} for row in rows]
     return jsonify(result)
         
 if __name__ == '__main__':
