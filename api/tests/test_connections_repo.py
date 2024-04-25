@@ -11,8 +11,7 @@ def test_get_all_connections(db_connection):
     assert result == [
     {"id": 1, "parent_id": 1,"reader_id": 2, "status": "approved"},
     {"id": 2, "parent_id": 2, "reader_id": 3, "status":'approved'},
-    {"id": 3, "parent_id":1, "reader_id":3, "status": 'rejected'},
-    {"id": 4,"parent_id": 3, "reader_id":1, "status":'pending'}
+    {"id": 3, "parent_id":1, "reader_id":3, "status": 'rejected'}
     ]
 
 def test_find_connection_by_column_parent_id(db_connection):
@@ -42,8 +41,7 @@ def test_create_connection(db_connection):
     {"id": 1, "parent_id": 1,"reader_id": 2, "status":"approved"},
     {"id": 2, "parent_id": 2, "reader_id": 3, "status":'approved'},
     {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected'},
-    {"id": 4,"parent_id": 3, "reader_id":1, "status":'pending'},
-    {"id": 5,"parent_id": 1, "reader_id":2, "status":'pending'},
+    {"id": 4,"parent_id": 1, "reader_id":2, "status":'pending'}
     ]
 
 def test_update_status(db_connection):
@@ -54,6 +52,5 @@ def test_update_status(db_connection):
     assert result == [
     {"id": 1, "parent_id": 1,"reader_id": 2, "status":"approved"},
     {"id": 2, "parent_id": 2, "reader_id": 3, "status":'approved'},
-    {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected'},
-    {"id": 4,"parent_id": 3, "reader_id":1, "status":'approved'}
+    {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected'}
     ]
