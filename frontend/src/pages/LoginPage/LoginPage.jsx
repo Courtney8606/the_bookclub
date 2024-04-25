@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import "/src/Login.css";
+import "./LoginPage.css";
 import { login } from "../../services/authentication";
 
 export const LoginPage = () => {
@@ -53,48 +53,48 @@ export const LoginPage = () => {
 
   return (
     <>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <div>
-          <h2>Book Club</h2>
-          <h4>Enter details below to login</h4>
-        </div>
-        <div className="icon-login">
-          <i className="fas fa-user-circle"></i>
-        </div>
-        <label htmlFor="username">Username:</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="Enter your username"
-          value={username}
-          onChange={handleUsernameChange}
-          className="login-input"
-        />
-        <br></br>
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={handlePasswordChange}
-          className="login-input"
-        />
-        <br></br>
-        <input
-          className="login-button"
-          role="submit-button"
-          id="submit"
-          type="submit"
-          value="Submit"
-        />
-        {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
-        <div>
-          <hr />
-          <p>Don't have an account? Click below to sign up!</p>
-          <Link to="/signup">Sign up</Link>
-        </div>
-      </form>
+      <div className="login-container">
+        <form className="login-form" onSubmit={handleSubmit}>
+          <div>
+            <h2>Book Club</h2>
+            <h4>Enter details below to login</h4>
+          </div>
+          <label htmlFor="username">Username:</label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter your username"
+            value={username}
+            onChange={handleUsernameChange}
+            className="login-input"
+          />
+          <br></br>
+          <label htmlFor="password">Password:</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={handlePasswordChange}
+            className="login-input"
+          />
+          <br></br>
+          <input
+            className="login-button"
+            role="submit-button"
+            id="submit"
+            type="submit"
+            value="Submit"
+          />
+          {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
+          <div>
+            <hr />
+            <p>Don't have an account? Click below to sign up!</p>
+            <Link to="/signup">Sign up</Link>
+          </div>
+        </form>
+        <div className="background-container"></div>
+      </div>
     </>
   );
 };
