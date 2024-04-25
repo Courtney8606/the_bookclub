@@ -7,6 +7,8 @@ from lib.recording_repo import *
 from lib.recording import *
 from lib.user_repository import UserRepository
 from lib.user import User
+from lib.connection import Connection
+from lib.connection_repo import ConnectionRepository
 from functools import wraps
 
 app = Flask(__name__)
@@ -15,6 +17,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'bookclub' 
 Session(app)
 
+# USERS/LOGIN ROUTES
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -56,8 +59,8 @@ def post_user():
     result = user_repository.find_all()[-1]
     return jsonify(result)
 
-
-# get recordings by username
+# RECORDINGS ROUTES
+    # get recordings by username parent/reader
 @app.route('/recordings/parent/<username>', methods=['GET'])
 def get_recording_by_parent(username):
     connection = get_flask_database_connection(app)
@@ -99,28 +102,57 @@ def post_recording():
         # Return failure message
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
 
+# CONNECTIONS ROUTES
 
-@app.route("/api/users", methods=['GET'])
-def users():
-    return jsonify(
-        {
-            "users": [
-                'Courtney',
-                'Mustafa'
-            ]
-        }
-    )
+@app.route('/connection', methods=['POST'])
+def post_connection():
+    try:
+        connection = get_flask_database_connection(app)
+        repo = ConnectionRepository(connection)
+        parent_username = request.json['parent_username']
+        reader_username = request.json['reader_username'] 
+        # instantiate a repo and get user objects from their into usernames
+        users_repository = UserRepository(connection)
+        parent = users_repository.find_username(parent_username)
+        reader = users_repository.find_username(reader_username)      
+        connection = Connection(None, parent["id"], reader["id"], None)
+        repo.create(connection)
+        return jsonify({'message': 'Connection created successfully'}), 201  # 201 status code for Created
+    except Exception as e:
+        # Return failure message
+        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+    
+@app.route('/connection', methods=['PUT'])
+def update_connection():
+    try:
+        connection = get_flask_database_connection(app)
+        repo = ConnectionRepository(connection)
+        connection_id = request.json['connection_id']
+        new_status = request.json['status'] 
+        repo.update_status(new_status, connection_id)
+        return jsonify({'message': 'Connection updated successfully'}), 200  # 200 status code for OK 
+    except Exception as e:
+        # Return failure message
+        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
+@app.route('/connections/parent/<username>', methods=['GET'])
+def get_connection_by_parent(username):
     connection = get_flask_database_connection(app)
-    title = "Test title"
-    connection.execute('INSERT INTO test (title) VALUES (%s)', [title])
-    rows = connection.execute('SELECT * from test')
-    result = [{'id': row['id'], 'title': row['title']} for row in rows]
+    connection_repository = ConnectionRepository(connection)
+    users_repository = UserRepository(connection)
+    user = users_repository.find_username(username)
+    result = connection_repository.find_by_parent_id(user["id"])
     return jsonify(result)
 
-        
+@app.route('/connections/reader/<username>', methods=['GET'])
+def get_connection_by_reader(username):
+    connection = get_flask_database_connection(app)
+    connection_repository = ConnectionRepository(connection)
+    users_repository = UserRepository(connection)
+    user = users_repository.find_username(username)
+    result = connection_repository.find_by_reader_id(user["id"])
+    return jsonify(result)
+
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
 
