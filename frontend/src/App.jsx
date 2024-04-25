@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import axios from "axios";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { SignupPage } from "./pages/SignupPage/SignupPage";
+import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 
 function App() {
   return (
     <BrowserRouter>
+      <NavigationBar />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<HomePage />} />
