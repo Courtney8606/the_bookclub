@@ -1,14 +1,15 @@
 import { useState } from 'react';
 // import { useNavigate } from "react-router-dom";
 import { createRecording } from "../../services/recordings"
+import PropTypes from 'prop-types';
 
-const CreateRecording = (props) => {
+const CreateRecording = ({username}) => {
     const [recordingUrl, setRecordingUrl] = useState("")
     const [recordingTitle, setRecordingTitle] = useState("")
     const [parentUsername, setParentUsername] = useState("")
     // const navigate = useNavigate();
     const [error, setError] = useState([])
-    const readerUsername = props.username
+    const readerUsername = username
 
     const handleRecordingUrlChange = (event) => {
         setRecordingUrl(event.target.value)
@@ -54,5 +55,9 @@ const CreateRecording = (props) => {
         </div>
     )
 }
+CreateRecording.propTypes = {
+    username: PropTypes.string.isRequired
+};
+
 
 export default CreateRecording;
