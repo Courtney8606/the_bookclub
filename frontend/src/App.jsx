@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
+import React from 'react'
+import {Cloudinary} from "@cloudinary/url-gen";
 
 import { ReaderPage } from "./pages/ReaderPage";
 import { ParentPage } from "./pages/ParentPage";
@@ -11,6 +13,14 @@ import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 
 
 function App() {
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: 'dhubt6wjd'
+    }
+  });
+
+
   return (
     <BrowserRouter>
       <NavigationBar />
@@ -24,5 +34,7 @@ function App() {
     </BrowserRouter>
   );
 }
+
+
 
 export default App;

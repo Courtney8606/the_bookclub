@@ -20,9 +20,17 @@ const ViewRecordings = (props) => {
           <tbody>
             {props.data.map((item, index) => (
               <tr key={index}>
-                {columns.map((column, columnIndex) => (
+                <td>{item.title}</td>
+                <td>{item.reader_id}</td>
+                {/* {columns.map((column, columnIndex) => (
                   <td key={columnIndex}>{item[column]}</td>
-                ))}
+                ))} */}
+                <td>
+                  <audio controls>
+                    <source src={item.audio_file} type="audio/mpeg" />
+                    Your browser does not support the audio element
+                  </audio>
+                </td>
               </tr>
             ))}
           </tbody>
