@@ -25,9 +25,9 @@ const getRecordingsByReader = async (username) => {
         return data;
         };
 
-const createRecording = async (recording_url, recording_title, parent_username, reader_username) => {
+const createRecording = async (recordedData, recording_title, parent_username, reader_username) => {
         const payload = {
-            audio_file: recording_url,
+            audio_file: recordedData,
             title: recording_title,
             parent_username: parent_username,
             reader_username: reader_username
