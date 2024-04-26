@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createRecording } from "../../services/recordings"
 import PropTypes from 'prop-types';
 
-const CreateRecording = ({username}) => {
+const CreateRecording = ({username, connections, onSubmit}) => {
     const [recordingUrl, setRecordingUrl] = useState("")
     const [recordingTitle, setRecordingTitle] = useState("")
     const [parentUsername, setParentUsername] = useState("")
@@ -28,6 +28,7 @@ const CreateRecording = ({username}) => {
             setRecordingUrl(""); 
             setRecordingTitle("")
             setParentUsername("")
+            onSubmit(username)
             // props.onCreateComment();
         } 
         catch (err) {
@@ -45,8 +46,14 @@ const CreateRecording = ({username}) => {
             <input data-testid="recording-url" type='text' value={recordingUrl} onChange={handleRecordingUrlChange}></input><br></br>
         <label htmlFor="recording-title">Recording Title:</label>
             <input data-testid="recording-title" type='text' value={recordingTitle} onChange={handleRecordingTitleChange}></input><br></br>
-        <label htmlFor="recording-parent-username">Parent Username:</label>    
-            <input data-testid="recording-parent-username" type='text' value={parentUsername} onChange={handleParentUsernameChange}></input><br></br>
+            <label htmlFor="reader-dropdown">Select a reader:</label>
+                <select data-testid="reader-dropdown" value={parentUsername} onChange={handleParentUsernameChange}>
+                    <option value="">Select a Recipient:</option>
+                    {connections.filter((connection) => connection.status === 'approved')
+                    .map((connection) => (
+                        <option key={connection.id} value={connection.parent_username}>{connection.parent_username}</option>
+                    ))}
+                </select><br />
             <input className="submit-button" role="submit-button" id="submit" type="submit" value="Submit" />
         </form>
         <div>
@@ -56,7 +63,9 @@ const CreateRecording = ({username}) => {
     )
 }
 CreateRecording.propTypes = {
-    username: PropTypes.string.isRequired
+    username: PropTypes.string.isRequired,
+    connections: PropTypes.array.isRequired,
+    onSubmit: PropTypes.func.isRequired 
 };
 
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // import { useNavigate } from "react-router-dom";
 
-const ViewRecordings = ({data}) => {
+const ViewTableAuto = ({data}) => {
     if (!data || data.length === 0) {
         return <p>No data available</p>;
     }
@@ -32,8 +32,8 @@ const ViewRecordings = ({data}) => {
       );
     };
 
-    ViewRecordings.propTypes = {
+    ViewTableAuto.propTypes = {
       data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
   };
   
-export default ViewRecordings;
+export default ViewTableAuto;
