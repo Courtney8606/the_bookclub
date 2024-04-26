@@ -68,6 +68,7 @@ INSERT INTO users (username, email, password, role) VALUES ('remy', 'remy@gmail.
 INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 2, 'approved');
 INSERT INTO connections (parent_id, reader_id, status) VALUES (2, 3, 'approved');
 INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 3, 'rejected');
+INSERT INTO connections (parent_id, reader_id, status) VALUES (3, 1, 'pending');
 
 INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test.mp3', 'The big surprise', 1, 2);
 INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2);
