@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, session, redirect
 from flask_session import Session
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import os
 from lib.database_connection import get_flask_database_connection
 from lib.recording_repo import *
@@ -15,6 +15,17 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'bookclub' 
 Session(app)
 
+# Route Mapping
+route_actions_mapping = {
+    '/login': 'login',
+    '/signup': 'signup',
+    '/users/<id>': 'view_a_user',
+    '/recordings': 'create_recording',
+    '/recordings/parent/<username>': 'view_own_recordings_parent',
+    '/recordings/reader/<username>': 'view_own_recordings_reader',
+    '/recordings/child': 'view_recordings_child'
+}
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -23,7 +34,37 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/login', methods=['POST'])
+def get_user_id():
+    username = session.get('user')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find_username(username)
+    return user.id
+
+def get_user():
+    username = session.get('user')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find_username(username)
+    return user
+
+def get_user_role():
+    username = session.get('user')
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    user = user_repository.find_username(username)
+    return user.role
+
+def check_permission(role, action):
+    connection = get_flask_database_connection(app)
+    row = connection.execute('SELECT * from permissions WHERE role = %s AND action = %s', [role, action])
+    if len(row) > 0:
+        return True, print("This is the permission row:", row)
+    else:
+        return False
+
+@app.route('/login', methods=['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def login():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
@@ -31,13 +72,14 @@ def login():
     password = request.json.get('password')
     result = user_repository.find_username(username)
     if result and password == result['password']:
-        session['username'] = result['username']
+        session['user'] = result['username']
+        print(session)
         return jsonify(result), 200
     else: 
         return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/users/<id>', methods=['GET'])
-@login_required
+@cross_origin(supports_credentials=True)
 def get_user(id):
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
@@ -45,6 +87,7 @@ def get_user(id):
     return jsonify(result)
 
 @app.route('/signup', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def post_user():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
@@ -56,29 +99,86 @@ def post_user():
     result = user_repository.find_all()[-1]
     return jsonify(result)
 
+@app.route('/child-safety-mode', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def toggle_child_safety_mode():
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    role = 'child'
+    print("Session:", session)
+    username = session.get('user')
+    print("Username:", username)
+    user_repository.update_role(role, username)
+    result = user_repository.find_username(username)
+    return jsonify(result)
 
+@app.route('/logout', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def logout():
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    username = session.get('user')
+    role = 'parent'
+    result = user_repository.update_role(role, username)
+    print(result)
+    session.pop('user', None)
+    print(session)
+    return jsonify(result)
+    
 # get recordings by username
 @app.route('/recordings/parent/<username>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_recording_by_parent(username):
     connection = get_flask_database_connection(app)
-    recording_repository = RecordingRepository(connection)
     users_repository = UserRepository(connection)
+    action = route_actions_mapping.get('/recordings/parent/<username>')
+    username = session.get('user')
     user = users_repository.find_username(username)
-    result = recording_repository.find_by_parent_id(user["id"])
-    return jsonify(result)
+    if check_permission(user['role'], action):
+        recording_repository = RecordingRepository(connection)
+        user = users_repository.find_username(username)
+        result = recording_repository.find_by_parent_id(user["id"])
+        return jsonify(result)
+    else:
+        return jsonify({'message': 'Unauthorised'})
+
+@app.route('/recordings/child', methods=['GET'])
+@cross_origin(supports_credentials=True)
+def get_recording_by_child():
+    connection = get_flask_database_connection(app)
+    users_repository = UserRepository(connection)
+    action = route_actions_mapping.get('/recordings/child')
+    username = session.get('user')
+    user = users_repository.find_username(username)
+    print(action)
+    print(user['role'])
+    if check_permission(user['role'], action):
+        recording_repository = RecordingRepository(connection)
+        user = users_repository.find_username(username)
+        result = recording_repository.find_by_parent_id(user["id"])
+        return jsonify(result)
+    else:
+        return jsonify({'message': 'Unauthorised'})
 
 @app.route('/recordings/reader/<username>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_recording_by_reader(username):
     connection = get_flask_database_connection(app)
-    recording_repository = RecordingRepository(connection)
     users_repository = UserRepository(connection)
+    action = route_actions_mapping.get('/recordings/reader/<username>')
+    username = session.get('user')
     user = users_repository.find_username(username)
-    result = recording_repository.find_by_reader_id(user["id"])
-    print (user)
-    return jsonify(result)
+    if check_permission(user['role'], action):
+        recording_repository = RecordingRepository(connection)
+        user = users_repository.find_username(username)
+        result = recording_repository.find_by_reader_id(user["id"])
+        return jsonify(result)
+    else:
+        return jsonify({'message': 'Unauthorised'})
 
 # create new recording
 @app.route('/recordings', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def post_recording():
     try:
         connection = get_flask_database_connection(app)
@@ -98,28 +198,6 @@ def post_recording():
     except Exception as e:
         # Return failure message
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
-
-
-@app.route("/api/users", methods=['GET'])
-def users():
-    return jsonify(
-        {
-            "users": [
-                'Courtney',
-                'Mustafa'
-            ]
-        }
-    )
-
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    connection = get_flask_database_connection(app)
-    title = "Test title"
-    connection.execute('INSERT INTO test (title) VALUES (%s)', [title])
-    rows = connection.execute('SELECT * from test')
-    result = [{'id': row['id'], 'title': row['title']} for row in rows]
-    return jsonify(result)
-
         
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))

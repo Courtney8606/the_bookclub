@@ -2,6 +2,10 @@ import React from "react";
 // import { useNavigate } from "react-router-dom";
 
 const ViewRecordings = (props) => {
+  if (props.data.message === "Unauthorised") {
+    return <p>Unauthorised access</p>;
+  }
+
   if (!props.data || props.data.length === 0) {
     return <p>No data available</p>;
   }
