@@ -8,7 +8,9 @@ import LogoutButton from "../../components/LogoutButton/LogoutButton";
 export const NavigationBar = () => {
   const username = localStorage.getItem("username");
   const location = useLocation();
-  const showNavbar = !["/signup", "/login"].includes(location.pathname);
+  const showNavbar = !["/signup", "/login", "/child"].includes(
+    location.pathname
+  );
 
   if (!showNavbar) {
     return null; // Return null to not render the navbar

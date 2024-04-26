@@ -35,6 +35,7 @@ export const LoginPage = () => {
       } else {
         const data = await response.json();
         localStorage.setItem("username", data["username"]);
+        localStorage.setItem("role", data["role"]);
         navigate("/");
       }
     } catch (err) {
