@@ -15,13 +15,11 @@ class UserRepository:
     def find_id(self, id):
         row = self._connection.execute("SELECT * FROM users WHERE id = %s", [id])[0]
         return row
-    
-    def find_username(self, username):
-        row = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])[0]
-        return row
-    # User( row['id'], row['username'], row['email'], row['password'], row['child'], row['role'], row['connections'] )
+
     def find_username(self, username):
         rows = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])
+        if not rows:
+            return None  # Return None or raise an exception to indicate that the user wasn't found
         row = rows[0]
         return row
     
