@@ -116,4 +116,23 @@ const data = await response.json();
 return data;
 }
 
-export {createRecording, getRecordingsByParent, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus};
+const getRecordingsByChild = async () => {
+  const requestOptions = {
+    method: "GET",
+    credentials: "include",
+  };
+  const response = await fetch(
+    `${BACKEND_URL}/recordings/child`,
+    requestOptions
+  );
+  if (response.status === 401) {
+    throw new Error("Unauthorised access");
+  }
+  if (!response.ok) {
+    throw new Error("Unable to fetch recordings");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export {createRecording, getRecordingsByParent, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus};
