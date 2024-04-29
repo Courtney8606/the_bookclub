@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";import React from 'react'
+import {Cloudinary} from "@cloudinary/url-gen";
+
 import { ReaderPage } from "./pages/ReaderPage/ReaderPage";
 import { ParentPage } from "./pages/ParentPage/ParentPage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
@@ -11,6 +13,14 @@ import { ChildPage } from "./pages/ChildPage/ChildPage";
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 
 function App() {
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: 'dhubt6wjd'
+    }
+  });
+
+
   return (
     <BrowserRouter>
       <HelmetProvider>
@@ -27,5 +37,7 @@ function App() {
     </BrowserRouter>
   );
 }
+
+
 
 export default App;

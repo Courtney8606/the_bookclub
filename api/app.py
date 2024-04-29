@@ -12,12 +12,21 @@ from lib.recording_request_repo import *
 from lib.connection import Connection
 from lib.connection_repo import ConnectionRepository
 from functools import wraps
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'bookclub' 
 Session(app)
+
+cloudinary.config(
+    cloud_name="dhubt6wjd",
+    api_key="114917146566637",
+    api_secret="YuuAzI1OUUaH3nJpbiSkqlGvU2Q"
+)
 
 # Route Mapping
 route_actions_mapping = {
@@ -181,6 +190,20 @@ def get_recording_by_reader(username):
     else:
         return jsonify({'message': 'Unauthorised'})
 
+@app.route('/cloudinary-upload', methods=['POST'])
+def post_recording_cloudinary():
+    try:
+        audio_file = request.files['audio_file']
+        # Upload audio file to Cloudinary
+        uploaded_file = cloudinary.uploader.upload(audio_file, resource_type="video")
+        audio_url = uploaded_file['secure_url']
+        
+        # Your recording creation logic here...
+        
+        return jsonify({'message': 'Recording created successfully', 'audio_url': audio_url}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
 # create new recording
 @app.route('/recordings', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -189,13 +212,17 @@ def post_recording():
         connection = get_flask_database_connection(app)
         recording_repository = RecordingRepository(connection)
         audio_file = request.json['audio_file']
+        print("audio_file", audio_file)
         title = request.json['title']
+        print("title:", title)
         parent_username = request.json['parent_username']
         reader_username = request.json['reader_username']
+        print("here")
         # instantiate a repo and get user objects from their into usernames
         users_repository = UserRepository(connection)
         parent = users_repository.find_username(parent_username)
         reader = users_repository.find_username(reader_username)
+        print("now here")
         # create the recording and add to db
         recording = Recording(None, audio_file, title, parent["id"], reader["id"])
         recording_repository.create(recording)
