@@ -1,26 +1,39 @@
 import ParentViewButton from "../../components/ParentViewButton/ParentViewButton";
 import ReaderViewButton from "../../components/ReaderViewButton/ReaderViewButton";
-import { useEffect } from "react";
+import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
   const username = localStorage.getItem("username");
+  const storedRole = localStorage.getItem("role");
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      navigate("/");
+    if (storedRole === "parent") {
+      if (username) {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
     } else {
-      navigate("/login");
+      setErrorMessage("Unauthorised");
     }
-  }, []);
+  }, [username, storedRole, navigate]);
 
   return (
     <>
-      <p>Welcome {username}</p>
-      <ParentViewButton />
-      <ReaderViewButton />
+      {errorMessage ? (
+        <p>{errorMessage}</p>
+      ) : (
+        <>
+          <p>Welcome {username}</p>
+          <ParentViewButton />
+          <ReaderViewButton />
+          <ChildViewButton />
+        </>
+      )}
     </>
   );
 };

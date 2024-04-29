@@ -15,6 +15,10 @@ class UserRepository:
     def find_id(self, id):
         row = self._connection.execute("SELECT * FROM users WHERE id = %s", [id])[0]
         return row
+    
+    def find_username(self, username):
+        row = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])[0]
+        return row
 
     def find_username(self, username):
         rows = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])
@@ -32,4 +36,7 @@ class UserRepository:
                 user.password,
             ])
 
-
+    def update_role(self, role, username):
+        self._connection.execute('UPDATE users SET role = %s WHERE username = %s', [role, username])
+        row = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])
+        return row

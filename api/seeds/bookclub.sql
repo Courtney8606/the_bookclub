@@ -20,6 +20,9 @@ DROP SEQUENCE IF EXISTS recordings_id_seq;
 DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS users_id_seq;
 
+DROP TABLE IF EXISTS permissions;
+DROP SEQUENCE IF EXISTS permissions_id_seq;
+
 DROP TYPE IF EXISTS user_role;
 DROP TYPE IF EXISTS status_type;
 
@@ -79,8 +82,17 @@ CREATE TABLE recording_requests (
 );
 
 
+CREATE SEQUENCE IF NOT EXISTS permissions_id_seq;
+CREATE TABLE permissions (
+    id SERIAL PRIMARY KEY,
+    role VARCHAR( 100 ) NOT NULL,
+    action VARCHAR( 100 ) NOT NULL
+);
+
+
+
 INSERT INTO users (username, email, password, role) VALUES ('mrs_dursley', 'dursley@gmail.com', 'hatemynephew123', 'parent');
-INSERT INTO users (username, email, password, role) VALUES ('montoya', 'montoya@gmail.com', 'preapre2die', 'parent');
+INSERT INTO users (username, email, password, role) VALUES ('montoya', 'montoya@gmail.com', 'prepare2die', 'parent');
 INSERT INTO users (username, email, password, role) VALUES ('remy', 'remy@gmail.com', 'kissthecook', 'parent');
 
 INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 2, 'approved');
@@ -95,3 +107,14 @@ INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test4.
 INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please write me a story about dragons', 1, 2, 'pending', NULL, '2024-07-20' );
 INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please read me the very hungry caterpillar', 1, 3, 'accepted', 1, '2023-10-22');
 INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('I want a story about a princess', 2, 3, 'completed', NULL, '2024-01-25');
+
+
+INSERT INTO permissions (role, action) VALUES 
+('parent', 'login'),
+('parent', 'signup'),
+('parent', 'view_a_user'),
+('parent', 'create_recording'),
+('parent', 'view_own_recordings_parent'),
+('parent', 'view_own_recordings_reader'),
+('child', 'view_recordings_child');
+
