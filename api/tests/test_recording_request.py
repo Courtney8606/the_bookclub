@@ -20,5 +20,6 @@ def test_equality():
 
 def test_formatting():
     request = RecordingRequest(1, "test request", 1, 2, "pending", None,)
-    date_test = datetime.now().date()
-    assert str(request) == f"RecordingRequest(1, test request, 1, 2, pending, None, {date_test})"
+    today = datetime.now().date()
+    formatted_date = today.strftime("%Y-%m-%d")
+    assert str(request) == f"RecordingRequest(1, test request, 1, 2, pending, None, {formatted_date})"

@@ -5,7 +5,7 @@ import os
 from lib.database_connection import get_flask_database_connection
 from lib.recording_repo import *
 from lib.recording import *
-from lib.user_repository import UserRepository
+from lib.user_repository import *
 from lib.user import User
 from lib.recording_request import *
 from lib.recording_request_repo import *

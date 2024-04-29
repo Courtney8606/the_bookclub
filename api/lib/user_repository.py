@@ -22,6 +22,8 @@ class UserRepository:
 
     def find_username(self, username):
         rows = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])
+        if not rows:
+            return None  # Return None or raise an exception to indicate that the user wasn't found
         row = rows[0]
         return row
     

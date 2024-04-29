@@ -18,18 +18,20 @@ def test_find_connection_by_column_parent_id(db_connection):
     db_connection.seed("seeds/bookclub.sql") 
     repository = ConnectionRepository(db_connection)
     connections = repository.find_by_parent_id(1)
-    assert connections == [
-        {"id": 1, "parent_id": 1,"reader_id": 2, "status":"approved"},
-        {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected'}
+    result_sorted = sorted(connections, key=lambda x: x['id'])
+    assert result_sorted == [
+        {"id": 1, "parent_id": 1,"reader_id": 2, "status":"approved",'parent_username': 'mrs_dursley','reader_username': 'montoya'},
+        {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected','parent_username': 'mrs_dursley','reader_username': 'remy'}
     ]
 
 def test_find_recordings_by_column_reader_id(db_connection):
     db_connection.seed("seeds/bookclub.sql") 
     repository = ConnectionRepository(db_connection)
     connections = repository.find_by_reader_id(3)
-    assert connections == [
-    {"id": 2, "parent_id": 2, "reader_id": 3, "status":'approved'},
-    {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected'}
+    result_sorted = sorted(connections, key=lambda x: x['id'])
+    assert result_sorted == [
+    {"id": 2, "parent_id": 2, "reader_id": 3, "status":'approved','parent_username': 'montoya','reader_username': 'remy'},
+    {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected','parent_username': 'mrs_dursley','reader_username': 'remy'}
     ]
     
 def test_create_connection(db_connection):

@@ -11,12 +11,38 @@ class ConnectionRepository:
         return connections
 
     def find_by_parent_id(self, id):
-        row = self._connection.execute("SELECT * FROM connections WHERE parent_id = %s", [id])
-        return row
+        query = """
+        SELECT connections.*, p.username AS parent_username, u.username AS reader_username
+        FROM connections 
+        LEFT JOIN 
+            users p ON connections.parent_id = p.id
+        LEFT JOIN 
+            users u ON connections.reader_id = u.id
+        WHERE connections.parent_id = %s
+        """
+        rows = self._connection.execute(query, [id])
+        result = [{'id': row['id'], 'parent_id': row['parent_id'], 
+                'reader_id': row['reader_id'], 'status': row['status'],
+                'reader_username': row['reader_username'], 'parent_username': row['parent_username']} for row in rows]
+        return result
 
     def find_by_reader_id(self, id):
-        row = self._connection.execute("SELECT * FROM connections WHERE reader_id = %s", [id])
-        return row
+        query = """
+        SELECT connections.*, p.username AS parent_username, u.username AS reader_username
+        FROM connections 
+        LEFT JOIN 
+            users p ON connections.parent_id = p.id
+        LEFT JOIN 
+            users u ON connections.reader_id = u.id
+        WHERE connections.reader_id = %s
+        """
+        rows = self._connection.execute(query, [id])
+        result = [{'id': row['id'], 'parent_id': row['parent_id'], 
+                'reader_id': row['reader_id'], 'status': row['status'],
+                'reader_username': row['reader_username'], 'parent_username': row['parent_username']} for row in rows]
+        return result
+        # row = self._connection.execute("SELECT * FROM connections WHERE reader_id = %s", [id])
+        # return row
     
     def update_status(self, status, id):
         self._connection.execute("UPDATE connections SET status = %s WHERE id = %s", [status, id])
