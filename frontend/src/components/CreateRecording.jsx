@@ -2,16 +2,27 @@ import React, { useState } from "react";
 import { createRecording } from "../../services/recordings";
 import { cloudinaryUpload } from "../../services/recordings";
 import { AudioRecorder } from "react-audio-voice-recorder";
+import PropTypes from 'prop-types';
 
-const CreateRecording = (props) => {
-  const [recordingTitle, setRecordingTitle] = useState("");
-  const [parentUsername, setParentUsername] = useState("");
-  const [recordedData, setRecordedData] = useState(null);
-  const [recordedUrl, setRecordedUrl] = useState(null);
-  const [error, setError] = useState([]);
-  const readerUsername = props.username;
+const CreateRecording = ({username}) => {
+    const [recordingUrl, setRecordingUrl] = useState("")
+    const [recordingTitle, setRecordingTitle] = useState("")
+    const [parentUsername, setParentUsername] = useState("")
+    const [recordedData, setRecordedData] = useState(null)
+    const [recordedUrl, setRecordedUrl] = useState(null);
+    // const navigate = useNavigate();
+    const [error, setError] = useState([])
+    const readerUsername = username
 
-  
+    const handleRecordingUrlChange = (event) => {
+        setRecordingUrl(event.target.value)
+    }; 
+    const handleRecordingTitleChange = (event) => {
+        setRecordingTitle(event.target.value)
+    }; 
+    const handleParentUsernameChange = (event) => {
+        setParentUsername(event.target.value)
+    }; 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -109,6 +120,10 @@ const CreateRecording = (props) => {
     </div>
   );
 };
+CreateRecording.propTypes = {
+    username: PropTypes.string.isRequired
+};
+
 
 export default CreateRecording;
 

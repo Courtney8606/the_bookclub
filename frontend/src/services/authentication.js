@@ -12,6 +12,7 @@ export const login = async (username, password) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(payload),
   };
 
@@ -32,6 +33,7 @@ export const signup = async (email, password, username) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(payload),
   };
 

@@ -5,7 +5,7 @@ from lib.recording import *
 #We get a list of spaces objects reflecting the seed data.
 
 def test_get_all_records_from_recordings(db_connection): 
-    db_connection.seed("../seeds/bookclub.sql") 
+    db_connection.seed("seeds/bookclub.sql") 
     repository = RecordingRepository(db_connection)
     result = repository.all()
     assert result == [
@@ -16,7 +16,7 @@ def test_get_all_records_from_recordings(db_connection):
     ]
 
 def test_find_recordings_by_column_parent_id(db_connection):
-    db_connection.seed("../seeds/bookclub.sql") 
+    db_connection.seed("seeds/bookclub.sql") 
     repository = RecordingRepository(db_connection)
     recording = repository.find_by_parent_id(2)
     assert recording == [
@@ -25,7 +25,7 @@ def test_find_recordings_by_column_parent_id(db_connection):
         ]
 
 def test_find_recordings_by_column_reader_id(db_connection):
-    db_connection.seed("../seeds/bookclub.sql") 
+    db_connection.seed("seeds/bookclub.sql") 
     repository = RecordingRepository(db_connection)
     recording = repository.find_by_reader_id(2)
     assert recording == [
@@ -34,7 +34,7 @@ def test_find_recordings_by_column_reader_id(db_connection):
         ]
     
 def test_create_space(db_connection):
-    db_connection.seed("../seeds/bookclub.sql")
+    db_connection.seed("seeds/bookclub.sql")
     repository = RecordingRepository(db_connection)
     repository.create(Recording(None, 'Test5.mp3', 'The Very Hungry Caterpillar', 1, 2))
 
