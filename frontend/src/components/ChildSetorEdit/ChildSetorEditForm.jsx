@@ -12,11 +12,8 @@ const ChildNameOrEditForm = () => {
     const [childName, setChildName] = useState("")
     const navigate = useNavigate();
 
-    const handleSetNewChildName = (event) => {
-        setNewChildName(event.target.value)
-    }; 
-    
-    const setStartingChildName = async () => {
+
+    const getChildName = async () => {
         try {
             const response = await getUserDetails(username);
             if (response.message === "Unauthorised") {
@@ -32,28 +29,16 @@ const ChildNameOrEditForm = () => {
         }
     };
 
-    const getLoggedInUserDetails = async () => {
-        try {
-        const response = await getUserDetails(username);
-        if (response.message === "Unauthorised") {
-            setError("Unauthorised");
-        } else {
-            const userDetails = response
-            await setChildName(userDetails.child)
-            console.log(childName)
-        }
-        } catch (error) {
-        console.error("Error fetching data");
-        setError("Error fetching data");
-        }
-    };  
+    const handleSetNewChildName = (event) => {
+        setNewChildName(event.target.value)
+    }; 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             await updateChildName(newChildName) ;
-            await getLoggedInUserDetails()
-            setShowInput(false)
+            await getChildName()
+            await setShowInput(false)
         } 
         catch (err) {
             console.error(err);
@@ -62,8 +47,7 @@ const ChildNameOrEditForm = () => {
     };
     
     useEffect(() => {
-        setStartingChildName()
-        getLoggedInUserDetails()
+        getChildName()
     }, [navigate]);
 
     return (
