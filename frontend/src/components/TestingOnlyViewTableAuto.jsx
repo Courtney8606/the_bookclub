@@ -1,7 +1,9 @@
 // import React from 'react';
 import PropTypes from 'prop-types';
-
 // import { useNavigate } from "react-router-dom";
+
+// TESTING ONLY - THIS COMPONENT RENDERS A TABLE AUTOMATICALLY USING ALL HEADERS AND CONTENTS
+// USEFUL FOR TESTING BUT NOT TO BE USED AS COMPONENT
 
 const ViewTableAuto = ({data}) => {
     if (!data || data.length === 0) {
