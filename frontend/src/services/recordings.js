@@ -3,7 +3,8 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const getRecordingsByParent = async (username) => {
     const requestOptions = {
-        method: "GET"
+        method: "GET",
+        credentials: "include",
     };
     const response = await fetch(`${BACKEND_URL}/recordings/parent/${username}`, requestOptions);
     if (response.status !== 200) {
@@ -15,7 +16,8 @@ const getRecordingsByParent = async (username) => {
 
 const getRecordingsByReader = async (username) => {
         const requestOptions = {
-            method: "GET"
+            method: "GET",
+            credentials: "include",
         };
         const response = await fetch(`${BACKEND_URL}/recordings/reader/${username}`, requestOptions);
         if (response.status !== 200) {
@@ -27,7 +29,8 @@ const getRecordingsByReader = async (username) => {
 
 const getRecordingRequestsByParent = async (username) => {
     const requestOptions = {
-        method: "GET"
+        method: "GET",
+        credentials: "include",
     };
     const response = await fetch(`${BACKEND_URL}/recording-request/parent/${username}`, requestOptions);
     if (response.status !== 200) {
@@ -39,7 +42,8 @@ const getRecordingRequestsByParent = async (username) => {
 
 const getRecordingRequestsByReader = async (username) => {
         const requestOptions = {
-            method: "GET"
+            method: "GET",
+            credentials: "include"
         };
         const response = await fetch(`${BACKEND_URL}/recording-request/reader/${username}`, requestOptions);
         if (response.status !== 200) {
@@ -63,6 +67,7 @@ const createRecording = async (recording_url, recording_title, parent_username, 
         headers: {
         "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(payload),
         };
     let response = await fetch(`${BACKEND_URL}/recordings`, requestOptions);
@@ -85,6 +90,7 @@ const requestOptions = {
     headers: {
     "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(payload),
     };
 let response = await fetch(`${BACKEND_URL}/recording-request`, requestOptions);

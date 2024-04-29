@@ -2,7 +2,8 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const getConnectionsByParent = async (username) => {
     const requestOptions = {
-        method: "GET"
+        method: "GET",
+        credentials: "include",
     };
     const response = await fetch(`${BACKEND_URL}/connections/parent/${username}`, requestOptions);
     if (response.status !== 200) {
@@ -14,7 +15,8 @@ const getConnectionsByParent = async (username) => {
 
 const getConnectionsByReader = async (username) => {
         const requestOptions = {
-            method: "GET"
+            method: "GET",
+            credentials: "include",
         };
         const response = await fetch(`${BACKEND_URL}/connections/reader/${username}`, requestOptions);
         if (response.status !== 200) {
@@ -27,7 +29,7 @@ const getConnectionsByReader = async (username) => {
 const createConnectionRequest = async (parent_username, reader_username) => {
             const payload = {
                 parent_username: parent_username,
-                reader_username: reader_username
+                reader_username: reader_username,
             }
         console.log(payload)
         const requestOptions = {
@@ -35,6 +37,7 @@ const createConnectionRequest = async (parent_username, reader_username) => {
             headers: {
             "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify(payload),
             };
         let response = await fetch(`${BACKEND_URL}/connections`, requestOptions);
@@ -56,6 +59,7 @@ const createConnectionRequest = async (parent_username, reader_username) => {
         headers: {
         "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(payload),
         };
         let response = await fetch(`${BACKEND_URL}/connections`, requestOptions);

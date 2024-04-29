@@ -6,24 +6,32 @@ import { getRecordingsByReader, getRecordingRequestsByReader } from "../services
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getConnectionsByReader } from "../services/connections";
+import ChildViewButton from "../components/ChildViewButton/ChildViewButton";
+
 
 export const ReaderPage = () => {
     const username = localStorage.getItem("username");
     const [recordings, setRecordings] = useState([]);
     const [connections, setConnections] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
     const [recordingRequests, setRecordingRequests] = useState([]);
     const navigate = useNavigate();
     const view = "reader"
 
-    const getAllRecordingsTrigger = (username) => {
-        getRecordingsByReader(username)
-            .then((data) => {
-              const allRecordings = data
-            //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-              setRecordings(allRecordings);
-            //   localStorage.setItem("token", data.token);
-            })
-      } 
+    const getAllRecordingsTrigger = async (username) => {
+      try {
+        const response = await getRecordingsByReader(username);
+        if (response.message === "Unauthorised") {
+          setErrorMessage("Unauthorised");
+        } else {
+          setRecordings(response);
+        }
+      } catch (error) {
+        console.error("Error fetching data");
+        setErrorMessage("Error fetching data");
+      }
+      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
+    };
 
       const getAllRecordingRequestsTrigger = (username) => {
         getRecordingRequestsByReader(username)
@@ -38,7 +46,9 @@ export const ReaderPage = () => {
       const getAllConnectionsTrigger = (username) => {
         getConnectionsByReader(username)
             .then((data) => {
+              console.log (data)
               const allConnections = data
+              console.log (allConnections)
             //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
               setConnections(allConnections);
             //   localStorage.setItem("token", data.token);
@@ -51,12 +61,19 @@ export const ReaderPage = () => {
       }, [navigate]); 
 
     return (
-        <>
+      <>
+        {errorMessage ? (
+          <p>{errorMessage}</p>
+        ) : (
+          <>
         <h2>Reader View</h2>
         <CreateRecording username = {username} connections={connections} onSubmit={getAllRecordingsTrigger}/>
         <ViewRecordings data = {recordings} view = {view}/>
         <ViewConnections data = {connections} view = {view} onUpdate ={getAllConnectionsTrigger}/>
         <ViewRecordingRequests data = {recordingRequests} view = {view} onUpdate={getAllRecordingRequestsTrigger}/>
+        <ChildViewButton />
         </>
-    )
-}
+    )}
+    </>
+    );
+};

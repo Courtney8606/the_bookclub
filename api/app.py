@@ -191,6 +191,7 @@ def get_recording_by_reader(username):
         return jsonify({'message': 'Unauthorised'})
 
 @app.route('/cloudinary-upload', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def post_recording_cloudinary():
     try:
         audio_file = request.files['audio_file']
@@ -234,6 +235,7 @@ def post_recording():
 # CONNECTIONS ROUTES
 
 @app.route('/connections', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def post_connection():
     try:
         connection = get_flask_database_connection(app)
@@ -252,6 +254,7 @@ def post_connection():
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
     
 @app.route('/connections', methods=['PUT'])
+@cross_origin(supports_credentials=True)
 def update_connection():
     try:
         connection = get_flask_database_connection(app)
@@ -265,6 +268,7 @@ def update_connection():
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
 
 @app.route('/connections/parent/<username>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_connection_by_parent(username):
     connection = get_flask_database_connection(app)
     connection_repository = ConnectionRepository(connection)
@@ -274,6 +278,7 @@ def get_connection_by_parent(username):
     return jsonify(result)
 
 @app.route('/connections/reader/<username>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_connection_by_reader(username):
     connection = get_flask_database_connection(app)
     connection_repository = ConnectionRepository(connection)
@@ -286,6 +291,7 @@ def get_connection_by_reader(username):
 # RECORDING REQUESTS START HERE
 
 @app.route('/recording-request', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def post_recording_request():
     try:
         connection = get_flask_database_connection(app)
@@ -305,6 +311,7 @@ def post_recording_request():
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
     
 @app.route('/recording-request', methods=['PUT'])
+@cross_origin(supports_credentials=True)
 def update_recording_request():
     try:
         connection = get_flask_database_connection(app)
@@ -318,6 +325,7 @@ def update_recording_request():
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
 
 @app.route('/recording-request/parent/<username>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_request_by_parent(username):
     connection = get_flask_database_connection(app)
     recording_request_repository = RecordingRequestRepository(connection)
@@ -327,6 +335,7 @@ def get_request_by_parent(username):
     return jsonify(result)
 
 @app.route('/recording-request/reader/<username>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_request_by_reader(username):
     connection = get_flask_database_connection(app)
     recording_request_repository = RecordingRequestRepository(connection)

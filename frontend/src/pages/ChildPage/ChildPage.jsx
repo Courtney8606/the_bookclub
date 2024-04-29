@@ -1,4 +1,4 @@
-import ViewRecordings from "../../components/ViewRecordings";
+import ViewRecordings from "../../Archive/ViewRecordings";
 import { getRecordingsByChild } from "../../services/recordings";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";

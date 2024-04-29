@@ -53,6 +53,7 @@ const CreateRecording = ({username, connections, onSubmit}) => {
                     .map((connection) => (
                         <option key={connection.id} value={connection.parent_username}>{connection.parent_username}</option>
                     ))}
+                    {console.log(connections)}
                 </select><br />
             <input className="submit-button" role="submit-button" id="submit" type="submit" value="Submit" />
         </form>
