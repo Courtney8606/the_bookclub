@@ -12,6 +12,7 @@ const ReaderViewButton = () => {
         type="button"
         className="reader-view-button"
         onClick={handleSubmit}
+        style={{ backgroundColor: "transparent" }}
       >
         Reader View
       </button>

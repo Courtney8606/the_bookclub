@@ -94,7 +94,7 @@ export const LoginPage = () => {
             <Link to="/signup">Sign up</Link>
           </div>
         </form>
-        <div className="background-container"></div>
+        <div className="background-container-login"></div>
       </div>
     </>
   );
