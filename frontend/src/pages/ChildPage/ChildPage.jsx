@@ -1,5 +1,5 @@
 import ViewRecordings from "../../components/ViewRecordings";
-import { getRecordingsByChild } from "../../../services/recordings";
+import { getRecordingsByChild } from "../../services/recordings";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../../components/LogoutButton/LogoutButton";

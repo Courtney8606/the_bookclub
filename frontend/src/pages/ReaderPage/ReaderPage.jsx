@@ -1,4 +1,4 @@
-import CreateRecording from "../../components/CreateRecording";
+import CreateRecording from "../../components/Recordings/CreateRecording"
 import ViewRecordings from "../../components/ViewRecordings";
 import { getRecordingsByReader } from "../../../services/recordings";
 import { useState, useEffect } from "react";
