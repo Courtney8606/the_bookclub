@@ -12,6 +12,7 @@ const ParentViewButton = () => {
         type="button"
         className="parent-view-button"
         onClick={handleSubmit}
+        style={{ backgroundColor: "transparent" }}
       >
         Parent View
       </button>

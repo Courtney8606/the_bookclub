@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
   const username = localStorage.getItem("username");
+  const storedRole = localStorage.getItem("role");
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedRole = localStorage.getItem("role");
     if (storedRole === "parent") {
       if (username) {
         navigate("/");
@@ -20,7 +20,7 @@ export const HomePage = () => {
     } else {
       setErrorMessage("Unauthorised");
     }
-  });
+  }, [username, storedRole, navigate]);
 
   return (
     <>

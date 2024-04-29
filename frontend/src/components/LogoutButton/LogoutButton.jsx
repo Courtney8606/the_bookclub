@@ -12,7 +12,12 @@ const LogoutButton = () => {
 
   return (
     <div className="logout">
-      <button type="button" className="logout-button" onClick={logout}>
+      <button
+        type="button"
+        className="logout-button"
+        onClick={logout}
+        style={{ backgroundColor: "transparent" }}
+      >
         Logout
       </button>
     </div>
