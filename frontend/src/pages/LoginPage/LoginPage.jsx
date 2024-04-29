@@ -6,6 +6,7 @@ import { login } from "../../services/authentication";
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   //   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ export const LoginPage = () => {
   //         "Email address not found. Please try a different email address or sign up."
   //       );
   //     }
-  //   };
+  //   };  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,6 +33,7 @@ export const LoginPage = () => {
       const response = await login(username, password);
       if (response.status != 200) {
         console.log("Error returning data");
+        setErrorMessage('Username or Password is incorrect!')
       } else {
         const data = await response.json();
         localStorage.setItem("username", data["username"]);
@@ -80,6 +82,7 @@ export const LoginPage = () => {
             className="login-input"
           />
           <br></br>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <input
             className="login-button"
             role="submit-button"
@@ -87,7 +90,7 @@ export const LoginPage = () => {
             type="submit"
             value="Submit"
           />
-          {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
+           
           <div>
             <hr />
             <p>Don't have an account? Click below to sign up!</p>
