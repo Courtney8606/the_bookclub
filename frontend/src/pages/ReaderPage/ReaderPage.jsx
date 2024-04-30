@@ -24,24 +24,31 @@ export const ReaderPage = () => {
         if (response.message === "Unauthorised") {
           setErrorMessage("Unauthorised");
         } else {
-          setRecordings(response);
+          const allRecordings = response;
+          allRecordings.sort((a, b) => new Date(b.date_recorded) - new Date(a.date_recorded));
+          setRecordings(allRecordings);
         }
       } catch (error) {
         console.error("Error fetching data");
         setErrorMessage("Error fetching data");
       }
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
     };
 
-      const getAllRecordingRequestsTrigger = (username) => {
-        getRecordingRequestsByReader(username)
-            .then((data) => {
-              const allRecordingRequests = data
-            //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-              setRecordingRequests(allRecordingRequests);
-            //   localStorage.setItem("token", data.token);
-            })
-      } 
+    const getAllRecordingRequestsTrigger = async (username) => {
+      try {
+        const response = await  getRecordingRequestsByReader(username);
+        if (response.message === "Unauthorised") {
+          setErrorMessage("Unauthorised");
+        } else {
+          const allRecordingRequests = response;
+          allRecordingRequests.sort((a, b) => new Date(b.date_requested) - new Date(a.date_requested));
+          setRecordingRequests(allRecordingRequests);
+        }
+      } catch (error) {
+        console.error("Error fetching data");
+        setErrorMessage("Error fetching data");
+      }
+    };
 
       const getAllConnectionsTrigger = (username) => {
         getConnectionsByReader(username)
@@ -68,7 +75,7 @@ export const ReaderPage = () => {
           <>
         <h2>Reader View</h2>
         <CreateRecording username = {username} connections={connections} onSubmit={getAllRecordingsTrigger}/>
-        <ViewRecordings data = {recordings} view = {view}/>
+        <ViewRecordings data = {recordings} view = {view} onUpdate={getAllRecordingsTrigger}/>
         <ViewConnections data = {connections} view = {view} onUpdate ={getAllConnectionsTrigger}/>
         <ViewRecordingRequests data = {recordingRequests} view = {view} onUpdate={getAllRecordingRequestsTrigger}/>
         <ChildViewButton />

@@ -44,6 +44,28 @@ class RecordingRepository:
             requests.append(row)       
         return requests
 
+    def find_approved_by_parent_id(self, id):
+        # this query joins on the user ids to add in the usernames of the reader and parent
+        query = '''
+        SELECT 
+            recordings.*,
+            p.username AS parent_username,
+            u.username AS reader_username
+        FROM 
+            recordings
+        LEFT JOIN 
+            users p ON recordings.parent_id = p.id
+        LEFT JOIN 
+            users u ON recordings.reader_id = u.id
+        WHERE 
+            recordings.parent_id = %s AND recordings.recording_status = 'approved'
+    '''
+        rows = self._connection.execute(query, [id])
+        requests = []
+        for row in rows:
+            requests.append(row)       
+        return requests
+
     def find_by_reader_id(self, id):
         # this joins on the user ids to add in the usernames of the reader and parent
         query = '''

@@ -40,6 +40,22 @@ def test_get_all_records_from_recordings(db_connection):
         "recording_status": "rejected"}
     ]
 
+def test_find_approved_recordings_by_column_parent_id(db_connection):
+    db_connection.seed("seeds/bookclub.sql") 
+    repository = RecordingRepository(db_connection)
+    recording = repository.find_approved_by_parent_id(1)
+    assert recording == [
+        {"id": 2,
+        "audio_file":"Test2.mp3", 
+        "title":"Teddy bear picnic", 
+        "parent_id": 1, 
+        "reader_id":2,
+        'parent_username': 'mrs_dursley',
+        'reader_username': 'montoya',
+        "date_recorded": datetime(2024, 3, 25, 13, 10, 0),
+        "recording_status": "approved"},
+        ]
+
 def test_find_recordings_by_column_parent_id(db_connection):
     db_connection.seed("seeds/bookclub.sql") 
     repository = RecordingRepository(db_connection)

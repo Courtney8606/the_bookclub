@@ -193,7 +193,7 @@ def get_recording_by_child():
     if check_permission(user['role'], action):
         recording_repository = RecordingRepository(connection)
         user = users_repository.find_username(username)
-        result = recording_repository.find_by_parent_id(user["id"])
+        result = recording_repository.find_approved_by_parent_id(user["id"])
         return jsonify(result)
     else:
         return jsonify({'message': 'Unauthorised'})
