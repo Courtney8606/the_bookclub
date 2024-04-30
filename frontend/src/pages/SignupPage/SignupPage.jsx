@@ -1,34 +1,54 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignupPage.css";
-import { signup } from "../../services/authentication";
+import { signup, checkUsername, checkEmail } from "../../services/authentication";
 
 export const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
+  const [emailAvailable, setEmailAvailable] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const special = /[!@#$%^&*(),.?":{}|<>]/;
   const caps = /[A-Z]/
   
   
-  const handleSubmit = async (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password.length > 8 && special.test(password) && caps.test(password)) {
-      try {
-        await signup(email, password, username);
-        console.log("redirecting...:");
-        navigate("/login");
-      } catch (err) {
-        console.error(err);
-        navigate("/signup");
-      }
-    }
-    else {
-      setErrorMessage('invalid Password!')
-    }
 
+    if (password.length > 12 && special.test(password) && caps.test(password)) {
+      try {
+        // Check if the username is available
+        const available = await checkUsername(username);
+        const emailAvailable = await checkEmail(email);
+        setUsernameAvailable(available);
+        setEmailAvailable(emailAvailable);
+
+
+        if (available) {
+          // If username is available, proceed with signup
+          await signup(email, password, username);
+          console.log("redirecting...");
+          navigate("/login");
+        } else {
+          if (!usernameAvailable && !emailAvailable) {
+            setErrorMessage('Username and email are already taken!');
+          } else if (!usernameAvailable) {
+            setErrorMessage('Username is already taken!');
+          } else {
+            setErrorMessage('Email is already taken!');
+          }
+        }
+      } catch (error) {
+        console.error('Error during signup:', error);
+        setErrorMessage('Error during signup. Please try again.');
+      }
+    } else {
+      // Display error message if password is invalid
+      setErrorMessage('Password must be at least 8 characters long, contain a special character, and contain a capital letter.');
+    }
   };
 
   const handleEmailChange = (event) => {
