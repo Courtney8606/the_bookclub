@@ -61,7 +61,7 @@ const createRecording = async (recording_url, recording_title, parent_username, 
             parent_username: parent_username,
             reader_username: reader_username
         }
-    console.log(payload)
+    console.log("PAYLOAD: ",payload)
     const requestOptions = {
         method: "POST",
         headers: {
@@ -70,13 +70,33 @@ const createRecording = async (recording_url, recording_title, parent_username, 
         credentials: "include",
         body: JSON.stringify(payload),
         };
+try {
     let response = await fetch(`${BACKEND_URL}/recordings`, requestOptions);
-    if (response.status !== 201) {
-        throw new Error("Error creating recording");
+
+    // Check if the response status is within the success range (200-299)
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    } else {
+        // If the response status is not in the success range, throw an error
+        const responseData = await response.json(); // Parse response body
+        throw new Error(`Error creating recording: ${response.status} - ${responseData.message}`); //here
     }
-    const data = await response.json();
-    return data;
+} catch (error) {
+    console.error("Error creating recording:", error);
+    throw error; // Rethrow the error to be caught by the caller
 }
+};
+
+
+//     let response = await fetch(`${BACKEND_URL}/recordings`, requestOptions); / was at line 72
+//     if (response.status !== 201) {
+//         throw new Error("Error creating recording");
+//     }
+//     const data = await response.json();
+//     return data;
+// }
+
 
 const cloudinaryUpload = async (formData) => {
     const requestOptions = {

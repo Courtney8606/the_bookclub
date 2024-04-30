@@ -1,4 +1,7 @@
-import { getRecordingRequestsByParent, getRecordingsByParent } from "../../services/recordings";
+import {
+  getRecordingRequestsByParent,
+  getRecordingsByParent,
+} from "../../services/recordings";
 // import ViewRecordingsArchive from "../../Archive/ViewRecordings";
 import ViewConnections from "../../components/Connections/ViewConnections";
 import ViewRecordings from "../../components/Recordings/ViewRecordings";
@@ -9,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
 import { getConnectionsByParent } from "../../services/connections";
+import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ChildNameOrEditForm from "../../components/ChildSetorEdit/ChildSetorEditForm";
 
 export const ParentPage = () => {
@@ -18,7 +22,7 @@ export const ParentPage = () => {
   const [recordingRequests, setRecordingRequests] = useState([]);
   const [connections, setConnections] = useState([]);
   const navigate = useNavigate();
-  const view = "parent";
+  const view = "parent";;
 
   const getAllRecordingsTrigger = async (username) => {
     try {
@@ -53,14 +57,14 @@ export const ParentPage = () => {
   }; 
 
   const getAllConnectionsTrigger = async (username) => {
-    getConnectionsByParent(username)
-        .then((data) => {
-          const allConnections = data
-        //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-          setConnections(allConnections);
-        //   localStorage.setItem("token", data.token);
-        })
-  } 
+    await getConnectionsByParent(username).then((data) => {
+      const allConnections = data;
+      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
+      setConnections(allConnections);
+      //   localStorage.setItem("token", data.token);
+    });
+  };
+
   useEffect(() => {
     getAllRecordingsTrigger(username);
     getAllConnectionsTrigger(username);
@@ -75,11 +79,28 @@ export const ParentPage = () => {
         <>
           <p>I am parent: {username} </p>
           <ChildNameOrEditForm/>
-          <RequestConnection username= {username} connections= {connections} onSubmit={getAllConnectionsTrigger}/>
-          <ViewConnections data = {connections} view = {view} onUpdate={getAllConnectionsTrigger}/>
-          <CreateRecordingRequest username= {username} connections={connections} onSubmit={getAllRecordingRequestsTrigger}/>
-          <ViewRecordingRequests data = {recordingRequests} view = {view} onUpdate={getAllRecordingRequestsTrigger}/>
-          <ViewRecordings data = {recordings} view = {view} onUpdate={getAllRecordingsTrigger}/>
+    
+          <RequestConnection
+            username={username}
+            connections={connections}
+            onSubmit={getAllConnectionsTrigger}
+          />
+          <ViewConnections
+            data={connections}
+            view={view}
+            onUpdate={getAllConnectionsTrigger}
+          />
+          <CreateRecordingRequest
+            username={username}
+            connections={connections}
+            onSubmit={getAllRecordingRequestsTrigger}
+          />
+          <ViewRecordingRequests
+            data={recordingRequests}
+            view={view}
+            onUpdate={getAllRecordingRequestsTrigger}
+          />
+          <ViewRecordings data={recordings} view={view} onUpdate={getAllRecordingsTrigger}/>
           <ChildViewButton />
         </>
       )}

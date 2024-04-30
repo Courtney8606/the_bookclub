@@ -24,7 +24,7 @@ class RecordingRequestRepository:
         result = [{'id': row['id'], 'request_description': row['request_description'], 'parent_id': row['parent_id'], 
                 'reader_id': row['reader_id'], 'reader_status': row['reader_status'], 
                 'completed_recording_id': row['completed_recording_id'], 'date_requested': row['date_requested'],
-                'reader_username': row['reader_username'], 'parent_username': row['parent_username']} for row in rows]
+                'reader_username': row['reader_username'], 'parent_username': row['parent_username'], 'display_message_icon': row['display_message_icon']} for row in rows]
         return result
 
     def find_by_reader_id(self, id):
@@ -41,20 +41,28 @@ class RecordingRequestRepository:
         result = [{'id': row['id'], 'request_description': row['request_description'], 'parent_id': row['parent_id'], 
                 'reader_id': row['reader_id'], 'reader_status': row['reader_status'], 
                 'completed_recording_id': row['completed_recording_id'], 'date_requested': row['date_requested'],
-                'reader_username': row['reader_username'], 'parent_username': row['parent_username']} for row in rows]
+                'reader_username': row['reader_username'], 'parent_username': row['parent_username'], 'display_message_icon': row['display_message_icon']} for row in rows]
         return result
     
     def update_status(self, status, id):
-        self._connection.execute("UPDATE recording_requests SET reader_status = %s WHERE id = %s", [status, id])
+        self._connection.execute("UPDATE recording_requests SET reader_status = %s, display_message_icon = True WHERE id = %s", [status, id])
         return print("updated")
+    
+    def clear_notifications_parent(self, parent_id):
+        self._connection.execute('UPDATE recording_requests SET display_message_icon = False WHERE parent_id = %s', [parent_id])
+    
+    def clear_notifications_reader(self,reader_id):
+        self._connection.execute('UPDATE recording_requests SET display_message_icon = False WHERE reader_id = %s', [reader_id])
     
     def create(self, recording_request):
         recording_request.reader_status = "pending"
         recording_request.completed_recording_id = None
-        self._connection.execute('INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, date_requested) VALUES (%s, %s,%s,%s, %s)', 
+        recording_request.display_message_icon = True
+        self._connection.execute('INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, date_requested, display_message_icon) VALUES (%s, %s,%s,%s, %s, %s)', 
             [   recording_request.request_description,
                 recording_request.parent_id,
                 recording_request.reader_id,
                 recording_request.reader_status,
                 recording_request.date_requested,
+                recording_request.display_message_icon
             ])

@@ -53,7 +53,7 @@ def get_user_id():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     user = user_repository.find_username(username)
-    return user.id
+    return user['id']
 
 def get_user():
     username = session.get('user')
@@ -67,7 +67,7 @@ def get_user_role():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     user = user_repository.find_username(username)
-    return user.role
+    return user['role']
 
 def check_permission(role, action):
     connection = get_flask_database_connection(app)
@@ -365,7 +365,7 @@ def post_recording_request():
         users_repository = UserRepository(connection)
         parent = users_repository.find_username(parent_username)
         reader = users_repository.find_username(reader_username)      
-        record = RecordingRequest(None, request_description, parent["id"], reader["id"], None, None)
+        record = RecordingRequest(None, request_description, parent["id"], reader["id"], None, None, None)
         repo.create(record)
         return jsonify({'message': 'Recording request created successfully'}), 201  # 201 status code for Created
     except Exception as e:
@@ -414,13 +414,34 @@ def get_request_by_reader(username):
         user = users_repository.find_username(username)
         if user is None:
             return jsonify({'message': 'User not found'}), 404
-
         result = recording_request_repository.find_by_reader_id(user["id"])
         return jsonify(result)
     except Exception as e:
         # Log the exception for debugging purposes
         print(f"An error occurred: {e}")
         return jsonify({'message': 'Internal Server Error'}), 500
+
+# NOTIFICATION ROUTES
+
+@app.route('/update-connections-notifications', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def update_connections_notifications():
+    connection = get_flask_database_connection(app)
+    connection_repository = ConnectionRepository(connection)
+    user_id = get_user_id()
+    connection_repository.clear_notifications_parent(user_id)
+    connection_repository.clear_notifications_reader(user_id)
+    return jsonify({'message': 'Notifications successfully cleared'})
+
+@app.route('/update-requests-notifications', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def update_requests_notifications():
+    connection = get_flask_database_connection(app)
+    recording_request_repository = RecordingRequestRepository(connection)
+    user_id = get_user_id()
+    recording_request_repository.clear_notifications_parent(user_id)
+    recording_request_repository.clear_notifications_reader(user_id)
+    return jsonify({'message': 'Notifications successfully cleared'})
     
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))

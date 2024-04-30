@@ -56,7 +56,8 @@ CREATE TABLE connections (
     id SERIAL PRIMARY KEY,
     parent_id INTEGER REFERENCES users(id),
     reader_id INTEGER REFERENCES users(id),
-    status status_type
+    status status_type,
+    display_message_icon bool
 );
 
 CREATE SEQUENCE IF NOT EXISTS recordings_id_seq;
@@ -81,6 +82,7 @@ CREATE TABLE recording_requests (
     reader_status reader_status_type,
     completed_recording_id INTEGER REFERENCES recordings(id),
     date_requested TIMESTAMP
+    display_message_icon bool
 );
 
 
@@ -91,24 +93,26 @@ CREATE TABLE permissions (
     action VARCHAR( 100 ) NOT NULL
 );
 
-
-
 INSERT INTO users (username, email, password, role) VALUES ('mrs_dursley', 'dursley@gmail.com', 'hatemynephew123', 'parent');
 INSERT INTO users (username, email, password, role) VALUES ('montoya', 'montoya@gmail.com', 'prepare2die', 'parent');
 INSERT INTO users (username, email, password, role) VALUES ('remy', 'remy@gmail.com', 'kissthecook', 'parent');
 
-INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 2, 'approved');
-INSERT INTO connections (parent_id, reader_id, status) VALUES (2, 3, 'approved');
-INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 3, 'rejected');
+INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (1, 2, 'approved', True);
+INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (2, 3, 'approved', True);
+INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (1, 3, 'rejected', False);
 
 INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test.mp3', 'The big surprise', 1, 2, 'pending', '2024-04-10 10:00:00');
 INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2,'approved','2024-03-25 13:10:00');
 INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3,'pending','2024-04-15 19:15:10');
 INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3,'rejected', '2023-12-10 11:21:01');
 
-INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please write me a story about dragons', 1, 2, 'pending', NULL, '2024-07-20 10:00:00' );
-INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please read me the very hungry caterpillar', 1, 3, 'accepted', 1, '2023-10-22 10:00:00');
-INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('I want a story about a princess', 2, 3, 'completed', NULL, '2024-01-25 10:00:00');
+
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about a big surprise', 1, 2, 'completed', 1, '2024-01-25 10:00:00', True);
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about a teddy bear picnic', 1, 2, 'completed', 2, '2024-01-20 10:00:00', False);
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about a dragons', 2, 3, 'completed', 3, '2024-01-17 10:00:00', True);
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about lions and tigers and bears', 2, 3, 'completed', 4, '2024-01-03 10:00:00', False);
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('please write me a story about monkeys', 1, 2, 'pending', NULL, '2024-07-20 10:00:00', True);
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('please read me the very hungry caterpillar', 1, 2, 'accepted', NULL, '2023-10-22 10:00:00', False);
 
 
 INSERT INTO permissions (role, action) VALUES 
