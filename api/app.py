@@ -219,13 +219,31 @@ def get_recording_by_reader(username):
 def post_recording_cloudinary():
     try:
         audio_file = request.files['audio_file']
-        # Upload audio file to Cloudinary
         uploaded_file = cloudinary.uploader.upload(audio_file, resource_type="video")
+        print("UPLOADED FILE", uploaded_file)
         audio_url = uploaded_file['secure_url']
-        
-        # Your recording creation logic here...
-        
-        return jsonify({'message': 'Recording created successfully', 'audio_url': audio_url}), 201
+        public_id = uploaded_file['public_id']
+        return jsonify({'message': 'Recording created successfully', 'audio_url': audio_url, 'public_id': public_id}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
+@app.route('/cloudinary-delete', methods=['DELETE'])
+@cross_origin(supports_credentials=True)
+def delete_recording_cloudinary():
+    try:
+        # audio_url = request.json['audio_url']
+        # print("audio_url PRINTOUT", audio_url)
+        # deletion_response = cloudinary.uploader.destroy(audio_url)
+
+        public_id = request.json['public_id']
+        print("public_id PRINTOUT", public_id)
+        deletion_response = cloudinary.uploader.destroy(public_id, resource_type="video")
+        print(deletion_response)
+        if deletion_response['result'] == 'ok':
+            return jsonify({'message': 'Recording deleted successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to delete recording from Cloudinary'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
@@ -242,6 +260,7 @@ def post_recording():
         print("title:", title)
         parent_username = request.json['parent_username']
         reader_username = request.json['reader_username']
+        public_id = request.json['public_id']
         print("here")
         # instantiate a repo and get user objects from their into usernames
         users_repository = UserRepository(connection)
@@ -249,9 +268,22 @@ def post_recording():
         reader = users_repository.find_username(reader_username)
         print("now here")
         # create the recording and add to db
-        recording = Recording(None, audio_file, title, parent["id"], reader["id"])
+        recording = Recording(None, audio_file, title, parent["id"], reader["id"], public_id)
         recording_repository.create(recording)
         return jsonify({'message': 'Recording created successfully'}), 201  # 201 status code for Created
+    except Exception as e:
+        # Return failure message
+        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+    
+
+@app.route('/delete-recordings/<int:recording_id>', methods=['DELETE'])
+@cross_origin(supports_credentials=True)
+def delete_recording(recording_id):
+    try:
+        connection = get_flask_database_connection(app)
+        recording_repository = RecordingRepository(connection)
+        recording_repository.delete(recording_id)
+        return jsonify({'message': 'Recording deleted successfully'}), 201  # 201 status code for Created
     except Exception as e:
         # Return failure message
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request

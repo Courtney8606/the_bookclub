@@ -64,10 +64,10 @@ CREATE SEQUENCE IF NOT EXISTS recordings_id_seq;
 CREATE TABLE recordings (
     id SERIAL PRIMARY KEY,
     audio_file VARCHAR( 100 ) NOT NULL,
-    -- audio file type tbc
     title VARCHAR( 100 ) NOT NULL,
     parent_id INTEGER REFERENCES users(id),
-    reader_id INTEGER REFERENCES users(id)
+    reader_id INTEGER REFERENCES users(id),
+    public_id VARCHAR( 100 ) NOT NULL
 );
 
 CREATE TYPE reader_status_type AS ENUM ('pending', 'accepted', 'rejected', 'completed');
@@ -99,10 +99,10 @@ INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VAL
 INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (2, 3, 'approved', True);
 INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (1, 3, 'rejected', False);
 
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test.mp3', 'The big surprise', 1, 2);
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2);
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3);
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3);
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, public_id) VALUES ('Test.mp3', 'The big surprise', 1, 2, 'TESTSTRING');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, public_id) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2, 'TESTSTRING');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, public_id) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3, 'TESTSTRING');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, public_id) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3, 'TESTSTRING');
 
 INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about a big surprise', 1, 2, 'completed', 1, '2024-01-25', True);
 INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about a teddy bear picnic', 1, 2, 'completed', 2, '2024-01-20', False);

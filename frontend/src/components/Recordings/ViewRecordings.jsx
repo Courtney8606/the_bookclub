@@ -1,9 +1,11 @@
 // import React from 'react';
 import PropTypes from 'prop-types';
+import { DeleteAudioButton } from './DeleteRecording';
 
 // import { useNavigate } from "react-router-dom";
 
 const ViewRecordings = ({data, view}) => {
+  console.log("ITEM", data[0])
   if (data.message === "Unauthorised") {
     return <p>Unauthorised access</p>;
   }
@@ -35,6 +37,8 @@ const ViewRecordings = ({data, view}) => {
                 </td>
                 {view === 'parent' &&<td>{item.reader_username}</td>}
                 {view === 'reader' &&<td>{item.parent_username}</td>}
+                <td><DeleteAudioButton public_id={item.public_id} recording_id={item.ID}/></td>
+                <td></td>
               </tr>
             ))}
           </tbody>

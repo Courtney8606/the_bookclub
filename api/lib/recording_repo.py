@@ -7,15 +7,19 @@ class RecordingRepository:
 
     def all(self):
         rows = self._connection.execute('SELECT * FROM recordings')
-        result = [{'ID': row['id'], "audio_file": row["audio_file"], 'title': row['title'], "parent_id": row["parent_id"], "reader_id": row["reader_id"]} for row in rows]
+        result = [{'ID': row['id'], "audio_file": row["audio_file"], 'title': row['title'], "parent_id": row["parent_id"], "reader_id": row["reader_id"], "public_id": row["public_id"]} for row in rows]
         return result
 
     def create(self, recording):
-        rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES (%s, %s, %s, %s) RETURNING id', [
-                                recording.audio_file, recording.title, recording.parent_id, recording.reader_id])
+        rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id, public_id) VALUES (%s, %s, %s, %s, %s) RETURNING id', [
+                                recording.audio_file, recording.title, recording.parent_id, recording.reader_id, recording.public_id])
         row = rows[0]
         recording.id = row["id"]
         return recording
+    
+    def delete(self, recording_id):
+        self._connection.execute('DELETE FROM recordings WHERE id = %s', [recording_id])
+        return None
     
     def find_by_parent_id(self, id):
         # this query joins on the user ids to add in the usernames of the reader and parent
@@ -26,6 +30,7 @@ class RecordingRepository:
             r.title AS title, 
             r.parent_id AS parent_id, 
             r.reader_id AS reader_id,
+            r.public_id AS public_id,
             p.username AS parent_username,
             u.username AS reader_username
         FROM 
@@ -43,6 +48,7 @@ class RecordingRepository:
         'title': row['title'], 
         "parent_id": row["parent_id"], 
         "reader_id": row["reader_id"],
+        "public_id": row["public_id"],
         "parent_username": row["parent_username"],
         "reader_username": row["reader_username"]}
         for row in rows]      
@@ -57,6 +63,7 @@ class RecordingRepository:
             r.title AS title, 
             r.parent_id AS parent_id, 
             r.reader_id AS reader_id,
+            r.public_id AS public_id,
             p.username AS parent_username,
             u.username AS reader_username
         FROM 
@@ -74,6 +81,7 @@ class RecordingRepository:
         'title': row['title'], 
         "parent_id": row["parent_id"], 
         "reader_id": row["reader_id"],
+        "public_id": row["public_id"],
         "parent_username": row["parent_username"],
         "reader_username": row["reader_username"]}
         for row in rows]       
