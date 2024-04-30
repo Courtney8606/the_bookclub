@@ -7,18 +7,28 @@ export const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const regex = /[!@#$%^&*(),.?":{}|<>]/;
+  const caps = /[A-Z]/
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      await signup(email, password, username);
-      console.log("redirecting...:");
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-      navigate("/signup");
+    if (password.length > 8 && regex.test(password) && caps.test(password)) {
+      try {
+        await signup(email, password, username);
+        console.log("redirecting...:");
+        navigate("/login");
+      } catch (err) {
+        console.error(err);
+        navigate("/signup");
+      }
     }
+    else {
+      setErrorMessage('invalid Password!')
+    }
+
   };
 
   const handleEmailChange = (event) => {
@@ -96,6 +106,7 @@ export const SignupPage = () => {
             Create Account
           </button>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div>
           <hr />
           <p>Already have an account? Click below to log in!</p>
