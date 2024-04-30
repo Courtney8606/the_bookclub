@@ -9,6 +9,7 @@ export const DeleteAudioButton = (props) => {
             await deleteRecording(props.recording_id);
             await deleteCloudinaryUpload(props.public_id);
             console.log('Audio file and associated resources deleted successfully.');
+            await props.onSubmit(localStorage.getItem("username"))
         } catch (error) {
             console.error('Error deleting:', error);
         }
@@ -23,7 +24,8 @@ export const DeleteAudioButton = (props) => {
 
 DeleteAudioButton.propTypes = {
     recording_id: PropTypes.number.isRequired,
-    public_id: PropTypes.string.isRequired
+    public_id: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired
 };
 
 

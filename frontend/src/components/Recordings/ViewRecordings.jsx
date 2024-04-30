@@ -47,7 +47,7 @@ const ViewRecordings = ({data, view, onUpdate}) => {
                 <td>{item.recording_status}</td>
                 {view === 'parent' && <td>{ 
                 <UpdateStatusDropdown options = {statusOptions} item_id={item.id} updateFunction={updateRecordingStatus} onSubmit={onUpdate}/>}</td>}
-                <td><DeleteAudioButton public_id={item.public_id} recording_id={item.ID}/></td>
+                <td><DeleteAudioButton public_id={item.public_id} recording_id={item.id} onSubmit={onUpdate}/></td>
                 <td></td>
               </tr>
             ))}
