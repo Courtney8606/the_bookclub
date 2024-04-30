@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import UpdateStatusDropdown from '../UpdateStatus/UpdateStatusDropdown';
 import { updateRecordingStatus } from '../../services/recordings';
 import { formatDate } from '../../services/formatting';
+import { DeleteAudioButton } from './DeleteRecording';
 
 
 const ViewRecordings = ({data, view, onUpdate}) => {
+  console.log("ITEM", data[0])
   if (data.message === "Unauthorised") {
     return <p>Unauthorised access</p>;
   }
@@ -45,6 +47,8 @@ const ViewRecordings = ({data, view, onUpdate}) => {
                 <td>{item.recording_status}</td>
                 {view === 'parent' && <td>{ 
                 <UpdateStatusDropdown options = {statusOptions} item_id={item.id} updateFunction={updateRecordingStatus} onSubmit={onUpdate}/>}</td>}
+                <td><DeleteAudioButton public_id={item.public_id} recording_id={item.ID}/></td>
+                <td></td>
               </tr>
             ))}
           </tbody>

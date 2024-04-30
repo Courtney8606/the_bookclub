@@ -14,13 +14,17 @@ class RecordingRepository:
 
     def create(self, recording):
 
-        rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *', [
-                                recording.audio_file, recording.title, recording.parent_id, recording.reader_id, recording.recording_status, recording.date_recorded])
+        rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *', [
+                                recording.audio_file, recording.title, recording.parent_id, recording.reader_id, recording.recording_status, recording.date_recorded, recording.public_id])
         row = rows[0]
         recording.id = row["id"]
         print(row)
         recording.date_recorded = row["date_recorded"]
         return recording
+    
+    def delete(self, recording_id):
+        self._connection.execute('DELETE FROM recordings WHERE id = %s', [recording_id])
+        return None
     
     def find_by_parent_id(self, id):
         # this query joins on the user ids to add in the usernames of the reader and parent

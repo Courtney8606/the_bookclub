@@ -1,4 +1,4 @@
-import ViewRecordings from "../../Archive/ViewRecordings";
+import ViewRecordings from "../../components/TestingOnlyViewTableAuto"
 import { getRecordingsByChild, getRecordingRequestsByParent } from "../../services/recordings";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";

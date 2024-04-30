@@ -2,6 +2,8 @@ import  { useState } from "react";
 import { createRecording } from "../../services/recordings";
 import { cloudinaryUpload } from "../../services/recordings";
 import { AudioRecorder } from "react-audio-voice-recorder";
+
+
 import PropTypes from 'prop-types';
 
 const CreateRecording = ({username, connections, onSubmit}) => {
@@ -10,9 +12,22 @@ const CreateRecording = ({username, connections, onSubmit}) => {
     const [parentUsername, setParentUsername] = useState("")
     const [recordedData, setRecordedData] = useState(null)
     const [recordedUrl, setRecordedUrl] = useState(null);
+    const [publicID, setPublicID] = useState(null);
     // const navigate = useNavigate();
     const [error, setError] = useState([])
     const readerUsername = username
+
+
+
+
+
+  //   const handleDeleteAudio = () => {
+  //     // Logic to delete the audio file if needed
+  //     // Example: Delete audio file from Cloudinary or from the database
+  // };
+
+
+
 
     // const handleRecordingUrlChange = (event) => {
     //     setRecordingUrl(event.target.value)
@@ -37,9 +52,10 @@ const CreateRecording = ({username, connections, onSubmit}) => {
         console.log(formData)
       const data = await cloudinaryUpload(formData)
       console.log("CLOUD RESPONSE", data)
-      setRecordedUrl(data.audio_url)                        // here...setRecordedUrl and then immed using it
+      setRecordedUrl(data.audio_url) 
+      setPublicID(data.public_id)                       // here...setRecordedUrl and then immed using it
 
-      
+
 
       console.log("cloudinaryurl", recordedUrl)
 
@@ -47,7 +63,8 @@ const CreateRecording = ({username, connections, onSubmit}) => {
         data.audio_url,
         recordingTitle,
         parentUsername,
-        readerUsername
+        readerUsername,
+        data.public_id
       );
       setRecordingTitle("");
       setParentUsername("");
@@ -122,7 +139,7 @@ const CreateRecording = ({username, connections, onSubmit}) => {
       <div>
         <p>{error}</p>
       </div>
-    </div>
+      </div>
   );
 };
 CreateRecording.propTypes = {

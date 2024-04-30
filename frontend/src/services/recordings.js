@@ -54,12 +54,13 @@ const getRecordingRequestsByReader = async (username) => {
         };
 
 
-const createRecording = async (recording_url, recording_title, parent_username, reader_username) => {
+const createRecording = async (recording_url, recording_title, parent_username, reader_username, public_id) => {
         const payload = {
             audio_file: recording_url,
             title: recording_title,
             parent_username: parent_username,
-            reader_username: reader_username
+            reader_username: reader_username,
+            public_id: public_id
         }
     console.log("PAYLOAD: ",payload)
     const requestOptions = {
@@ -133,7 +134,7 @@ const createRecordingRequest = async (request_description, parent_username, read
     const payload = {
         request_description: request_description,
         parent_username: parent_username,
-        reader_username: reader_username
+        reader_username: reader_username,
     }
 console.log(payload)
 const requestOptions = {
@@ -213,6 +214,51 @@ const getRecordingsByChild = async () => {
   return data;
 };
 
+const deleteRecording = async (
+    recording_id
+  ) => {
+    const payload = {
+      recording_id: recording_id
+    };
+    console.log("HERE IS THE PAYLOAD!!!!", payload);
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    };
+    let response = await fetch(`${BACKEND_URL}/delete-recordings/${recording_id}`, requestOptions);
+    if (response.status !== 201) {
+      throw new Error("Error creating recording");
+    }
+    const data = await response.json();
+    return data;
+  };
+
+const deleteCloudinaryUpload = async (
+    public_id
+  ) => {
+    const payload = {
+      public_id: public_id
+    };
+    console.log("This is the SECOND one", payload);
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    };
+    let response = await fetch(`${BACKEND_URL}/cloudinary-delete`, requestOptions);
+    if (response.status !== 200) {
+      throw new Error("Error deleting cloudinary recording");
+    }
+    const data = await response.json();
+    return data;
+  };
 
 
-export {createRecording, getRecordingsByParent, cloudinaryUpload, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus, updateRecordingStatus};
+export {createRecording, getRecordingsByParent, cloudinaryUpload, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus, updateRecordingStatus,  deleteCloudinaryUpload, deleteRecording};
