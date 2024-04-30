@@ -49,7 +49,7 @@ python app.py
 
 At this stage, both front-end and back-end servers should be running. Open the following link with your browser (currently tested on Safari version 17.4.1 )
 
-[http://localhost:5173/](http://localhost:5173/)
+[http://localhost:5173/login](http://localhost:5173/login)
 
 # React + Vite
 
