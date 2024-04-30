@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
 import { getConnectionsByParent } from "../../services/connections";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import ChildNameOrEditForm from "../../components/ChildSetorEdit/ChildSetorEditForm";
 
 export const ParentPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -42,6 +43,7 @@ export const ParentPage = () => {
     //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
   };
 
+
   const getAllRecordingRequestsTrigger = async (username) => {
     await getRecordingRequestsByParent(username).then((data) => {
       const allRecordingRequests = data;
@@ -59,6 +61,7 @@ export const ParentPage = () => {
       //   localStorage.setItem("token", data.token);
     });
   };
+
   useEffect(() => {
     getAllRecordingsTrigger(username);
     getAllConnectionsTrigger(username);
@@ -71,7 +74,9 @@ export const ParentPage = () => {
         <p>{errorMessage}</p>
       ) : (
         <>
-          <p>I am parent: {username}</p>
+          <p>I am parent: {username} </p>
+          <ChildNameOrEditForm/>
+    
           <RequestConnection
             username={username}
             connections={connections}

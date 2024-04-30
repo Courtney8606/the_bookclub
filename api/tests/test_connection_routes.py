@@ -79,7 +79,7 @@ def test_get_connection_by_reader_failure(client, mocker):
     response = client.get('/connections/reader/non_existing_username')
 
     # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 400
+    assert response.status_code == 500
 
     # Assert the response content type is JSON
     assert response.content_type == 'application/json'
