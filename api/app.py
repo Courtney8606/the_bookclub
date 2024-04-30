@@ -227,9 +227,6 @@ def post_recording():
         # create the recording and add to db
         recording = Recording(None, audio_file, title, parent["id"], reader["id"])
         recording_repository.create(recording)
-        recording_request_repo = RecordingRequestRepository(connection)
-        new_status = "completed"
-        recording_request_repo.update_status(new_status, recording_request_id)
         return jsonify({'message': 'Recording created successfully'}), 201  # 201 status code for Created
     except Exception as e:
         # Return failure message
