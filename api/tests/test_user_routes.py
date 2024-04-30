@@ -131,13 +131,13 @@ def test_get_request_by_parent_failure(client, mocker):
     response = client.get('/recording-request/parent/non_existing_parent')
 
     # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 400
+    assert response.status_code == 404
 
     # Assert the response content type is JSON
     assert response.content_type == 'application/json'
 
     # Assert the response error message contains the expected substring
-    assert 'User not found' in response.json['error']
+    assert 'User not found' in response.json['message']
 
 def test_get_request_by_reader_failure(client, mocker):
     # Mock dependencies or database calls
@@ -148,11 +148,11 @@ def test_get_request_by_reader_failure(client, mocker):
     response = client.get('/recording-request/reader/non_existing_reader')
 
     # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 400
+    assert response.status_code == 404
 
     # Assert the response content type is JSON
     assert response.content_type == 'application/json'
 
     # Assert the response error message contains the expected substring
-    assert 'User not found' in response.json['error']
+    assert 'User not found' in response.json['message']
 
