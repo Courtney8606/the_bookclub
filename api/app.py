@@ -344,5 +344,26 @@ def get_request_by_reader(username):
     result = recording_request_repository.find_by_reader_id(user["id"])
     return jsonify(result)
 
+@app.route('/check-username', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def check_username_availability():
+    username = request.json.get('username')
+    connection = get_flask_database_connection(app)
+    users_repository = UserRepository(connection)
+    user_exists = bool(users_repository.find_username(username))
+    print('hello')
+    return jsonify({'available': not user_exists})
+
+@app.route('/check-email', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def check_email_availability():
+    email = request.json.get('email')
+    connection = get_flask_database_connection(app)
+    users_repository = UserRepository(connection)
+    email_exists = bool(users_repository.find_email(email))
+    return jsonify({'available': not email_exists})
+    
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
