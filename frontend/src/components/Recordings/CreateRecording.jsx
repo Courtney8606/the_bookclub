@@ -4,7 +4,7 @@ import { cloudinaryUpload } from "../../services/recordings";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import PropTypes from 'prop-types';
 
-const CreateRecording = ({username}) => {
+const CreateRecording = ({username, connections, onSubmit}) => {
     // const [recordingUrl, setRecordingUrl] = useState("")
     const [recordingTitle, setRecordingTitle] = useState("")
     const [parentUsername, setParentUsername] = useState("")
@@ -52,6 +52,8 @@ const CreateRecording = ({username}) => {
       setRecordingTitle("");
       setParentUsername("");
       setRecordedData(null);
+      onSubmit(username)
+      setError("")
     } catch (err) {
       console.error(err);
       setError([err.message]);
@@ -102,14 +104,13 @@ const CreateRecording = ({username}) => {
           onChange={(e) => setRecordingTitle(e.target.value)}
         />
         <br />
-        <label htmlFor="recording-parent-username">Parent Username:</label>
-        <input
-          data-testid="recording-parent-username"
-          type="text"
-          value={parentUsername}
-          onChange={(e) => setParentUsername(e.target.value)}
-        />
-        <br />
+        <label htmlFor="parent-dropdown">Select a parent:</label>
+                <select data-testid="parent-dropdown" value={parentUsername} onChange={(e) => setParentUsername(e.target.value)}>
+                    <option value="">Select a parent</option>
+                    {connections.filter((connection) => connection.status === 'approved').map((connection) => (
+                        <option key={connection.id} value={connection.parent_username}>{connection.parent_username}</option>
+                    ))}
+                </select><br />
         <input
           className="submit-button"
           role="submit-button"
@@ -125,7 +126,9 @@ const CreateRecording = ({username}) => {
   );
 };
 CreateRecording.propTypes = {
-    username: PropTypes.string.isRequired
+    username: PropTypes.string.isRequired,
+    connections: PropTypes.array.isRequired,
+    onSubmit: PropTypes.func.isRequired 
 };
 
 

@@ -255,8 +255,9 @@ def post_recording():
         parent = users_repository.find_username(parent_username)
         reader = users_repository.find_username(reader_username)
         print("now here")
+        status = "pending"
         # create the recording and add to db
-        recording = Recording(None, audio_file, title, parent["id"], reader["id"])
+        recording = Recording(None, audio_file, title, parent["id"], reader["id"], status)
         recording_repository.create(recording)
         return jsonify({'message': 'Recording created successfully'}), 201  # 201 status code for Created
     except Exception as e:

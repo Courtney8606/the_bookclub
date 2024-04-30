@@ -81,8 +81,8 @@ CREATE TABLE recording_requests (
     reader_id INTEGER REFERENCES users(id),
     reader_status reader_status_type,
     completed_recording_id INTEGER REFERENCES recordings(id),
-    date_requested TIMESTAMP
-    display_message_icon bool
+    date_requested TIMESTAMP,
+    display_message_icon BOOL
 );
 
 
