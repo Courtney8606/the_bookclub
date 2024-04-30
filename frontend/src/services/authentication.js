@@ -17,7 +17,7 @@ export const login = async (username, password) => {
   };
 
   const response = await fetch(`${BACKEND_URL}/login`, requestOptions);
-
+  
   return response;
 };
 

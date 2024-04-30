@@ -9,13 +9,13 @@ export const SignupPage = () => {
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const regex = /[!@#$%^&*(),.?":{}|<>]/;
+  const special = /[!@#$%^&*(),.?":{}|<>]/;
   const caps = /[A-Z]/
   
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password.length > 8 && regex.test(password) && caps.test(password)) {
+    if (password.length > 8 && special.test(password) && caps.test(password)) {
       try {
         await signup(email, password, username);
         console.log("redirecting...:");
@@ -94,6 +94,16 @@ export const SignupPage = () => {
               className="signup-input"
             ></input>
           </div>
+         
+          <ul style={{ listStyleType: 'disc', marginLeft: '10px', paddingTop: '0', marginBottom: '0' }}>
+        <ul style={{ listStyleType: 'disc', marginLeft: '10px', paddingTop: '0', marginBottom: '0' }}>
+        <h3 style={{fontSize: '12px', color: password.length > 12 && special.test(password) && caps.test(password) ? 'green' : 'red', textAlign: 'left'}}>Password requirements:</h3>
+        <li style={{ fontSize: '12px', color: password.length > 12 ? 'green' : 'red', textAlign: 'left' }}>Password length must be greater than 12.</li>
+        <li style={{ fontSize: '12px', color: special.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain special character.</li>
+        <li style={{ fontSize: '12px', color: caps.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain at least one capital letter character.</li>
+      </ul>
+      </ul>
+         
         </div>
 
         <div>
