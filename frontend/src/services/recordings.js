@@ -168,12 +168,33 @@ const requestOptions = {
     };
     let response = await fetch(`${BACKEND_URL}/recording-request`, requestOptions);
     if (response.status !== 200) {
-        throw new Error("Error creating recording");
+        throw new Error("Error updating");
     }
 const data = await response.json();
 return data;
 }
 
+const updateRecordingStatus = async (recording_id, new_status) => {
+    const payload = {
+        recording_id: recording_id,
+        recording_status: new_status
+    }
+    console.log(payload)
+    const requestOptions = {
+        method: "PUT",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+        };
+        let response = await fetch(`${BACKEND_URL}/recordings/status`, requestOptions);
+        if (response.status !== 200) {
+            throw new Error("Error updating");
+        }
+    const data = await response.json();
+    return data;
+}
 const getRecordingsByChild = async () => {
   const requestOptions = {
     method: "GET",
@@ -240,4 +261,4 @@ const deleteCloudinaryUpload = async (
   };
 
 
-export {createRecording, getRecordingsByParent, cloudinaryUpload, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus,  deleteCloudinaryUpload, deleteRecording};
+export {createRecording, getRecordingsByParent, cloudinaryUpload, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus, updateRecordingStatus,  deleteCloudinaryUpload, deleteRecording};

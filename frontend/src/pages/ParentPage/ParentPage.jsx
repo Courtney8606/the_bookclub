@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
 import { getConnectionsByParent } from "../../services/connections";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+// import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ChildNameOrEditForm from "../../components/ChildSetorEdit/ChildSetorEditForm";
 
 export const ParentPage = () => {
@@ -31,34 +31,35 @@ export const ParentPage = () => {
         setErrorMessage("Unauthorised");
       } else {
         const allRecordings = response;
-        allRecordings.sort(
-          (a, b) => new Date(b.date_requested) - new Date(a.date_requested)
-        );
+        allRecordings.sort((a, b) => new Date(b.date_recorded) - new Date(a.date_recorded));
         setRecordings(allRecordings);
       }
     } catch (error) {
       console.error("Error fetching data");
       setErrorMessage("Error fetching data");
     }
-    //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
   };
-
 
   const getAllRecordingRequestsTrigger = async (username) => {
-    await getRecordingRequestsByParent(username).then((data) => {
-      const allRecordingRequests = data;
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-      setRecordingRequests(allRecordingRequests);
-      //   localStorage.setItem("token", data.token);
-    });
-  };
+    try {
+      const response = await  getRecordingRequestsByParent(username);
+      if (response.message === "Unauthorised") {
+        setErrorMessage("Unauthorised");
+      } else {
+        const allRecordingRequests = response;
+        allRecordingRequests.sort((a, b) => new Date(b.date_requested) - new Date(a.date_requested));
+        setRecordingRequests(allRecordingRequests);
+      }
+    } catch (error) {
+      console.error("Error fetching data");
+      setErrorMessage("Error fetching data");
+    }
+  }; 
 
   const getAllConnectionsTrigger = async (username) => {
     await getConnectionsByParent(username).then((data) => {
       const allConnections = data;
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
       setConnections(allConnections);
-      //   localStorage.setItem("token", data.token);
     });
   };
 
@@ -97,7 +98,10 @@ export const ParentPage = () => {
             view={view}
             onUpdate={getAllRecordingRequestsTrigger}
           />
-          <ViewRecordings data={recordings} view={view} />
+          <ViewRecordings 
+          data={recordings} 
+          view={view} 
+          onUpdate={getAllRecordingsTrigger}/>
           <ChildViewButton />
         </>
       )}

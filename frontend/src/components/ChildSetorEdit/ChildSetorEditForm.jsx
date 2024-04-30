@@ -20,8 +20,13 @@ const ChildNameOrEditForm = () => {
                 // Handle unauthorized case
                 return;
             } else {
-                setChildName(response.child);
-                setShowInput(response.child === '');
+                const child = response.child
+                if (child) {
+                setChildName(child);
+                setShowInput(child === '');}
+                else {
+                    setChildName("")
+                }
             }
         } catch (error) {
             console.error("Error fetching data");

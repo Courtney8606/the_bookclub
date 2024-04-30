@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getConnectionsByReader } from "../../services/connections";
 import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+// import NavigationBar from "../../components/NavigationBar/NavigationBar";
 
 export const ReaderPage = () => {
   const username = localStorage.getItem("username");
@@ -21,38 +21,44 @@ export const ReaderPage = () => {
   const navigate = useNavigate();
   const view = "reader";
 
-  const getAllRecordingsTrigger = async (username) => {
-    try {
-      const response = await getRecordingsByReader(username);
-      if (response.message === "Unauthorised") {
-        setErrorMessage("Unauthorised");
-      } else {
-        setRecordings(response);
+    const getAllRecordingsTrigger = async (username) => {
+      try {
+        const response = await getRecordingsByReader(username);
+        if (response.message === "Unauthorised") {
+          setErrorMessage("Unauthorised");
+        } else {
+          const allRecordings = response;
+          allRecordings.sort((a, b) => new Date(b.date_recorded) - new Date(a.date_recorded));
+          await setRecordings(allRecordings);
+        }
+      } catch (error) {
+        console.error("Error fetching data");
+        setErrorMessage("Error fetching data");
       }
-    } catch (error) {
-      console.error("Error fetching data");
-      setErrorMessage("Error fetching data");
-    }
-    //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-  };
+    };
 
-  const getAllRecordingRequestsTrigger = (username) => {
-    getRecordingRequestsByReader(username).then((data) => {
-      const allRecordingRequests = data;
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-      setRecordingRequests(allRecordingRequests);
-      //   localStorage.setItem("token", data.token);
-    });
-  };
+    const getAllRecordingRequestsTrigger = async (username) => {
+      try {
+        const response = await  getRecordingRequestsByReader(username);
+        if (response.message === "Unauthorised") {
+          setErrorMessage("Unauthorised");
+        } else {
+          const allRecordingRequests = response;
+          allRecordingRequests.sort((a, b) => new Date(b.date_requested) - new Date(a.date_requested));
+          await setRecordingRequests(allRecordingRequests);
+        }
+      } catch (error) {
+        console.error("Error fetching data");
+        setErrorMessage("Error fetching data");
+      }
+    };
 
-  const getAllConnectionsTrigger = (username) => {
+  const getAllConnectionsTrigger = async (username) => {
     getConnectionsByReader(username).then((data) => {
       console.log(data);
       const allConnections = data;
       console.log(allConnections);
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
       setConnections(allConnections);
-      //   localStorage.setItem("token", data.token);
     });
   };
   useEffect(() => {
@@ -77,7 +83,10 @@ export const ReaderPage = () => {
             connections={connections}
             onSubmit={getAllRecordingsTrigger}
           />
-          <ViewRecordings data={recordings} view={view} />
+          <ViewRecordings 
+            data={recordings} 
+            view={view} 
+            onUpdate={getAllRecordingsTrigger} />
           <ViewConnections
             data={connections}
             view={view}

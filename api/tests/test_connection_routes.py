@@ -3,12 +3,20 @@ from app import app  # Assuming your Flask application is in a module named app
 from lib.database_connection import get_flask_database_connection
 from lib.connection_repo import ConnectionRepository
 from lib.user_repository import UserRepository
+from flask import Flask, session
+
 
 # The fixture client allows us to make HTTP requests to the routes
 @pytest.fixture
 def client():
     with app.test_client() as client:
         yield client
+
+@pytest.fixture
+def session_client(client):
+    with client.session_transaction() as session:
+        session['user'] = 'test_user'  # Set session variables as needed
+    yield client
 
 # Mocking is to remove dependencies, in this case the dependencies are; 
 # 1.get_flask_database_connection function 
@@ -79,13 +87,13 @@ def test_get_connection_by_reader_failure(client, mocker):
     response = client.get('/connections/reader/non_existing_username')
 
     # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 500
+    assert response.status_code == 404
 
     # Assert the response content type is JSON
     assert response.content_type == 'application/json'
 
     # Assert the response error message contains the expected substring
-    assert 'User not found' in response.json['error']
+    assert 'User not found' in response.json['message']
 
 
 def test_get_connection_by_parent_failure(client, mocker):
@@ -97,13 +105,13 @@ def test_get_connection_by_parent_failure(client, mocker):
     response = client.get('/connections/parent/non_existing_username')
 
     # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 400
+    assert response.status_code == 404
 
     # Assert the response content type is JSON
     assert response.content_type == 'application/json'
 
     # Assert the response error message contains the expected substring
-    assert 'User not found' in response.json['error']
+    assert 'User not found' in response.json['message']
 
 
 
