@@ -59,9 +59,7 @@ export const ParentPage = () => {
   const getAllConnectionsTrigger = async (username) => {
     await getConnectionsByParent(username).then((data) => {
       const allConnections = data;
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
       setConnections(allConnections);
-      //   localStorage.setItem("token", data.token);
     });
   };
 
