@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
 import { getConnectionsByParent } from "../../services/connections";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+// import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import ChildNameOrEditForm from "../../components/ChildSetorEdit/ChildSetorEditForm";
 
 export const ParentPage = () => {
@@ -22,7 +22,7 @@ export const ParentPage = () => {
   const [recordingRequests, setRecordingRequests] = useState([]);
   const [connections, setConnections] = useState([]);
   const navigate = useNavigate();
-  const view = "parent";;
+  const view = "parent";
 
   const getAllRecordingsTrigger = async (username) => {
     try {
@@ -100,7 +100,10 @@ export const ParentPage = () => {
             view={view}
             onUpdate={getAllRecordingRequestsTrigger}
           />
-          <ViewRecordings data={recordings} view={view} onUpdate={getAllRecordingsTrigger}/>
+          <ViewRecordings 
+          data={recordings} 
+          view={view} 
+          onUpdate={getAllRecordingsTrigger}/>
           <ChildViewButton />
         </>
       )}

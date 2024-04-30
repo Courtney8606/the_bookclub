@@ -167,7 +167,7 @@ const requestOptions = {
     };
     let response = await fetch(`${BACKEND_URL}/recording-request`, requestOptions);
     if (response.status !== 200) {
-        throw new Error("Error creating recording");
+        throw new Error("Error updating");
     }
 const data = await response.json();
 return data;
@@ -189,7 +189,7 @@ const updateRecordingStatus = async (recording_id, new_status) => {
         };
         let response = await fetch(`${BACKEND_URL}/recordings/status`, requestOptions);
         if (response.status !== 200) {
-            throw new Error("Error creating recording");
+            throw new Error("Error updating");
         }
     const data = await response.json();
     return data;
