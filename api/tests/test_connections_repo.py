@@ -20,7 +20,12 @@ def test_find_connection_by_column_parent_id(db_connection):
     connections = repository.find_by_parent_id(1)
     result_sorted = sorted(connections, key=lambda x: x['id'])
     assert result_sorted == [
-        {"id": 1, "parent_id": 1,"reader_id": 2, "status":"approved",'parent_username': 'mrs_dursley','reader_username': 'montoya'},
+        {"id": 1, 
+        "parent_id": 1,
+        "reader_id": 2, 
+        "status":"approved",
+        'parent_username': 'mrs_dursley',
+        'reader_username': 'montoya'},
         {"id":3, "parent_id":1, "reader_id":3, "status": 'rejected','parent_username': 'mrs_dursley','reader_username': 'remy'}
     ]
 

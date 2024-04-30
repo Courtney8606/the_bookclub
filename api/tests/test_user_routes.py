@@ -11,7 +11,7 @@ def client():
     with app.test_client() as client:
         yield client
 
-def test_put_child_update_request(client, mocker):
+def test_post_create_recording_request(client, mocker):
     # Mock dependencies or database calls
     mocker.patch('lib.database_connection.get_flask_database_connection')
     mocker.patch.object(UserRepository, 'find_username', side_effect=[

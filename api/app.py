@@ -263,6 +263,22 @@ def post_recording():
         # Return failure message
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
 
+# Update recording status
+@app.route('/recordings/status', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def update_recording_status():
+    try:
+        connection = get_flask_database_connection(app)
+        repo = RecordingRepository(connection)
+        connection_id = request.json['recording_id']
+        new_status = request.json['recording_status'] 
+        repo.update_status(new_status, connection_id)
+        return jsonify({'message': 'Recording updated successfully'}), 200  # 200 status code for OK 
+    except Exception as e:
+        # Return failure message
+        return jsonify({'error': "Recording update failed"}), 400  # 400 status code for Bad Request
+
+
 # CONNECTIONS ROUTES
 
 @app.route('/connections', methods=['POST'])
