@@ -8,7 +8,7 @@ class RecordingRequest():
     self.reader_id = reader_id
     self.reader_status = reader_status
     self.completed_recording_id = completed_recording_id
-    self.date_requested = (datetime.now().date()).strftime("%Y-%m-%d")
+    self.date_requested = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
  
 
   # Equality method

@@ -66,7 +66,9 @@ CREATE TABLE recordings (
     -- audio file type tbc
     title VARCHAR( 100 ) NOT NULL,
     parent_id INTEGER REFERENCES users(id),
-    reader_id INTEGER REFERENCES users(id)
+    reader_id INTEGER REFERENCES users(id),
+    recording_status status_type,
+    date_recorded TIMESTAMP
 );
 
 CREATE TYPE reader_status_type AS ENUM ('pending', 'accepted', 'rejected', 'completed');
@@ -78,7 +80,7 @@ CREATE TABLE recording_requests (
     reader_id INTEGER REFERENCES users(id),
     reader_status reader_status_type,
     completed_recording_id INTEGER REFERENCES recordings(id),
-    date_requested DATE
+    date_requested TIMESTAMP
 );
 
 
@@ -99,14 +101,14 @@ INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 2, 'approved')
 INSERT INTO connections (parent_id, reader_id, status) VALUES (2, 3, 'approved');
 INSERT INTO connections (parent_id, reader_id, status) VALUES (1, 3, 'rejected');
 
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test.mp3', 'The big surprise', 1, 2);
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2);
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3);
-INSERT INTO recordings (audio_file, title, parent_id, reader_id) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3);
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test.mp3', 'The big surprise', 1, 2, 'pending', '2024-04-10 10:00:00');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2,'approved','2024-03-25 13:10:00');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3,'pending','2024-04-15 19:15:10');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3,'rejected', '2023-12-10 11:21:01');
 
-INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please write me a story about dragons', 1, 2, 'pending', NULL, '2024-07-20' );
-INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please read me the very hungry caterpillar', 1, 3, 'accepted', 1, '2023-10-22');
-INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('I want a story about a princess', 2, 3, 'completed', NULL, '2024-01-25');
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please write me a story about dragons', 1, 2, 'pending', NULL, '2024-07-20 10:00:00' );
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('please read me the very hungry caterpillar', 1, 3, 'accepted', 1, '2023-10-22 10:00:00');
+INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested) VALUES ('I want a story about a princess', 2, 3, 'completed', NULL, '2024-01-25 10:00:00');
 
 
 INSERT INTO permissions (role, action) VALUES 
