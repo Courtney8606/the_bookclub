@@ -9,7 +9,7 @@ export const ChildPage = () => {
   const username = localStorage.getItem("username");
   const [recordings, setRecordings] = useState([]);
   const [childName, setChildName] = useState("");
-  const [error, setError] = useState([])
+  const [errorMessage, setErrorMessage] = useState([])
   const navigate = useNavigate();
 
   const getAllRecordingsTrigger = (username) => {
@@ -24,15 +24,15 @@ export const ChildPage = () => {
     try {
     const response = await getUserDetails(username);
     if (response.message === "Unauthorised") {
-        setError("Unauthorised");
+      errorMessage("Unauthorised");
     } else {
         const userDetails = response
         await setChildName(userDetails.child)
         console.log(childName)
     }
     } catch (error) {
-    console.error("Error fetching data");
-    setError("Error fetching data");
+    setErrorMessage("Error fetching data");
+    console.log(errorMessage)
     }
 };  
 
@@ -43,7 +43,7 @@ export const ChildPage = () => {
 
   return (
     <>
-      <p>I am child: {childName}</p>
+      <h2>Hello {childName}!</h2>
       <ViewRecordings data={recordings} />
       <LogoutButton />
     </>
