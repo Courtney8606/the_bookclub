@@ -91,12 +91,23 @@ def login():
     else: 
         return jsonify({'message': 'Invalid credentials'}), 401
 
-@app.route('/users/<id>', methods=['GET'])
+# @app.route('/users/<id>', methods=['GET'])
+# @cross_origin(supports_credentials=True)
+# def get_user_by_id(id):
+#     connection = get_flask_database_connection(app)
+#     user_repository = UserRepository(connection)
+#     result = user_repository.find_id(id)
+#     return jsonify(result)
+
+@app.route('/users/<username>', methods=['GET'])
 @cross_origin(supports_credentials=True)
-def get_user(id):
+def get_user(username):
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-    result = user_repository.find_id(id)
+    username = session.get('user')
+    print("GET USER - Username:", username)
+    result = user_repository.find_username(username)
+    print (result)
     return jsonify(result)
 
 @app.route('/signup', methods=['POST'])
@@ -122,6 +133,19 @@ def toggle_child_safety_mode():
     username = session.get('user')
     print("Username:", username)
     user_repository.update_role(role, username)
+    result = user_repository.find_username(username)
+    return jsonify(result)
+
+@app.route('/users/update-child', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def update_child_name():
+    child_name = request.json['child_name']
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    print("Session:", session)
+    username = session.get('user')
+    print("Username:", username)
+    user_repository.update_child_name(child_name, username)
     result = user_repository.find_username(username)
     return jsonify(result)
 

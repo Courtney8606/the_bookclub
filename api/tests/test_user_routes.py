@@ -1,7 +1,6 @@
 import pytest
 from app import app  # Assuming your Flask application is in a module named app
 from lib.database_connection import get_flask_database_connection
-from lib.connection_repo import ConnectionRepository
 from lib.user_repository import UserRepository
 from lib.recording_request import *
 from lib.recording_request_repo import *
@@ -12,7 +11,7 @@ def client():
     with app.test_client() as client:
         yield client
 
-def test_post_recording_request(client, mocker):
+def test_put_child_update_request(client, mocker):
     # Mock dependencies or database calls
     mocker.patch('lib.database_connection.get_flask_database_connection')
     mocker.patch.object(UserRepository, 'find_username', side_effect=[

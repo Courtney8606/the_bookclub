@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "50a87e301589def54f57a84f3fa74bf2ffa2def3ac7519f926faf575821d36c2"
+            "sha256": "b49275479cc0c07ac935c125a4f75832e08e4d693a6d775590b37d2cb9ca04ec"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -180,6 +180,13 @@
             "markers": "python_version >= '3.7'",
             "version": "==2.1.5"
         },
+        "mocker": {
+            "hashes": [
+                "sha256:2009911707c74b28bdc9959b5224717e45fcb93475b4b7bb4efad3285fcf2919"
+            ],
+            "index": "pypi",
+            "version": "==1.1.1"
+        },
         "msgspec": {
             "hashes": [
                 "sha256:06acbd6edf175bee0e36295d6b0302c6de3aaf61246b46f9549ca0041a9d7177",
@@ -277,6 +284,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==8.2.0"
+        },
+        "pytest-mock": {
+            "hashes": [
+                "sha256:0b72c38033392a5f4621342fe11e9219ac11ec9d375f8e2a0c164539e0d70f6f",
+                "sha256:2719255a1efeceadbc056d6bf3df3d1c5015530fb40cf347c0f9afac88410bd0"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==3.14.0"
         },
         "pytest-xprocess": {
             "hashes": [

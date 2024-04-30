@@ -9,13 +9,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
 import { getConnectionsByParent } from "../../services/connections";
+import ChildNameOrEditForm from "../../components/ChildSetorEdit/ChildSetorEditForm";
 
 export const ParentPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const username = localStorage.getItem("username");
   const [recordings, setRecordings] = useState([]);
   const [recordingRequests, setRecordingRequests] = useState([]);
-  const [connections, setConnections] = useState([]);  
+  const [connections, setConnections] = useState([]);
   const navigate = useNavigate();
   const view = "parent"
 
@@ -36,7 +37,8 @@ export const ParentPage = () => {
     //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
   };
 
-  const getAllRecordingRequestsTrigger = (username) => {
+
+  const getAllRecordingRequestsTrigger = async (username) => {
     getRecordingRequestsByParent(username)
         .then((data) => {
           const allRecordingRequests = data
@@ -46,7 +48,7 @@ export const ParentPage = () => {
         })
   } 
 
-  const getAllConnectionsTrigger = (username) => {
+  const getAllConnectionsTrigger = async (username) => {
     getConnectionsByParent(username)
         .then((data) => {
           const allConnections = data
@@ -58,7 +60,7 @@ export const ParentPage = () => {
   useEffect(() => {
     getAllRecordingsTrigger(username);
     getAllConnectionsTrigger(username);
-    getAllRecordingRequestsTrigger(username)
+    getAllRecordingRequestsTrigger(username);
   }, [navigate]);
 
   return (
@@ -67,7 +69,8 @@ export const ParentPage = () => {
         <p>{errorMessage}</p>
       ) : (
         <>
-          <p>I am parent: {username}</p>
+          <p>I am parent: {username} </p>
+          <ChildNameOrEditForm/>
           <RequestConnection username= {username} connections= {connections} onSubmit={getAllConnectionsTrigger}/>
           <ViewConnections data = {connections} view = {view} onUpdate={getAllConnectionsTrigger}/>
           <CreateRecordingRequest username= {username} connections={connections} onSubmit={getAllRecordingRequestsTrigger}/>
