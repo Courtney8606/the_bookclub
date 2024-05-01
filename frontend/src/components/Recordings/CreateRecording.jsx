@@ -3,17 +3,16 @@ import { createRecording } from "../../services/recordings";
 import { cloudinaryUpload } from "../../services/recordings";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import "./CreateRecording.css";
+import PropTypes from 'prop-types';
 
-import PropTypes from "prop-types";
-
-const CreateRecording = ({ username, connections, onSubmit }) => {
-  const [recordingTitle, setRecordingTitle] = useState("");
-  const [parentUsername, setParentUsername] = useState("");
-  const [recordedData, setRecordedData] = useState(null);
-  const [recordedUrl, setRecordedUrl] = useState(null);
-  const [publicID, setPublicID] = useState(null);
-  const [error, setError] = useState([]);
-  const readerUsername = username;
+const CreateRecording = ({username, connections, onSubmit}) => {
+    const [recordingTitle, setRecordingTitle] = useState("")
+    const [parentUsername, setParentUsername] = useState("")
+    const [recordedData, setRecordedData] = useState(null)
+    const [recordedUrl, setRecordedUrl] = useState(null);
+    const [publicID, setPublicID] = useState(null);
+    const [error, setError] = useState([])
+    const readerUsername = username
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,13 +24,9 @@ const CreateRecording = ({ username, connections, onSubmit }) => {
       }
       const formData = new FormData();
       formData.append("audio_file", recordedData);
-      console.log(formData);
       const data = await cloudinaryUpload(formData);
-      console.log("CLOUD RESPONSE", data);
       setRecordedUrl(data.audio_url);
       setPublicID(data.public_id); // here...setRecordedUrl and then immed using it
-
-      console.log("cloudinaryurl", recordedUrl);
 
       await createRecording(
         // here

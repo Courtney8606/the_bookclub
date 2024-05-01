@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createRecordingRequest } from "../../services/recordings"
 import PropTypes from 'prop-types';
 
-const CreateRecordingRequest = ({username, connections, onSubmit}) => {
+const CreateRecordingRequestChild = ({username, connections, onSubmit}) => {
     const [requestDescription, setRequestDescription] = useState("")
     const [readerUsername, setReaderUsername] = useState("")
     // const navigate = useNavigate();
@@ -34,20 +34,19 @@ const CreateRecordingRequest = ({username, connections, onSubmit}) => {
 
     return (
         <div data-testid='create-recording-component'>
-        <form onSubmit={handleSubmit} className="border border-2 rounded recording-request-form-bg mt-3 p-4" id="border-mulberry">
-        <h4 className="text-center">Request a recording here!</h4><br></br>
-        <div className="form-group">
-        <label htmlFor="recording-description" className="col-sm-3 col-form-label pt-0" >Request Description:</label>
-            <input data-testid="description"  type='text' value={requestDescription} onChange={handleRecordingDescriptionChange}></input><br></br>
-        <label htmlFor="reader-dropdown" className="col-form-label pt-4 pe-4">Select a reader:</label>
+        <form onSubmit={handleSubmit}>
+        <label><h2>Ask for a new story</h2></label>
+        <label htmlFor="recording-description"><h3>What would you like read to you?</h3></label>
+        <p><i>You can ask them to make you up a new story or read from a book. If you want a made-up story what are your favourite things to read stories about?</i></p>
+            <textarea data-testid="description" type='text' value={requestDescription} onChange={handleRecordingDescriptionChange}/><br></br>
+        <label htmlFor="reader-dropdown">Choose your reader: </label>
                 <select data-testid="reader-dropdown" value={readerUsername} onChange={handleReaderUsernameChange}>
-                    <option value="">Select a reader</option>
+                    <option value="">click here for your readers </option>
                     {connections.filter((connection) => connection.status === 'approved').map((connection) => (
                         <option key={connection.id} value={connection.reader_username}>{connection.reader_username}</option>
                     ))}
                 </select><br />
-            <input className="button mt-3 request-recording-submit-button" role="submit-button" id="submit" type="submit" value="Submit" />
-            </div>
+            <input className="submit-button" role="submit-button" id="submit" type="submit" value="Send" />
         </form>
         <div>
             <p>{error}</p>
@@ -55,11 +54,11 @@ const CreateRecordingRequest = ({username, connections, onSubmit}) => {
         </div>
     )
 }
-CreateRecordingRequest.propTypes = {
+CreateRecordingRequestChild.propTypes = {
     username: PropTypes.string.isRequired,
     connections: PropTypes.array.isRequired,
     onSubmit: PropTypes.func.isRequired  
 };
 
 
-export default CreateRecordingRequest;
+export default CreateRecordingRequestChild;

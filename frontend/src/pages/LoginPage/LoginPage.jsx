@@ -7,6 +7,9 @@ import backgroundImage from "../../assets/background.jpg";
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  //   const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -15,6 +18,7 @@ export const LoginPage = () => {
       const response = await login(username, password);
       if (response.status != 200) {
         console.log("Error returning data");
+        setErrorMessage('Username or Password is incorrect!')
       } else {
         const data = await response.json();
         localStorage.setItem("username", data["username"]);
@@ -71,6 +75,7 @@ export const LoginPage = () => {
             className="login-input"
           />
           <br></br>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <input
             className="login-button"
             role="submit-button"
@@ -78,10 +83,9 @@ export const LoginPage = () => {
             type="submit"
             value="Log in"
           />
-          {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
           <div>
             <hr />
-            <p>Don't have an account? Click below to sign up!</p>
+            <p>Don&apos;t have an account? Click below to sign up!</p>
             <Link to="/signup">Sign up</Link>
           </div>
         </form>

@@ -33,3 +33,20 @@ export const updateRecordingRequestsDisplayIcon = async () => {
 
   return response;
 };
+
+export const updateRecordingsDisplayIcon = async () => {
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  };
+
+  const response = await fetch(
+    `${BACKEND_URL}/update-recordings-notifications`,
+    requestOptions
+  );
+
+  return response;
+};

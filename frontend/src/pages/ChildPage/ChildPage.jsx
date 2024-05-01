@@ -1,12 +1,13 @@
-import ViewRecordings from "../../components/TestingOnlyViewTableAuto"
+/* eslint-disable react-hooks/exhaustive-deps */
+import ViewRecordingsChild from "../../components/Recordings/ViewRecordingsChild";
 import { getRecordingsByChild, getRecordingRequestsByParent } from "../../services/recordings";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../../components/LogoutButton/LogoutButton";
 import { getUserDetails } from "../../services/users";
 import { getConnectionsByParent } from "../../services/connections";
-import ViewRecordingRequests from "../../components/RecordingRequests/ViewRecordingRequests";
-import CreateRecordingRequest from "../../components/RecordingRequests/CreateRecordingRequest";
+import CreateRecordingRequestChild from "../../components/RecordingRequests/CreateRecordingRequestChild";
+import ViewRecordingRequestsChild from "../../components/RecordingRequests/ViewRecordingRequestChild";
 
 export const ChildPage = () => {
   const username = localStorage.getItem("username");
@@ -16,15 +17,24 @@ export const ChildPage = () => {
   const [connections, setConnections] = useState([]);
   const [errorMessage, setErrorMessage] = useState([])
   const navigate = useNavigate();
-  const view = "parent"
 
-  const getAllRecordingsTrigger = (username) => {
-    getRecordingsByChild(username).then((data) => {
-      const allRecordings = data;
-      console.log(data)
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
-      setRecordings(allRecordings);
-    });
+  if (!username) {
+    navigate("/login");}
+
+  const getAllRecordingsTrigger = async (username) => {
+    try {
+      const response = await getRecordingsByChild(username);
+      if (response.message === "Unauthorised") {
+        setErrorMessage("Unauthorised");
+      } else {
+        const allRecordings = response;
+        allRecordings.sort((a, b) => new Date(b.date_recorded) - new Date(a.date_recorded));
+        setRecordings(allRecordings);
+      }
+    } catch (error) {
+      console.error("Error fetching data");
+      setErrorMessage("Error fetching data");
+    }
   };
 
   const getAllRecordingRequestsTrigger = async (username) => {
@@ -46,9 +56,7 @@ export const ChildPage = () => {
   const getAllConnectionsTrigger = async (username) => {
     await getConnectionsByParent(username).then((data) => {
       const allConnections = data;
-      //   allPosts.sort((a, b) => new Date(b.post_date) - new Date(a.post_date));
       setConnections(allConnections);
-      //   localStorage.setItem("token", data.token);
     });
   };
 
@@ -78,16 +86,15 @@ export const ChildPage = () => {
   return (
     <>
       <h2>Hello {childName}!</h2>
-      <ViewRecordings data={recordings} />
-      <CreateRecordingRequest
+      <ViewRecordingsChild 
+          data={recordings}/>
+      <CreateRecordingRequestChild
             username={username}
             connections={connections}
             onSubmit={getAllRecordingRequestsTrigger}
           />
-      <ViewRecordingRequests
+      <ViewRecordingRequestsChild
             data={recordingRequests}
-            view={view}
-            onUpdate={getAllRecordingRequestsTrigger}
           />
       <LogoutButton />
     </>

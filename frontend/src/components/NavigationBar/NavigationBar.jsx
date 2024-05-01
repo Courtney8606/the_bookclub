@@ -11,7 +11,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./NavigationBar.css";
 
 export const NavigationBar = () => {
-  const username = localStorage.getItem("username");
+  // const username = localStorage.getItem("username");
   const location = useLocation();
   const [showNewMessage, setShowNewMessage] = useState(false);
   const showNavbar = !["/signup", "/login", "/child"].includes(
@@ -22,6 +22,8 @@ export const NavigationBar = () => {
     connectionsReader,
     recordingRequestsParent,
     recordingRequestsReader,
+    recordingsReader,
+    recordingsParent
   } = useDataContext();
 
   useEffect(() => {
@@ -45,6 +47,15 @@ export const NavigationBar = () => {
       recordingRequestsReader.some(
         (request) =>
           request.display_message_icon && request.reader_status === "pending"
+      ) ||
+      recordingsReader.some(
+        (request) =>
+          request.display_message_icon && (request.recording_status === "accepted" ||
+          request.recording_status === "rejected")
+      )||
+      recordingRequestsParent.some(
+        (request) =>
+          request.display_message_icon && request.reader_status === "pending"
       );
     setShowNewMessage(newMessage);
   }, [
@@ -52,6 +63,8 @@ export const NavigationBar = () => {
     connectionsReader,
     recordingRequestsParent,
     recordingRequestsReader,
+    recordingsReader,
+    recordingsParent
   ]);
 
   if (!showNavbar) {

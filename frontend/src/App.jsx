@@ -5,6 +5,7 @@ import React from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { ReaderPage } from "./pages/ReaderPage/ReaderPage";
 import { ParentPage } from "./pages/ParentPage/ParentPage";
+import { StoryRequestsPageParent } from "./pages/ParentPage/StoryRequestsPageParent";
 import { NotificationsPage } from "./pages/NotificationsPage/NotificationsPage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { HomePage } from "./pages/HomePage/HomePage";
@@ -39,6 +40,7 @@ function App() {
             <Route path="/child" element={<ChildPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/storystudio" element={<ReaderLandingPage />} />
+            <Route path="/family-hub-story-requests" element={<StoryRequestsPageParent />} />
             <Route
               path="/storystudioconnections"
               element={<ReaderConnectionsPage />}

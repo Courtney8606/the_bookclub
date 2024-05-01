@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   updateConnectionsDisplayIcon,
   updateRecordingRequestsDisplayIcon,
+  updateRecordingsDisplayIcon,
 } from "../../services/notifications";
 import "./NotificationsPage.css";
 
@@ -15,10 +16,16 @@ export const NotificationsPage = () => {
     connectionsReader,
     recordingRequestsParent,
     recordingRequestsReader,
+    recordingsReader,
+    recordingsParent
   } = useDataContext();
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+
+    if (!username) {
+      navigate("/login");}
+      
     const allNotifications = [];
 
     const approvedConnection = connectionsParent.find(
@@ -27,7 +34,7 @@ export const NotificationsPage = () => {
     );
     if (approvedConnection) {
       allNotifications.push(
-        `Your connection request to ${approvedConnection.reader_id} has been approved!`
+        `Your connection request to ${approvedConnection.reader_username} has been approved!`
       );
     }
     const pendingConnectionReader = connectionsReader.find(
@@ -36,7 +43,7 @@ export const NotificationsPage = () => {
     );
     if (pendingConnectionReader) {
       allNotifications.push(
-        `You have received a connection request from ${pendingConnectionReader.parent_id}. Head to your Reader account page to manage this request.`
+        `You have received a connection request from ${pendingConnectionReader.parent_username}. Head to your Reader account page to manage this request.`
       );
     }
     const rejectedConnectionParent = connectionsParent.find(
@@ -45,7 +52,7 @@ export const NotificationsPage = () => {
     );
     if (rejectedConnectionParent) {
       allNotifications.push(
-        `Your connection request to ${rejectedConnectionParent.reader_id} has been rejected.`
+        `Your connection request to ${rejectedConnectionParent.reader_username} has been rejected.`
       );
     }
     const pendingRequestReader = recordingRequestsReader.find(
@@ -54,7 +61,7 @@ export const NotificationsPage = () => {
     );
     if (pendingRequestReader) {
       allNotifications.push(
-        `You have been sent a story request by ${pendingRequestReader.parent_id}. Head over to your Reader account page to review the details.`
+        `You have been sent a story request by ${pendingRequestReader.parent_username}. Head over to your Reader account page to review the details.`
       );
     }
     const acceptedRequestParent = recordingRequestsParent.find(
@@ -63,7 +70,7 @@ export const NotificationsPage = () => {
     );
     if (acceptedRequestParent) {
       allNotifications.push(
-        `Your story request has been accepted by ${acceptedRequestParent.reader_id}. Get ready for a story coming your way soon!`
+        `Your story request has been accepted by ${acceptedRequestParent.reader_username}. Get ready for a story coming your way soon!`
       );
     }
     const rejectedRequestParent = recordingRequestsParent.find(
@@ -72,7 +79,7 @@ export const NotificationsPage = () => {
     );
     if (rejectedRequestParent) {
       allNotifications.push(
-        `Your story request has been rejected by ${rejectedRequestParent.reader_id}. Get ready for a story coming your way soon!`
+        `Your story request has been rejected by ${rejectedRequestParent.reader_username}. Get ready for a story coming your way soon!`
       );
     }
     const completedRequestParent = recordingRequestsParent.find(
@@ -81,7 +88,35 @@ export const NotificationsPage = () => {
     );
     if (completedRequestParent) {
       allNotifications.push(
-        `Your story request to ${completedRequestParent.reader_id} has been marked as complete.`
+        `Your story request to ${completedRequestParent.reader_username} has been marked as complete.`
+      );
+    }
+    
+    const pendingRecordingParent = recordingsParent.find(
+      (request) =>
+        request.recording_status === "pending" && request.display_message_icon
+    );
+    if (pendingRecordingParent) {
+      allNotifications.push(
+        `You have been sent a new story by ${pendingRecordingParent.reader_username}. Head over to your Parent account page to review. You will need to accept it before it can be available to your child.`
+      );
+    }
+    const acceptedRecordingReader = recordingsReader.find(
+      (request) =>
+        request.recording_status === "approved" && request.display_message_icon
+    );
+    if (acceptedRecordingReader) {
+      allNotifications.push(
+        `Your story has been approved by ${acceptedRecordingReader.parent_username}!`
+      );
+    }
+    const rejectedRecordingReader = recordingsReader.find(
+      (request) =>
+        request.recording_status === "rejected" && request.display_message_icon
+    );
+    if (rejectedRecordingReader) {
+      allNotifications.push(
+        `Your story has been rejected by ${rejectedRecordingReader.parent_username}.`
       );
     }
     setNotifications(allNotifications);
@@ -90,6 +125,8 @@ export const NotificationsPage = () => {
     connectionsReader,
     recordingRequestsParent,
     recordingRequestsReader,
+    recordingsParent,
+    recordingsReader,
     navigate,
   ]);
 
@@ -98,6 +135,7 @@ export const NotificationsPage = () => {
       await Promise.all([
         updateConnectionsDisplayIcon(),
         updateRecordingRequestsDisplayIcon(),
+        updateRecordingsDisplayIcon(),
       ]);
       setNotifications([]);
     } catch (error) {
