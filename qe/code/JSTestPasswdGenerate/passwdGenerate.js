@@ -1,7 +1,9 @@
 // File: passwdGenerate.js
 
 const passwdGenerate = ( maxPasswdLength, numberOfTestPasswds ) => {
-    return 'a';
+    if ( numberOfTestPasswds === 1 ) {
+        return 'a';
+    } 
 };
 
 module.exports = passwdGenerate;
