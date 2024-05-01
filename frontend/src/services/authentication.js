@@ -39,7 +39,7 @@ export const signup = async (email, password, username) => {
 
   let response = await fetch(`${BACKEND_URL}/signup`, requestOptions);
   // docs: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
-  if (response.status === 200) {
+  if (response.status === 201) {
     return;
   } else {
     throw new Error(
