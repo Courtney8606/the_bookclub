@@ -88,6 +88,7 @@ def login():
     password = data.get('password')
     # Retrieve user from database by username
     user = user_repository.find_username(username)
+    print(user)
     # Check if user exists and password is correct
     if user['id'] <= 3:
         # For test users (IDs 1-3), compare passwords directly
