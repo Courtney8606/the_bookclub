@@ -16,7 +16,11 @@ const LogoutButton = () => {
         type="button"
         className="logout-button"
         onClick={logout}
-        style={{ backgroundColor: "transparent" }}
+        style={{
+          backgroundColor: "transparent",
+          border: "None",
+          color: "#00215e",
+        }}
       >
         Logout
       </button>

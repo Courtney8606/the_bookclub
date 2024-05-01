@@ -1,0 +1,15 @@
+.navbar {
+  background-color: #8cc0de !important;
+  color: #00215e;
+}
+
+.button-one {
+  color: #00215e;
+}
+
+img.LogoImage {
+  position: relative;
+  top: 4px;
+  height: 70px;
+  width: auto;
+}

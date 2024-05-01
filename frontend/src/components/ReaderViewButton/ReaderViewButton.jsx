@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
 
-const ReaderViewButton = () => {
+const ReaderViewButton = ({ className }) => {
   const navigate = useNavigate();
   const handleSubmit = () => {
-    navigate(`/reader`);
+    navigate(`/storystudio`);
   };
 
   return (
     <div className="reader-view">
       <button
         type="button"
-        className="reader-view-button"
+        className={`reader-view-button ${className}`}
         onClick={handleSubmit}
-        style={{ backgroundColor: "transparent" }}
+        style={{
+          backgroundColor: "transparent",
+          border: "None",
+        }}
       >
-        Reader View
+        Story Studio
       </button>
     </div>
   );
