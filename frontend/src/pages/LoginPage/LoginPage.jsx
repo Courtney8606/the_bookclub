@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./LoginPage.css";
 import { login } from "../../services/authentication";
+import backgroundImage from "../../assets/background.jpg";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -36,7 +37,15 @@ export const LoginPage = () => {
 
   return (
     <>
-      <div className="login-container">
+      <div
+        className="login-container"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+        }}
+      >
         <form className="login-form" onSubmit={handleSubmit}>
           <div>
             <h2>Book Club</h2>
@@ -76,7 +85,6 @@ export const LoginPage = () => {
             <Link to="/signup">Sign up</Link>
           </div>
         </form>
-        <div className="background-container-login"></div>
       </div>
     </>
   );
