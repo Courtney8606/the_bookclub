@@ -18,6 +18,10 @@ export const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+
+    if (!username) {
+      navigate("/login");}
+      
     const allNotifications = [];
 
     const approvedConnection = connectionsParent.find(

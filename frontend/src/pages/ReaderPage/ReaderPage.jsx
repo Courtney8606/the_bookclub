@@ -21,6 +21,9 @@ export const ReaderPage = () => {
   const navigate = useNavigate();
   const view = "reader";
 
+  if (!username) {
+    navigate("/login");}
+
     const getAllRecordingsTrigger = async (username) => {
       try {
         const response = await getRecordingsByReader(username);

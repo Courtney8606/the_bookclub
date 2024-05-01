@@ -19,6 +19,9 @@ export const ReaderConnectionsPage = () => {
     });
   };
   useEffect(() => {
+    if (!username) {
+      navigate("/login");}
+      
     getAllConnectionsTrigger(username);
   }, [navigate]);
 
