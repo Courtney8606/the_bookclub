@@ -24,6 +24,9 @@ export const ParentPage = () => {
   const navigate = useNavigate();
   const view = "parent";
 
+  if (!username) {
+    navigate("/login");}
+
   const getAllRecordingsTrigger = async (username) => {
     try {
       const response = await getRecordingsByParent(username);

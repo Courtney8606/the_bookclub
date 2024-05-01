@@ -18,6 +18,9 @@ export const ChildPage = () => {
   const [errorMessage, setErrorMessage] = useState([])
   const navigate = useNavigate();
 
+  if (!username) {
+    navigate("/login");}
+
   const getAllRecordingsTrigger = async (username) => {
     try {
       const response = await getRecordingsByChild(username);
