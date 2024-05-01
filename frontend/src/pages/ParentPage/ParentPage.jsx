@@ -31,7 +31,9 @@ export const ParentPage = () => {
         setErrorMessage("Unauthorised");
       } else {
         const allRecordings = response;
-        allRecordings.sort((a, b) => new Date(b.date_recorded) - new Date(a.date_recorded));
+        allRecordings.sort(
+          (a, b) => new Date(b.date_recorded) - new Date(a.date_recorded)
+        );
         setRecordings(allRecordings);
       }
     } catch (error) {
@@ -42,19 +44,21 @@ export const ParentPage = () => {
 
   const getAllRecordingRequestsTrigger = async (username) => {
     try {
-      const response = await  getRecordingRequestsByParent(username);
+      const response = await getRecordingRequestsByParent(username);
       if (response.message === "Unauthorised") {
         setErrorMessage("Unauthorised");
       } else {
         const allRecordingRequests = response;
-        allRecordingRequests.sort((a, b) => new Date(b.date_requested) - new Date(a.date_requested));
+        allRecordingRequests.sort(
+          (a, b) => new Date(b.date_requested) - new Date(a.date_requested)
+        );
         setRecordingRequests(allRecordingRequests);
       }
     } catch (error) {
       console.error("Error fetching data");
       setErrorMessage("Error fetching data");
     }
-  }; 
+  };
 
   const getAllConnectionsTrigger = async (username) => {
     await getConnectionsByParent(username).then((data) => {
@@ -75,34 +79,45 @@ export const ParentPage = () => {
         <p>{errorMessage}</p>
       ) : (
         <>
-          <p>I am parent: {username} </p>
-          <ChildNameOrEditForm/>
-    
-          <RequestConnection
-            username={username}
-            connections={connections}
-            onSubmit={getAllConnectionsTrigger}
-          />
-          <ViewConnections
-            data={connections}
-            view={view}
-            onUpdate={getAllConnectionsTrigger}
-          />
-          <CreateRecordingRequest
-            username={username}
-            connections={connections}
-            onSubmit={getAllRecordingRequestsTrigger}
-          />
-          <ViewRecordingRequests
-            data={recordingRequests}
-            view={view}
-            onUpdate={getAllRecordingRequestsTrigger}
-          />
-          <ViewRecordings 
-          data={recordings} 
-          view={view} 
-          onUpdate={getAllRecordingsTrigger}/>
-          <ChildViewButton />
+          <div>
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-sm-6">
+                <p>I am parent: {username} </p>
+                <ChildNameOrEditForm />
+
+                <RequestConnection
+                  username={username}
+                  connections={connections}
+                  onSubmit={getAllConnectionsTrigger}
+                />
+                <ViewConnections
+                  data={connections}
+                  view={view}
+                  onUpdate={getAllConnectionsTrigger}
+                />
+              </div>
+              <div className="col-sm-6">
+                <CreateRecordingRequest
+                  username={username}
+                  connections={connections}
+                  onSubmit={getAllRecordingRequestsTrigger}
+                />
+                <ViewRecordingRequests
+                  data={recordingRequests}
+                  view={view}
+                  onUpdate={getAllRecordingRequestsTrigger}
+                />
+                <ViewRecordings
+                  data={recordings}
+                  view={view}
+                  onUpdate={getAllRecordingsTrigger}
+                />
+              </div>
+              </div>
+            </div>
+            <ChildViewButton />
+          </div>
         </>
       )}
     </>

@@ -34,18 +34,20 @@ const CreateRecordingRequest = ({username, connections, onSubmit}) => {
 
     return (
         <div data-testid='create-recording-component'>
-        <form onSubmit={handleSubmit}>
-        <label>Request a recording:</label><br></br>
-        <label htmlFor="recording-description">Request Description:</label>
-            <input data-testid="description" type='text' value={requestDescription} onChange={handleRecordingDescriptionChange}></input><br></br>
-        <label htmlFor="reader-dropdown">Select a reader:</label>
+        <form onSubmit={handleSubmit} className="border border-2 rounded recording-request-form-bg mt-3 p-4" id="border-mulberry">
+        <h4 className="text-center">Request a recording here!</h4><br></br>
+        <div className="form-group">
+        <label htmlFor="recording-description" className="col-sm-3 col-form-label pt-0" >Request Description:</label>
+            <input data-testid="description"  type='text' value={requestDescription} onChange={handleRecordingDescriptionChange}></input><br></br>
+        <label htmlFor="reader-dropdown" className="col-form-label pt-4 pe-4">Select a reader:</label>
                 <select data-testid="reader-dropdown" value={readerUsername} onChange={handleReaderUsernameChange}>
                     <option value="">Select a reader</option>
                     {connections.filter((connection) => connection.status === 'approved').map((connection) => (
                         <option key={connection.id} value={connection.reader_username}>{connection.reader_username}</option>
                     ))}
                 </select><br />
-            <input className="submit-button" role="submit-button" id="submit" type="submit" value="Submit" />
+            <input className="button mt-3 request-recording-submit-button" role="submit-button" id="submit" type="submit" value="Submit" />
+            </div>
         </form>
         <div>
             <p>{error}</p>

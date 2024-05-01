@@ -31,7 +31,7 @@ const RequestConnection = ({username, onSubmit}) => {
     return (
         <div data-testid='create-recording-component'>
         <form onSubmit={handleSubmit}>
-        <label>Connection Request:</label><br></br>
+        <label>Make a connection request here!</label><br></br>
         <label htmlFor="reader-username">Request Reader Connection (please input their username):</label>
             <input data-testid="reader-username" type='text' value={readerUsername} onChange={handlerReaderUsernameChange}></input><br></br>
             <input className="submit-button" role="submit-button" id="submit" type="submit" value="Submit" />
