@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 class Recording:
-    def __init__(self, id, audio_file, title, parent_id, reader_id, recording_status, public_id):
+    def __init__(self, id, audio_file, title, parent_id, reader_id, recording_status, public_id, display_message_icon = False):
         self.id = id
         self.audio_file = audio_file
         self.title = title
@@ -11,6 +11,7 @@ class Recording:
         self.recording_status = recording_status
         self.date_recorded = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.public_id = public_id
+        self.display_message_icon = display_message_icon
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -24,5 +25,6 @@ class Recording:
             'Reader ID': self.reader_id,
             'Public ID': self.public_id,
             'Recording Status': self.recording_status,
-            'Recorded Date': self.date_recorded
+            'Recorded Date': self.date_recorded,
+            'Display Message Icon': self.display_message_icon
         })

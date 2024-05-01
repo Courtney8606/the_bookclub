@@ -13,13 +13,12 @@ class RecordingRepository:
         return requests
 
     def create(self, recording):
-
-        rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *', [
-                                recording.audio_file, recording.title, recording.parent_id, recording.reader_id, recording.recording_status, recording.date_recorded, recording.public_id])
+        recording.display_message_icon = True
+        rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id, display_message_icon) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *', [
+                                recording.audio_file, recording.title, recording.parent_id, recording.reader_id, recording.recording_status, recording.date_recorded, recording.public_id, recording.display_message_icon])
         row = rows[0]
-        recording.id = row["id"]
         print(row)
-        recording.date_recorded = row["date_recorded"]
+        recording.id = row["id"]
         return recording
     
     def delete(self, recording_id):
@@ -93,5 +92,11 @@ class RecordingRepository:
         return requests
 
     def update_status(self, status, id):
-        self._connection.execute("UPDATE recordings SET recording_status = %s WHERE id = %s", [status, id])
+        self._connection.execute("UPDATE recordings SET recording_status = %s, display_message_icon = True WHERE id = %s", [status, id])
         return print("updated")
+
+    def clear_notifications_parent(self, parent_id):
+        self._connection.execute('UPDATE recordings SET display_message_icon = False WHERE parent_id = %s', [parent_id])
+    
+    def clear_notifications_reader(self,reader_id):
+        self._connection.execute('UPDATE recordings SET display_message_icon = False WHERE reader_id = %s', [reader_id])
