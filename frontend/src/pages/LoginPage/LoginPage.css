@@ -61,3 +61,7 @@ body {
   opacity: 0.2;
   z-index: -1; /* Ensure the background stays behind the form */
 }
+.error-message {
+  color: red; /* Change this to the desired color */
+}
+

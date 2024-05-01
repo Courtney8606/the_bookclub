@@ -27,6 +27,13 @@ class UserRepository:
         row = rows[0]
         return row
     
+    def find_email(self, email):
+        rows = self._connection.execute("SELECT * FROM users WHERE email = %s", [email])
+        if not rows:
+            return None  # Return None or raise an exception to indicate that the user wasn't found
+        row = rows[0]
+        return row
+    
     def create(self, user):
         self._connection.execute('INSERT INTO users (username, email, role, password) VALUES (%s,%s,%s,%s)', 
             [   user.username,
