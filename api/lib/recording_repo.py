@@ -95,3 +95,9 @@ class RecordingRepository:
     def update_status(self, status, id):
         self._connection.execute("UPDATE recordings SET recording_status = %s WHERE id = %s", [status, id])
         return print("updated")
+
+    def clear_notifications_parent(self, parent_id):
+        self._connection.execute('UPDATE recordings SET display_message_icon = False WHERE parent_id = %s', [parent_id])
+    
+    def clear_notifications_reader(self,reader_id):
+        self._connection.execute('UPDATE recordings SET display_message_icon = False WHERE reader_id = %s', [reader_id])

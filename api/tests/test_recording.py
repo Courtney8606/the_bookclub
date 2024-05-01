@@ -13,6 +13,7 @@ def test_creates_recording_instance():
     assert recording.recording_status == "pending"
     assert recording.date_recorded == formatted_date
     assert recording.public_id == "testId"
+    assert recording.display_message_icon == False
 
 
 # #Test to confirm equality of a record
@@ -35,5 +36,6 @@ def test_formats_recording_records_nicely():
             'Reader ID': 2,
             'Public ID': "testId",
             'Recording Status': "pending",
-            'Recorded Date': formatted_date
+            'Recorded Date': formatted_date,
+            'Display Message Icon': False
         })

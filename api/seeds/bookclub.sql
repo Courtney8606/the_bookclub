@@ -69,7 +69,8 @@ CREATE TABLE recordings (
     reader_id INTEGER REFERENCES users(id),
     recording_status status_type,
     date_recorded TIMESTAMP,
-    public_id VARCHAR( 100 ) NOT NULL
+    public_id VARCHAR( 100 ) NOT NULL,
+    display_message_icon BOOL
 );
 
 CREATE TYPE reader_status_type AS ENUM ('pending', 'accepted', 'rejected', 'completed');
@@ -101,10 +102,10 @@ INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VAL
 INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (2, 3, 'approved', True);
 INSERT INTO connections (parent_id, reader_id, status, display_message_icon) VALUES (1, 3, 'rejected', False);
 
-INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id) VALUES ('Test.mp3', 'The big surprise', 1, 2, 'pending', '2024-04-10 10:00:00', 'TESTSTRING');
-INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2,'approved','2024-03-25 13:10:00', 'TESTSTRING');
-INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3,'pending','2024-04-15 19:15:10', 'TESTSTRING');
-INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3,'rejected', '2023-12-10 11:21:01', 'TESTSTRING');
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id, display_message_icon) VALUES ('Test.mp3', 'The big surprise', 1, 2, 'pending', '2024-04-10 10:00:00', 'TESTSTRING', True);
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id, display_message_icon) VALUES ('Test2.mp3', 'Teddy bear picnic', 1, 2,'approved','2024-03-25 13:10:00', 'TESTSTRING', True);
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id, display_message_icon) VALUES ('Test3.mp3', 'A dragon for tea', 2, 3,'pending','2024-04-15 19:15:10', 'TESTSTRING', False);
+INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id, display_message_icon) VALUES ('Test4.mp3', 'Lions, tigers and bears, oh my!', 2, 3,'rejected', '2023-12-10 11:21:01', 'TESTSTRING', False);
 
 
 INSERT INTO recording_requests (request_description, parent_id, reader_id, reader_status, completed_recording_id, date_requested, display_message_icon) VALUES ('I want a story about a big surprise', 1, 2, 'completed', 1, '2024-01-25 10:00:00', True);

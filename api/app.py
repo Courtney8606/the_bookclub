@@ -135,6 +135,25 @@ def post_user():
     response_data = {key: value for key, value in result.items() if key != 'password'}
     return jsonify(response_data), 201
 
+@app.route('/check-username', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def check_username_availability():
+    username = request.json.get('username')
+    connection = get_flask_database_connection(app)
+    users_repository = UserRepository(connection)
+    user_exists = bool(users_repository.find_username(username))
+    print('hello')
+    return jsonify({'available': not user_exists})
+
+@app.route('/check-email', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def check_email_availability():
+    email = request.json.get('email')
+    connection = get_flask_database_connection(app)
+    users_repository = UserRepository(connection)
+    email_exists = bool(users_repository.find_email(email))
+    return jsonify({'available': not email_exists})
+
 @app.route('/child-safety-mode', methods=['PUT'])
 @cross_origin(supports_credentials=True)
 def toggle_child_safety_mode():
@@ -477,24 +496,15 @@ def update_connections_notifications():
     connection_repository.clear_notifications_reader(user_id)
     return jsonify({'message': 'Notifications successfully cleared'})
 
-@app.route('/check-username', methods=['POST'])
+@app.route('/update-recordings-notifications', methods=['PUT'])
 @cross_origin(supports_credentials=True)
-def check_username_availability():
-    username = request.json.get('username')
+def update_recordings_notifications():
     connection = get_flask_database_connection(app)
-    users_repository = UserRepository(connection)
-    user_exists = bool(users_repository.find_username(username))
-    print('hello')
-    return jsonify({'available': not user_exists})
-
-@app.route('/check-email', methods=['POST'])
-@cross_origin(supports_credentials=True)
-def check_email_availability():
-    email = request.json.get('email')
-    connection = get_flask_database_connection(app)
-    users_repository = UserRepository(connection)
-    email_exists = bool(users_repository.find_email(email))
-    return jsonify({'available': not email_exists})
+    recordings_repository = RecordingRepository(recordings)
+    user_id = get_user_id()
+    recordings_repository.clear_notifications_parent(user_id)
+    recordings_repository.clear_notifications_reader(user_id)
+    return jsonify({'message': 'Notifications successfully cleared'})
 
 @app.route('/update-requests-notifications', methods=['PUT'])
 @cross_origin(supports_credentials=True)
