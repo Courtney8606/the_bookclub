@@ -1,23 +1,52 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./SignupPage.css";
-import { signup } from "../../services/authentication";
+import { signup, checkUsername, checkEmail } from "../../services/authentication";
 
 export const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
+  const [emailAvailable, setEmailAvailable] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-
-  const handleSubmit = async (event) => {
+  const special = /[!@#$%^&*(),.?":{}|<>]/;
+  const caps = /[A-Z]/
+  
+  
+const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      await signup(email, password, username);
-      console.log("redirecting...:");
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-      navigate("/signup");
+
+    if (password.length > 12 && special.test(password) && caps.test(password)) {
+      try {
+        // Check if the username is available
+        const usernameAvailable = await checkUsername(username);
+        const emailAvailable = await checkEmail(email);
+        setUsernameAvailable(usernameAvailable);
+        setEmailAvailable(emailAvailable);
+
+      if (usernameAvailable && emailAvailable) {
+          // If username is available, proceed with signup
+          await signup(email, password, username);
+          console.log("redirecting...");
+          navigate("/login");
+        } else {
+          if (!usernameAvailable && !emailAvailable) {
+            setErrorMessage('Username and email are already taken!');
+          } else if (!usernameAvailable) {
+            setErrorMessage('Username is already taken!');
+          } else {
+            setErrorMessage('Email is already taken!');
+          }
+        }
+      } catch (error) {
+        console.error('Error during signup:', error);
+        setErrorMessage('Error during signup. Please try again.');
+      }
+    } else {
+      // Display error message if password is invalid
+      setErrorMessage('invalid details');
     }
   };
 
@@ -84,6 +113,16 @@ export const SignupPage = () => {
               className="signup-input"
             ></input>
           </div>
+         
+          <ul style={{ listStyleType: 'disc', marginLeft: '10px', paddingTop: '0', marginBottom: '0' }}>
+        <ul style={{ listStyleType: 'disc', marginLeft: '10px', paddingTop: '0', marginBottom: '0' }}>
+        <h3 style={{fontSize: '12px', color: password.length > 12 && special.test(password) && caps.test(password) ? 'green' : 'red', textAlign: 'left'}}>Password requirements:</h3>
+        <li style={{ fontSize: '12px', color: password.length > 12 ? 'green' : 'red', textAlign: 'left' }}>Password length must be greater than 12.</li>
+        <li style={{ fontSize: '12px', color: special.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain special character.</li>
+        <li style={{ fontSize: '12px', color: caps.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain at least one capital letter character.</li>
+      </ul>
+      </ul>
+         
         </div>
 
         <div>
@@ -96,6 +135,7 @@ export const SignupPage = () => {
             Create Account
           </button>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div>
           <hr />
           <p>Already have an account? Click below to log in!</p>

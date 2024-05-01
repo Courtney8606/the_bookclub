@@ -12,7 +12,11 @@ const NotificationsPageButton = () => {
         type="button"
         className="notifications-page-button"
         onClick={handleSubmit}
-        style={{ backgroundColor: "transparent" }}
+        style={{
+          backgroundColor: "transparent",
+          border: "None",
+          color: "#00215e",
+        }}
       >
         Notifications
       </button>

@@ -1,10 +1,10 @@
 
+// import React from 'react';
 import PropTypes from 'prop-types';
 import UpdateStatusDropdown from '../UpdateStatus/UpdateStatusDropdown';
 import { updateRecordingStatus } from '../../services/recordings';
 import { formatDate } from '../../services/formatting';
 import { DeleteAudioButton } from './DeleteRecording';
-
 
 const ViewRecordings = ({data, view, onUpdate}) => {
   console.log("ITEM", data[0])
@@ -64,3 +64,4 @@ const ViewRecordings = ({data, view, onUpdate}) => {
   };
   
 export default ViewRecordings;
+
