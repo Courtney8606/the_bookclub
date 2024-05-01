@@ -21,13 +21,12 @@ const handleSubmit = async (event) => {
     if (password.length > 12 && special.test(password) && caps.test(password)) {
       try {
         // Check if the username is available
-        const available = await checkUsername(username);
+        const usernameAvailable = await checkUsername(username);
         const emailAvailable = await checkEmail(email);
-        setUsernameAvailable(available);
+        setUsernameAvailable(usernameAvailable);
         setEmailAvailable(emailAvailable);
 
-
-        if (available) {
+      if (usernameAvailable && emailAvailable) {
           // If username is available, proceed with signup
           await signup(email, password, username);
           console.log("redirecting...");
@@ -47,7 +46,7 @@ const handleSubmit = async (event) => {
       }
     } else {
       // Display error message if password is invalid
-      setErrorMessage('Password must be at least 8 characters long, contain a special character, and contain a capital letter.');
+      setErrorMessage('invalid details');
     }
   };
 
