@@ -1,0 +1,28 @@
+.social-icon {
+  color: #212f3c;
+  font-size: 30px;
+  transition: color 0.2s;
+  text-decoration: none;
+  padding-left: 10px;
+}
+
+.social-icon:hover {
+  color: #8cc0de;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #8cc0de;
+  margin-top: 100px;
+}
+
+a:link {
+  text-decoration: none;
+  color: #00215e;
+}
+
+a:visited {
+  color: #00215e;
+}

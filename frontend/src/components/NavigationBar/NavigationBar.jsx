@@ -1,13 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./NavigationBar.css";
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
 import logoImage from "../../assets/logo.png";
 import ParentViewButton from "../../components/ParentViewButton/ParentViewButton";
 import ReaderViewButton from "../../components/ReaderViewButton/ReaderViewButton";
 import LogoutButton from "../../components/LogoutButton/LogoutButton";
 import { useDataContext } from "../../data/data";
 import NotificationsPageButton from "../NotificationsPageButton/NotificationsPageButton";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./NavigationBar.css";
 
 export const NavigationBar = () => {
   const username = localStorage.getItem("username");
@@ -59,18 +61,23 @@ export const NavigationBar = () => {
 
   return (
     <div>
-      <Helmet>
+      {/* <Helmet>
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous"
         />
-      </Helmet>
+      </Helmet> */}
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            Logo
+          <a className="navbar-brand" href="/">
+            <img
+              className="LogoImage"
+              role="logoImg"
+              alt="logo"
+              src={logoImage}
+            />
           </a>
           <button
             className="navbar-toggler"
@@ -88,19 +95,6 @@ export const NavigationBar = () => {
               <li className="nav-item">
                 <a
                   className={
-                    location.pathname === "/reader"
-                      ? "nav-link active"
-                      : "nav-link"
-                  }
-                  aria-current="page"
-                  href="/reader"
-                >
-                  <ReaderViewButton />
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className={
                     location.pathname === "/parent"
                       ? "nav-link active"
                       : "nav-link"
@@ -108,11 +102,27 @@ export const NavigationBar = () => {
                   aria-current="page"
                   href="/parent"
                 >
-                  <ParentViewButton />
+                  <ParentViewButton className="button-one" />
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link">
+                <a
+                  className={
+                    location.pathname === "/reader"
+                      ? "nav-link active"
+                      : "nav-link"
+                  }
+                  aria-current="page"
+                  href="/reader"
+                >
+                  <ReaderViewButton className="button-one" />
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  style={{ backgroundColor: "transparent", border: "None" }}
+                >
                   <NotificationsPageButton />
                   {showNewMessage && ( // Conditional rendering of New Message
                     <p>
@@ -124,11 +134,6 @@ export const NavigationBar = () => {
               <li className="nav-item">
                 <a className="nav-link">
                   <LogoutButton />
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link disabled" aria-disabled="true">
-                  {username !== null ? `Signed in as ${username}` : null}
                 </a>
               </li>
             </ul>

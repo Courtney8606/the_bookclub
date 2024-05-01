@@ -1,26 +1,26 @@
 import { useNavigate } from "react-router-dom";
 
-const ParentViewButton = ({ className }) => {
+const ConnectionsViewButton = ({ className }) => {
   const navigate = useNavigate();
   const handleSubmit = () => {
-    navigate(`/parent`);
+    navigate(`/storystudioconnections`);
   };
 
   return (
-    <div className="parent-view">
+    <div className="connections-reader-view">
       <button
         type="button"
-        className={`parent-view-button ${className}`}
+        className={`connections-reader-view-button ${className}`}
         onClick={handleSubmit}
         style={{
           backgroundColor: "transparent",
           border: "None",
         }}
       >
-        Family Hub
+        Connections
       </button>
     </div>
   );
 };
 
-export default ParentViewButton;
+export default ConnectionsViewButton;
