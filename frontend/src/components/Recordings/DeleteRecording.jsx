@@ -1,4 +1,3 @@
-import React from 'react';
 import { deleteCloudinaryUpload } from '../../services/recordings';
 import { deleteRecording } from '../../services/recordings';
 import PropTypes from 'prop-types';
