@@ -1,7 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./NavigationBar.css";
-// import { Helmet } from "react-helmet-async";
 import logoImage from "../../assets/logo.png";
 import ParentViewButton from "../../components/ParentViewButton/ParentViewButton";
 import ReaderViewButton from "../../components/ReaderViewButton/ReaderViewButton";
@@ -108,12 +107,12 @@ export const NavigationBar = () => {
               <li className="nav-item">
                 <a
                   className={
-                    location.pathname === "/reader"
+                    location.pathname === "/storystudio"
                       ? "nav-link active"
                       : "nav-link"
                   }
                   aria-current="page"
-                  href="/reader"
+                  href="/storystudio"
                 >
                   <ReaderViewButton className="button-one" />
                 </a>
@@ -121,11 +120,12 @@ export const NavigationBar = () => {
               <li className="nav-item">
                 <a
                   className="nav-link"
+                  id="notifications"
                   style={{ backgroundColor: "transparent", border: "None" }}
                 >
                   <NotificationsPageButton />
                   {showNewMessage && ( // Conditional rendering of New Message
-                    <p>
+                    <p className="alignment message">
                       New <span id="message-icon">&#9993;</span>
                     </p>
                   )}

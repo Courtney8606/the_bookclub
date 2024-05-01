@@ -26,7 +26,7 @@ export const Footer = () => {
         ></script>
       </Helmet>
       <footer>
-        <div className="footer">
+        <div className="footer col-12">
           <p style={{ color: "#00215e" }}>
             {" "}
             *APP NAME* Connecting children with their relatives all around the

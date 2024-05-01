@@ -6,25 +6,7 @@ import { login } from "../../services/authentication";
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  //   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-  //   const handleErrorResponse = async (response) => {
-  //     try {
-  //       let data = await response.json();
-  //       if (data.message === "Password incorrect") {
-  //         setErrorMessage("Password is incorrect. Please try again.");
-  //         document.getElementById("password").value = "";
-  //       } else {
-  //         setErrorMessage("An error has occurred. Please try again.");
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //       setErrorMessage(
-  //         "Email address not found. Please try a different email address or sign up."
-  //       );
-  //     }
-  //   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -85,7 +67,7 @@ export const LoginPage = () => {
             role="submit-button"
             id="submit"
             type="submit"
-            value="Submit"
+            value="Log in"
           />
           {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
           <div>

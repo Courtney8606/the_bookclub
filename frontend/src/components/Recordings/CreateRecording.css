@@ -1,0 +1,50 @@
+.recording-input {
+  width: 200px;
+  padding: 12px 8px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.audio-recorder {
+  height: 80px !important;
+  width: 80px !important;
+}
+
+.audio-recorder-mic {
+  height: 45px !important;
+  margin-left: 5px;
+}
+
+.recording-form {
+  border: 5px solid #ffd9c0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 33%;
+  padding-bottom: 40px;
+  background-color: #ffd9c0;
+  padding-top: 40px;
+  color: #00215e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.create-recording-component {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 900px) {
+  .recording-form {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .recording-form {
+    width: 70%;
+  }
+}

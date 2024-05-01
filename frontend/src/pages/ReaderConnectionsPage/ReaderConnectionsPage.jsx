@@ -7,8 +7,22 @@ export const ReaderConnectionsPage = () => {
   const username = localStorage.getItem("username");
   const [connections, setConnections] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
+  const storedRole = localStorage.getItem("role");
   const navigate = useNavigate();
   const view = "reader";
+
+  useEffect(() => {
+    if (storedRole === "parent") {
+      if (username) {
+        navigate("/storystudioconnections");
+        getAllConnectionsTrigger(username);
+      } else {
+        navigate("/login");
+      }
+    } else {
+      setErrorMessage("Unauthorised");
+    }
+  }, [username, storedRole, navigate]);
 
   const getAllConnectionsTrigger = (username) => {
     getConnectionsByReader(username).then((data) => {
@@ -18,9 +32,6 @@ export const ReaderConnectionsPage = () => {
       setConnections(allConnections);
     });
   };
-  useEffect(() => {
-    getAllConnectionsTrigger(username);
-  }, [navigate]);
 
   return (
     <>
@@ -28,11 +39,13 @@ export const ReaderConnectionsPage = () => {
         <p>{errorMessage}</p>
       ) : (
         <>
-          <ViewConnections
-            data={connections}
-            view={view}
-            onUpdate={getAllConnectionsTrigger}
-          />
+          <div>
+            <ViewConnections
+              data={connections}
+              view={view}
+              onUpdate={getAllConnectionsTrigger}
+            />
+          </div>
         </>
       )}
     </>
