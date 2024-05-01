@@ -12,8 +12,12 @@ const passwdGenerate = ( maxPasswdLength, numberOfTestPasswds ) => {
     lowercase = "abcdefghijklmnopqrstuvwxyz";
     passwds = [];
     for( currentTestPasswdNumber = 0; currentTestPasswdNumber < numberOfTestPasswds; currentTestPasswdNumber++ ) {
-        randomCharNumber = getRandomInt(0, lowercase.length);
-        passwds.push(lowercase.charAt(randomCharNumber));
+        currentPasswd = "";
+        for( currentCharNumber = 0; currentCharNumber < maxPasswdLength; currentCharNumber++ ) {
+            randomCharNumber = getRandomInt(0, lowercase.length);
+            currentPasswd = currentPasswd.concat( lowercase.charAt(randomCharNumber) );
+        }
+        passwds.push(currentPasswd);
     }
     return passwds;
 };
