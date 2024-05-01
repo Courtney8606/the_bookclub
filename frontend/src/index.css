@@ -41,7 +41,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #8A2952;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -64,4 +64,83 @@ button:focus-visible {
   button {
     background-color: white;
   }
+}
+
+
+/* *----------- recording request form styles ------------* */
+
+
+#border-mulberry {
+  border-color: #FF9EAA !important;
+}
+
+.recording-request-form-bg {
+  background-color:#FFD9C0;
+  color:#00215E;
+}
+
+.request-recording-submit-button{
+  background-color: #8A2952;
+  border-color: #8A2952;;
+  color: #FFD9C0;
+  border-radius: 7px;
+}
+
+/* #00215e; */
+
+.button:hover {
+  background-color: #9F4F70;
+  border-color:#9F4F70;
+  color: #FFD9C0;
+  border-radius: 7px;
+}
+
+
+/* *----------- recording request table styles ------------* */
+
+/* .table-rounded {
+  border-radius:25px !important;
+} */
+/* 
+#requests-table-background{
+  background-color:  #FFD9C0;
+} */
+
+.recordings-requests-table {
+  border: 2px solid #FF9EAA;
+  background-color: #FFD9C0;
+  border-radius: 20px;
+  border-collapse: separate !important;
+  width: 70%;
+  color: #00215E
+}
+#recordings-requests-row-one {
+  border-bottom: 1px solid #8A2952;
+}
+.recordings-requests-row th,
+.recordings-requests-row td {
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+.recordings-requests-heading {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* *----------- childview button styles ------------* */
+
+
+.child-view-button {
+  background-color: #8a2952;
+  color: #ffd9c0; 
+  border: none; 
+  padding: 10px 20px; 
+  font-size: 16px;
+  cursor: pointer; 
+}
+
+.child-view-button:hover {
+  opacity: 0.8; 
 }
