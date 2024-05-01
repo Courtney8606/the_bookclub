@@ -94,7 +94,7 @@ export const HomePage = () => {
                       Let your child safely request or listen to stories
                     </p>
                     <a href="#" className="btn btn-primary" id="custom-button">
-                      <ChildViewButton className="button-two" />
+                      <ChildViewButton />
                     </a>
                   </div>
                 </div>

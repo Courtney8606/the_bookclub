@@ -47,7 +47,7 @@ const UpdateStatusDropdown = ({
           ))}
         </select>
         <button
-          className="submit-button connection-status-submit-button"
+          className="custom-button"
           role="submit-button"
           id="submit"
           type="submit"

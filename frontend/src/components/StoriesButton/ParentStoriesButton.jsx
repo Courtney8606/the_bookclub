@@ -1,26 +1,26 @@
 import { useNavigate } from "react-router-dom";
 
-const ParentViewButton = ({ className }) => {
+const ParentStoriesButton = ({ className }) => {
   const navigate = useNavigate();
   const handleSubmit = () => {
-    navigate(`/familyhub`);
+    navigate(`/familyhubstories`);
   };
 
   return (
-    <div className="parent-view">
+    <div className="stories-parent-view">
       <button
         type="button"
-        className={`parent-view-button ${className}`}
+        className={`stories-parent-view-button ${className}`}
         onClick={handleSubmit}
         style={{
           backgroundColor: "transparent",
           border: "None",
         }}
       >
-        Family Hub
+        Your stories
       </button>
     </div>
   );
 };
 
-export default ParentViewButton;
+export default ParentStoriesButton;

@@ -1,18 +1,11 @@
-import ParentViewButton from "../../components/ParentViewButton/ParentViewButton";
-import ReaderViewButton from "../../components/ReaderViewButton/ReaderViewButton";
-import ChildViewButton from "../../components/ChildViewButton/ChildViewButton";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import recordingImage from "../../assets/recording.png";
-import storyRequestsImage from "../../assets/storyrequests2.png";
-import connectionsImage from "../../assets/family.png";
-import ConnectionsViewButton from "../../components/Connections/ConnectionsViewButton";
-import ReaderStoryRequestsButton from "../../components/StoryRequestsButton/ReaderStoryRequestsButton";
-import ReaderStoriesButton from "../../components/StoriesButton/ReaderStoriesButton";
-import childImage from "../../assets/child.jpg";
-import "./ReaderLandingPage.css";
+import ParentConnectionsViewButton from "../../components/Connections/ParentConnectionsViewButton";
+import ParentStoriesButton from "../../components/StoriesButton/ParentStoriesButton";
+import ParentStoryRequestsButton from "../../components/StoryRequestsButton/ParentStoryRequestsButton";
+import "../ReaderLandingPage/ReaderLandingPage.css";
 
-export const ReaderLandingPage = () => {
+export const ParentLandingPage = () => {
   const username = localStorage.getItem("username");
   const storedRole = localStorage.getItem("role");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -21,7 +14,7 @@ export const ReaderLandingPage = () => {
   useEffect(() => {
     if (storedRole === "parent") {
       if (username) {
-        navigate("/storystudio");
+        navigate("/familyhub");
       } else {
         navigate("/login");
       }
@@ -44,9 +37,9 @@ export const ReaderLandingPage = () => {
                   id="custom-card-storystudio"
                   style={{ width: "18rem" }}
                 >
-                  <Link to="/storystudioconnections">
+                  <Link to="/familyhubconnections">
                     <i className="fa-solid fa-children storystudioicons"></i>
-                    <ConnectionsViewButton className="button-storystudio" />
+                    <ParentConnectionsViewButton className="button-storystudio" />
                   </Link>
                 </div>
               </div>
@@ -56,9 +49,9 @@ export const ReaderLandingPage = () => {
                   style={{ width: "18rem" }}
                   id="custom-card-storystudio"
                 >
-                  <Link to="/storystudiorequests">
+                  <Link to="/familyhubrequests">
                     <i className="fa-brands fa-fort-awesome storystudioicons"></i>
-                    <ReaderStoryRequestsButton className="button-storystudio" />
+                    <ParentStoryRequestsButton className="button-storystudio" />
                   </Link>
                 </div>
               </div>
@@ -68,9 +61,9 @@ export const ReaderLandingPage = () => {
                   style={{ width: "18rem" }}
                   id="custom-card-storystudio"
                 >
-                  <Link to="/storystudiostories">
+                  <Link to="/familyhubstories">
                     <i className="fa-solid fa-book storystudioicons"></i>
-                    <ReaderStoriesButton className="button-storystudio" />
+                    <ParentStoriesButton className="button-storystudio" />
                   </Link>
                 </div>
               </div>

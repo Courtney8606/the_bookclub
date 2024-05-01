@@ -13,20 +13,22 @@ const ViewRecordingRequests = ({ data, view, onUpdate }) => {
       <div className="container">
         <div className="row">
           <div className="col">
-            <h2 className="pt-4 pb-0 mb-0">Recording Requests</h2>
+            <h2 className="pt-4 pb-0 mb-0">Story Requests</h2>
           </div>
         </div>
         <div className="row">
           <div className="col">
-            <table className="recordings-requests-table recordings-requests-row th recordings-requests-row td recordings-requests-heading " id="requests-table-background">
-
+            <table
+              className="recordings-requests-table recordings-requests-row th recordings-requests-row td recordings-requests-heading "
+              id="requests-table-background"
+            >
               <thead>
                 <tr>
                   <th>Date requested</th>
-                  <th>Request</th>
-                  {view === "parent" && <th>Reader Requested</th>}
+                  <th>Story Details</th>
+                  {view === "parent" && <th>Requested From</th>}
                   {view === "reader" && <th>Requested By</th>}
-                  <th>Request Status</th>
+                  <th>Status</th>
                   {view === "reader" && <th>Update response</th>}
                 </tr>
               </thead>

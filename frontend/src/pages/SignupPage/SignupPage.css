@@ -9,13 +9,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 450px;
+  width: 550px;
   padding-bottom: 20px;
   background-color: white;
 }
 
 .signup-input {
-  width: 200px;
+  width: 270px;
   padding: 12px 8px;
   margin: 8px 0;
   display: inline-block;
@@ -60,4 +60,10 @@ body {
   background-position: center;
   opacity: 0.2;
   z-index: -1; /* Ensure the background stays behind the form */
+}
+
+.signuplogo {
+  height: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

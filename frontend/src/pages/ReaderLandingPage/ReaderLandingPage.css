@@ -4,13 +4,12 @@
   /* border-color: #8cc0de; Change to the desired color */
   /* border-color: #faf0d7; */
   border-color: #8a2952;
-  color: #00215e; /* Change to the desired color */
+  /* color: #00215e; Change to the desired color */
 }
 
 #custom-button:hover {
-  background-color: #00215e; /* Change to the desired color on hover */
-  border-color: #00215e; /* Change to the desired color on hover */
-  color: #8cc0de; /* Change to the desired text color on hover */
+  background-color: #00215e;
+  border-color: #00215e;
 }
 
 #custom-card-storystudio {
@@ -62,6 +61,12 @@
 
 .storystudioicons {
   color: #00215e;
+  font-size: 130px;
+  padding-bottom: 20px;
+}
+
+.storystudioicons:hover {
+  color: #8a2952;
   font-size: 130px;
   padding-bottom: 20px;
 }

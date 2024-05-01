@@ -5,7 +5,7 @@ import React from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { ReaderPage } from "./pages/ReaderPage/ReaderPage";
 import { ParentPage } from "./pages/ParentPage/ParentPage";
-import { StoryRequestsPageParent } from "./pages/ParentPage/StoryRequestsPageParent";
+import { ParentRequestsPage } from "./pages/ParentPage/ParentRequestsPage";
 import { NotificationsPage } from "./pages/NotificationsPage/NotificationsPage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { HomePage } from "./pages/HomePage/HomePage";
@@ -18,6 +18,10 @@ import { Footer } from "./components/Footer/Footer";
 import { ReaderConnectionsPage } from "./pages/ReaderConnectionsPage/ReaderConnectionsPage";
 import { ReaderStoriesPage } from "./pages/ReaderStoriesPage/ReaderStoriesPage";
 import { CreateRecordingPage } from "./pages/CreateRecordingPage/CreateRecordingPage";
+import { ParentLandingPage } from "./pages/ParentPage/ParentLandingPage";
+import { ParentStoriesPage } from "./pages/ParentPage/ParentStoriesPage";
+import { ParentConnectionsPage } from "./pages/ParentPage/ParentConnectionsPage";
+import { ReaderStoryRequestsPage } from "./pages/ReaderStoryRequestsPage/ReaderStoryRequestsPage";
 
 function App() {
   const cld = new Cloudinary({
@@ -40,17 +44,26 @@ function App() {
             <Route path="/child" element={<ChildPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/storystudio" element={<ReaderLandingPage />} />
-            <Route path="/family-hub-story-requests" element={<StoryRequestsPageParent />} />
+            <Route path="/familyhubrequests" element={<ParentRequestsPage />} />
             <Route
               path="/storystudioconnections"
               element={<ReaderConnectionsPage />}
             />
-            {/* <Route path="/storystudiorequests" element={<ReaderRequestsPage />} /> */}
+            <Route
+              path="/storystudiorequests"
+              element={<ReaderStoryRequestsPage />}
+            />
             <Route path="/storystudiostories" element={<ReaderStoriesPage />} />
             <Route
               path="/storystudiorecording"
               element={<CreateRecordingPage />}
             />
+            <Route path="/familyhub" element={<ParentLandingPage />} />
+            <Route
+              path="/familyhubconnections"
+              element={<ParentConnectionsPage />}
+            />
+            <Route path="/familyhubstories" element={<ParentStoriesPage />} />
           </Routes>
           <Footer />
         </DataProvider>

@@ -1,0 +1,32 @@
+.request-form {
+  border: 5px solid #ffd9c0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100;
+  padding-bottom: 40px;
+  background-color: #ffd9c0;
+  padding-top: 40px;
+  color: #00215e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.request-input {
+  width: 200px;
+  padding: 12px 8px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.request-button {
+  margin-top: 20px;
+}
+
+.request-title {
+  margin-top: 30px;
+}
