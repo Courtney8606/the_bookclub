@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
   getConnectionsByParent,
   getConnectionsByReader,
@@ -6,8 +6,10 @@ import {
 import {
   getRecordingRequestsByParent,
   getRecordingRequestsByReader,
+  getRecordingsByParent,
+  getRecordingsByReader,
 } from "../services/recordings";
-
+import PropTypes from 'prop-types';
 // Create the context
 const DataContext = createContext();
 
@@ -20,11 +22,16 @@ export const DataProvider = ({ children }) => {
   const [recordingRequestsParent, setRecordingRequestsParent] = useState([]);
   const [connectionsReader, setConnectionsReader] = useState([]);
   const [recordingRequestsReader, setRecordingRequestsReader] = useState([]);
+  const [recordingsReader, setRecordingsReader] = useState([]);
+  const [recordingsParent, setRecordingsParent] = useState([]);
   const [loading, setLoading] = useState(true);
   console.log("DATAconnectionsParent", connectionsParent);
-  console.log("DATArecordingsParent", recordingRequestsParent);
+  console.log("DATArecordingsRequestParent", recordingRequestsParent);
   console.log("DATAconnectionsReader", connectionsReader);
-  console.log("DATArecordingsReader", recordingRequestsReader);
+  console.log("DATArecordingsRequestReader", recordingRequestsReader);
+  console.log("DATArecordingsReader", recordingsReader);
+  console.log("DATArecordingsParent", recordingsParent);
+
 
   useEffect(() => {
     const fetchParentConnections = async () => {
@@ -71,11 +78,35 @@ export const DataProvider = ({ children }) => {
       }
     };
 
+    const fetchReaderRecordings = async () => {
+      try {
+        const response = await getRecordingsByReader(
+          localStorage.getItem("username")
+        );
+        setRecordingsReader(response);
+      } catch (error) {
+        console.error("Error fetching recording requests data:", error);
+      }
+    };
+
+    const fetchParentRecordings = async () => {
+      try {
+        const response = await getRecordingsByParent(
+          localStorage.getItem("username")
+        );
+        setRecordingsParent(response);
+      } catch (error) {
+        console.error("Error fetching recording requests data:", error);
+      }
+    };
+
     Promise.all([
       fetchParentConnections(),
       fetchParentRecordingRequests(),
       fetchReaderConnections(),
       fetchReaderRecordingRequests(),
+      fetchReaderRecordings(),
+      fetchParentRecordings(),
     ]).then(() => {
       setLoading(false);
     });
@@ -88,6 +119,8 @@ export const DataProvider = ({ children }) => {
         connectionsReader,
         recordingRequestsParent,
         recordingRequestsReader,
+        recordingsParent,
+        recordingsReader
       }}
     >
       {!loading && children}

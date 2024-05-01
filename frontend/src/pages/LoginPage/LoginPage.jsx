@@ -10,23 +10,6 @@ export const LoginPage = () => {
   //   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  //   const handleErrorResponse = async (response) => {
-  //     try {
-  //       let data = await response.json();
-  //       if (data.message === "Password incorrect") {
-  //         setErrorMessage("Password is incorrect. Please try again.");
-  //         document.getElementById("password").value = "";
-  //       } else {
-  //         setErrorMessage("An error has occurred. Please try again.");
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //       setErrorMessage(
-  //         "Email address not found. Please try a different email address or sign up."
-  //       );
-  //     }
-  //   };  
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -90,10 +73,9 @@ export const LoginPage = () => {
             type="submit"
             value="Submit"
           />
-           
           <div>
             <hr />
-            <p>Don't have an account? Click below to sign up!</p>
+            <p>Don&apos;t have an account? Click below to sign up!</p>
             <Link to="/signup">Sign up</Link>
           </div>
         </form>

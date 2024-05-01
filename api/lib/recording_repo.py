@@ -13,7 +13,7 @@ class RecordingRepository:
         return requests
 
     def create(self, recording):
-
+        recording.display_message_icon = True
         rows = self._connection.execute('INSERT INTO recordings (audio_file, title, parent_id, reader_id, recording_status, date_recorded, public_id, display_message_icon) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *', [
                                 recording.audio_file, recording.title, recording.parent_id, recording.reader_id, recording.recording_status, recording.date_recorded, recording.public_id, recording.display_message_icon])
         row = rows[0]
