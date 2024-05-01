@@ -8,7 +8,7 @@ import {
 } from "../../services/notifications";
 
 export const NotificationsPage = () => {
-  // const username = localStorage.getItem("username");
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
   const {
     connectionsParent,

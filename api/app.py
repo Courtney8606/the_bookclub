@@ -115,9 +115,9 @@ def get_user(username):
     user_repository = UserRepository(connection)
     username = session.get('user')
     print("GET USER - Username:", username)
-    result = user_repository.find_username(username)
-    print (result)
-    return jsonify(result)
+    user = user_repository.find_username(username)
+    print (user)
+    return jsonify({key: value for key, value in user.items() if key != 'password'}), 200
 
 @app.route('/signup', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -164,8 +164,8 @@ def toggle_child_safety_mode():
     username = session.get('user')
     print("Username:", username)
     user_repository.update_role(role, username)
-    result = user_repository.find_username(username)
-    return jsonify(result)
+    user = user_repository.find_username(username)
+    return jsonify({key: value for key, value in user.items() if key != 'password'}), 200
 
 @app.route('/users/update-child', methods=['PUT'])
 @cross_origin(supports_credentials=True)
@@ -177,8 +177,8 @@ def update_child_name():
     username = session.get('user')
     print("Username:", username)
     user_repository.update_child_name(child_name, username)
-    result = user_repository.find_username(username)
-    return jsonify(result)
+    user = user_repository.find_username(username)
+    return jsonify({key: value for key, value in user.items() if key != 'password'}), 200
 
 @app.route('/logout', methods=['PUT'])
 @cross_origin(supports_credentials=True)

@@ -9,7 +9,6 @@ import {
   getRecordingsByParent,
   getRecordingsByReader,
 } from "../services/recordings";
-import PropTypes from 'prop-types';
 // Create the context
 const DataContext = createContext();
 
@@ -17,6 +16,7 @@ const DataContext = createContext();
 export const useDataContext = () => useContext(DataContext);
 
 // Context provider component
+// eslint-disable-next-line react/prop-types
 export const DataProvider = ({ children }) => {
   const [connectionsParent, setConnectionsParent] = useState([]);
   const [recordingRequestsParent, setRecordingRequestsParent] = useState([]);
