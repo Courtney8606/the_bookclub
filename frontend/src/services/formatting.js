@@ -1,4 +1,3 @@
-
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { 
@@ -10,4 +9,5 @@ const formatDate = (dateString) => {
     return date.toLocaleDateString('en-UK', options);
   };
   
+
   export {formatDate}

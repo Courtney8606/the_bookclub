@@ -7,37 +7,13 @@ import { AudioRecorder } from "react-audio-voice-recorder";
 import PropTypes from 'prop-types';
 
 const CreateRecording = ({username, connections, onSubmit}) => {
-    // const [recordingUrl, setRecordingUrl] = useState("")
     const [recordingTitle, setRecordingTitle] = useState("")
     const [parentUsername, setParentUsername] = useState("")
     const [recordedData, setRecordedData] = useState(null)
     const [recordedUrl, setRecordedUrl] = useState(null);
     const [publicID, setPublicID] = useState(null);
-    // const navigate = useNavigate();
     const [error, setError] = useState([])
     const readerUsername = username
-
-
-
-
-
-  //   const handleDeleteAudio = () => {
-  //     // Logic to delete the audio file if needed
-  //     // Example: Delete audio file from Cloudinary or from the database
-  // };
-
-
-
-
-    // const handleRecordingUrlChange = (event) => {
-    //     setRecordingUrl(event.target.value)
-    // }; 
-    // const handleRecordingTitleChange = (event) => {
-    //     setRecordingTitle(event.target.value)
-    // }; 
-    // const handleParentUsernameChange = (event) => {
-    //     setParentUsername(event.target.value)
-    // }; 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -53,7 +29,8 @@ const CreateRecording = ({username, connections, onSubmit}) => {
       const data = await cloudinaryUpload(formData)
       console.log("CLOUD RESPONSE", data)
       setRecordedUrl(data.audio_url) 
-      setPublicID(data.public_id)                       // here...setRecordedUrl and then immed using it
+      setPublicID(data.public_id)
+      console.log(publicID)                       // here...setRecordedUrl and then immed using it
 
 
 
