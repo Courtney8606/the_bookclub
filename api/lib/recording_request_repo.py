@@ -21,11 +21,10 @@ class RecordingRequestRepository:
         WHERE recording_requests.parent_id = %s
         """
         rows = self._connection.execute(query, [id])
-        result = [{'id': row['id'], 'request_description': row['request_description'], 'parent_id': row['parent_id'], 
-                'reader_id': row['reader_id'], 'reader_status': row['reader_status'], 
-                'completed_recording_id': row['completed_recording_id'], 'date_requested': row['date_requested'],
-                'reader_username': row['reader_username'], 'parent_username': row['parent_username'], 'display_message_icon': row['display_message_icon']} for row in rows]
-        return result
+        requests = []
+        for row in rows:
+            requests.append(row)       
+        return requests
 
     def find_by_reader_id(self, id):
         query = """
@@ -38,11 +37,10 @@ class RecordingRequestRepository:
         WHERE reader_id = %s
         """
         rows = self._connection.execute(query, [id])
-        result = [{'id': row['id'], 'request_description': row['request_description'], 'parent_id': row['parent_id'], 
-                'reader_id': row['reader_id'], 'reader_status': row['reader_status'], 
-                'completed_recording_id': row['completed_recording_id'], 'date_requested': row['date_requested'],
-                'reader_username': row['reader_username'], 'parent_username': row['parent_username'], 'display_message_icon': row['display_message_icon']} for row in rows]
-        return result
+        requests = []
+        for row in rows:
+            requests.append(row)       
+        return requests
     
     def update_status(self, status, id):
         self._connection.execute("UPDATE recording_requests SET reader_status = %s, display_message_icon = True WHERE id = %s", [status, id])

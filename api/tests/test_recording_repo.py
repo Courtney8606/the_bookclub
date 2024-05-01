@@ -14,15 +14,16 @@ def test_get_all_records_from_recordings(db_connection):
         "audio_file":"Test.mp3", 
         "title": "The big surprise", 
         "parent_id": 1,  
-        "reader_id": 2, 
+        "reader_id": 2,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 4, 10, 10, 0, 0),
-        "recording_status": "pending",
-        "display_message_icon": True},
+        "recording_status": "pending"},
         {"id": 2,
         "audio_file":"Test2.mp3", 
         "title":"Teddy bear picnic", 
         "parent_id": 1, 
         "reader_id":2,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 3, 25, 13, 10, 0),
         "recording_status": "approved"},
         {"id":3, 
@@ -30,6 +31,7 @@ def test_get_all_records_from_recordings(db_connection):
         "title":"A dragon for tea", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 4, 15, 19, 15, 10),
         "recording_status": "pending"},
         {"id": 4, 
@@ -37,6 +39,7 @@ def test_get_all_records_from_recordings(db_connection):
         "title": "Lions, tigers and bears, oh my!", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2023, 12, 10, 11, 21, 1),
         "recording_status": "rejected"}
     ]
@@ -51,6 +54,7 @@ def test_find_approved_recordings_by_column_parent_id(db_connection):
         "title":"Teddy bear picnic", 
         "parent_id": 1, 
         "reader_id":2,
+        'public_id': 'TESTSTRING', 
         'parent_username': 'mrs_dursley',
         'reader_username': 'montoya',
         "date_recorded": datetime(2024, 3, 25, 13, 10, 0),
@@ -67,6 +71,7 @@ def test_find_recordings_by_column_parent_id(db_connection):
         "title":"A dragon for tea", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "parent_username": "montoya", 
         "reader_username": "remy",
         "date_recorded": datetime(2024, 4, 15, 19, 15, 10),
@@ -76,6 +81,7 @@ def test_find_recordings_by_column_parent_id(db_connection):
         "title": "Lions, tigers and bears, oh my!", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "parent_username": "montoya", 
         "reader_username": "remy",
         "date_recorded": datetime(2023, 12, 10, 11, 21, 1),
@@ -92,6 +98,7 @@ def test_find_recordings_by_column_reader_id(db_connection):
         "title": "The big surprise", 
         "parent_id": 1,  
         "reader_id": 2,
+        'public_id': 'TESTSTRING', 
         "parent_username": "mrs_dursley", 
         "reader_username": "montoya",
         "date_recorded": datetime(2024, 4, 10, 10, 0, 0),
@@ -101,6 +108,7 @@ def test_find_recordings_by_column_reader_id(db_connection):
         "title":"Teddy bear picnic", 
         "parent_id": 1, 
         "reader_id":2,
+        'public_id': 'TESTSTRING', 
         "parent_username": "mrs_dursley", 
         "reader_username": "montoya",
         "date_recorded": datetime(2024, 3, 25, 13, 10, 0),
@@ -110,7 +118,7 @@ def test_find_recordings_by_column_reader_id(db_connection):
 def test_create_recording(db_connection):
     # db_connection.seed("seeds/bookclub.sql")
     repository = RecordingRepository(db_connection)
-    newRecording = Recording(None, "Test5.mp3", "The Very Hungry Caterpillar", 1, 2, "pending")
+    newRecording = Recording(None, "Test5.mp3", "The Very Hungry Caterpillar", 1, 2, "pending", "TESTSTRING")
     print(newRecording)
     repository.create(newRecording)
     result = repository.all()
@@ -119,7 +127,8 @@ def test_create_recording(db_connection):
         "audio_file":"Test.mp3", 
         "title": "The big surprise", 
         "parent_id": 1,  
-        "reader_id": 2, 
+        "reader_id": 2,
+        'public_id': 'TESTSTRING',  
         "date_recorded": datetime(2024, 4, 10, 10, 0, 0),
         "recording_status": "pending"},
         {"id": 2,
@@ -127,6 +136,7 @@ def test_create_recording(db_connection):
         "title":"Teddy bear picnic", 
         "parent_id": 1, 
         "reader_id":2,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 3, 25, 13, 10, 0),
         "recording_status": "approved"},
         {"id":3, 
@@ -134,6 +144,7 @@ def test_create_recording(db_connection):
         "title":"A dragon for tea", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 4, 15, 19, 15, 10),
         "recording_status": "pending"},
         {"id": 4, 
@@ -141,6 +152,7 @@ def test_create_recording(db_connection):
         "title": "Lions, tigers and bears, oh my!", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2023, 12, 10, 11, 21, 1),
         "recording_status": "rejected"},
         {"id": 5,
@@ -148,6 +160,7 @@ def test_create_recording(db_connection):
         "title": "The Very Hungry Caterpillar", 
         "parent_id": 1, 
         "reader_id": 2,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime.now().replace(microsecond=0),
         "recording_status": "pending"
         }
@@ -164,7 +177,8 @@ def test_update_recording_status(db_connection):
         "audio_file":"Test.mp3", 
         "title": "The big surprise", 
         "parent_id": 1,  
-        "reader_id": 2, 
+        "reader_id": 2,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 4, 10, 10, 0, 0),
         "recording_status": "approved"},
         {"id": 2,
@@ -172,6 +186,7 @@ def test_update_recording_status(db_connection):
         "title":"Teddy bear picnic", 
         "parent_id": 1, 
         "reader_id":2,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 3, 25, 13, 10, 0),
         "recording_status": "approved"},
         {"id":3, 
@@ -179,6 +194,7 @@ def test_update_recording_status(db_connection):
         "title":"A dragon for tea", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2024, 4, 15, 19, 15, 10),
         "recording_status": "pending"},
         {"id": 4, 
@@ -186,6 +202,7 @@ def test_update_recording_status(db_connection):
         "title": "Lions, tigers and bears, oh my!", 
         "parent_id":2, 
         "reader_id":3,
+        'public_id': 'TESTSTRING', 
         "date_recorded": datetime(2023, 12, 10, 11, 21, 1),
         "recording_status": "rejected"}
     ]
