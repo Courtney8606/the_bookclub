@@ -10,7 +10,8 @@ function getRandomInt(min, max) {
 
 const passwdGenerate = ( maxPasswdLength, numberOfTestPasswds ) => {
     lowercase = "abcdefghijklmnopqrstuvwxyz";
-    possibleChars = lowercase;
+    uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    possibleChars = lowercase.concat(uppercase);
     passwds = [];
     for( currentTestPasswdNumber = 0; currentTestPasswdNumber < numberOfTestPasswds; currentTestPasswdNumber++ ) {
         currentPasswd = "";
