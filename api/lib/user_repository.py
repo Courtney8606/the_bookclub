@@ -35,8 +35,7 @@ class UserRepository:
         return row
     
     def create(self, user):
-        
-       self._connection.execute('INSERT INTO users (username, email, role, password) VALUES (%s,%s,%s,%s)', 
+        self._connection.execute('INSERT INTO users (username, email, role, password) VALUES (%s,%s,%s,%s)', 
             [   user.username,
                 user.email,
                 user.role,
@@ -45,5 +44,10 @@ class UserRepository:
 
     def update_role(self, role, username):
         self._connection.execute('UPDATE users SET role = %s WHERE username = %s', [role, username])
+        row = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])
+        return row
+    
+    def update_child_name(self, name, username):
+        self._connection.execute('UPDATE users SET child = %s WHERE username = %s', [name, username])
         row = self._connection.execute("SELECT * FROM users WHERE username = %s", [username])
         return row

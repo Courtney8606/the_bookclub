@@ -12,6 +12,8 @@ install = "*"
 pytest-xprocess = "*"
 flask-session = "*"
 cloudinary = "*"
+mocker = "*"
+pytest-mock = "*"
 
 [dev-packages]
 

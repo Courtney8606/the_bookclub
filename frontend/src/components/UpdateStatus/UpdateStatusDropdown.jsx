@@ -16,7 +16,8 @@ const UpdateStatusDropdown = ({options, item_id, updateFunction, onSubmit}) => {
         event.preventDefault();
         try {
             await updateFunction(item_id,newStatus) ;
-            onSubmit(username)
+            await onSubmit(username)
+            await setNewStatus("")
             // props.onCreateComment();
         } 
         catch (err) {
