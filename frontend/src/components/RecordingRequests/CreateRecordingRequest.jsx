@@ -24,7 +24,6 @@ const CreateRecordingRequest = ({username, connections, onSubmit}) => {
             setRequestDescription(""); 
             setReaderUsername("")
             onSubmit(username)
-            // props.onCreateComment();
         } 
         catch (err) {
             console.error(err);

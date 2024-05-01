@@ -91,12 +91,23 @@ def login():
     else: 
         return jsonify({'message': 'Invalid credentials'}), 401
 
-@app.route('/users/<id>', methods=['GET'])
+# @app.route('/users/<id>', methods=['GET'])
+# @cross_origin(supports_credentials=True)
+# def get_user_by_id(id):
+#     connection = get_flask_database_connection(app)
+#     user_repository = UserRepository(connection)
+#     result = user_repository.find_id(id)
+#     return jsonify(result)
+
+@app.route('/users/<username>', methods=['GET'])
 @cross_origin(supports_credentials=True)
-def get_user(id):
+def get_user(username):
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
-    result = user_repository.find_id(id)
+    username = session.get('user')
+    print("GET USER - Username:", username)
+    result = user_repository.find_username(username)
+    print (result)
     return jsonify(result)
 
 @app.route('/signup', methods=['POST'])
@@ -122,6 +133,19 @@ def toggle_child_safety_mode():
     username = session.get('user')
     print("Username:", username)
     user_repository.update_role(role, username)
+    result = user_repository.find_username(username)
+    return jsonify(result)
+
+@app.route('/users/update-child', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def update_child_name():
+    child_name = request.json['child_name']
+    connection = get_flask_database_connection(app)
+    user_repository = UserRepository(connection)
+    print("Session:", session)
+    username = session.get('user')
+    print("Username:", username)
+    user_repository.update_child_name(child_name, username)
     result = user_repository.find_username(username)
     return jsonify(result)
 
@@ -169,7 +193,7 @@ def get_recording_by_child():
     if check_permission(user['role'], action):
         recording_repository = RecordingRepository(connection)
         user = users_repository.find_username(username)
-        result = recording_repository.find_by_parent_id(user["id"])
+        result = recording_repository.find_approved_by_parent_id(user["id"])
         return jsonify(result)
     else:
         return jsonify({'message': 'Unauthorised'})
@@ -181,27 +205,52 @@ def get_recording_by_reader(username):
     users_repository = UserRepository(connection)
     action = route_actions_mapping.get('/recordings/reader/<username>')
     username = session.get('user')
-    user = users_repository.find_username(username)
-    if check_permission(user['role'], action):
-        recording_repository = RecordingRepository(connection)
+    try:
         user = users_repository.find_username(username)
-        result = recording_repository.find_by_reader_id(user["id"])
-        return jsonify(result)
-    else:
-        return jsonify({'message': 'Unauthorised'})
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
+
+        if not check_permission(user.get('role'), action):
+            return jsonify({'message': 'Unauthorized'}), 401
+
+        recording_repository = RecordingRepository(connection)
+        recordings = recording_repository.find_by_reader_id(user["id"])
+        return jsonify(recordings)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 @app.route('/cloudinary-upload', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def post_recording_cloudinary():
     try:
         audio_file = request.files['audio_file']
-        # Upload audio file to Cloudinary
         uploaded_file = cloudinary.uploader.upload(audio_file, resource_type="video")
+        print("UPLOADED FILE", uploaded_file)
         audio_url = uploaded_file['secure_url']
-        
-        # Your recording creation logic here...
-        
-        return jsonify({'message': 'Recording created successfully', 'audio_url': audio_url}), 201
+        public_id = uploaded_file['public_id']
+        return jsonify({'message': 'Recording created successfully', 'audio_url': audio_url, 'public_id': public_id}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
+@app.route('/cloudinary-delete', methods=['DELETE'])
+@cross_origin(supports_credentials=True)
+def delete_recording_cloudinary():
+    try:
+        # audio_url = request.json['audio_url']
+        # print("audio_url PRINTOUT", audio_url)
+        # deletion_response = cloudinary.uploader.destroy(audio_url)
+
+        public_id = request.json['public_id']
+        print("public_id PRINTOUT", public_id)
+        deletion_response = cloudinary.uploader.destroy(public_id, resource_type="video")
+        print(deletion_response)
+        if deletion_response['result'] == 'ok':
+            return jsonify({'message': 'Recording deleted successfully'}), 200
+        else:
+            return jsonify({'error': 'Failed to delete recording from Cloudinary'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
@@ -218,19 +267,49 @@ def post_recording():
         print("title:", title)
         parent_username = request.json['parent_username']
         reader_username = request.json['reader_username']
+        public_id = request.json['public_id']
         print("here")
         # instantiate a repo and get user objects from their into usernames
         users_repository = UserRepository(connection)
         parent = users_repository.find_username(parent_username)
         reader = users_repository.find_username(reader_username)
         print("now here")
+        status = "pending"
         # create the recording and add to db
-        recording = Recording(None, audio_file, title, parent["id"], reader["id"])
+        recording = Recording(None, audio_file, title, parent["id"], reader["id"], status, public_id)
         recording_repository.create(recording)
         return jsonify({'message': 'Recording created successfully'}), 201  # 201 status code for Created
     except Exception as e:
         # Return failure message
         return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+    
+@app.route('/delete-recordings/<int:recording_id>', methods=['DELETE'])
+@cross_origin(supports_credentials=True)
+def delete_recording(recording_id):
+    try:
+        connection = get_flask_database_connection(app)
+        recording_repository = RecordingRepository(connection)
+        recording_repository.delete(recording_id)
+        return jsonify({'message': 'Recording deleted successfully'}), 201  # 201 status code for Created
+    except Exception as e:
+        # Return failure message
+        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+
+# Update recording status
+@app.route('/recordings/status', methods=['PUT'])
+@cross_origin(supports_credentials=True)
+def update_recording_status():
+    try:
+        connection = get_flask_database_connection(app)
+        repo = RecordingRepository(connection)
+        connection_id = request.json['recording_id']
+        new_status = request.json['recording_status'] 
+        repo.update_status(new_status, connection_id)
+        return jsonify({'message': 'Recording updated successfully'}), 200  # 200 status code for OK 
+    except Exception as e:
+        # Return failure message
+        return jsonify({'error': "Recording update failed"}), 400  # 400 status code for Bad Request
+
 
 # CONNECTIONS ROUTES
 
@@ -251,7 +330,7 @@ def post_connection():
         return jsonify({'message': 'Connection created successfully'}), 201  # 201 status code for Created
     except Exception as e:
         # Return failure message
-        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+        return jsonify({'error': "User not found"}), 400  # 400 status code for Bad Request
     
 @app.route('/connections', methods=['PUT'])
 @cross_origin(supports_credentials=True)
@@ -270,23 +349,38 @@ def update_connection():
 @app.route('/connections/parent/<username>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_connection_by_parent(username):
-    connection = get_flask_database_connection(app)
-    connection_repository = ConnectionRepository(connection)
-    users_repository = UserRepository(connection)
-    user = users_repository.find_username(username)
-    result = connection_repository.find_by_parent_id(user["id"])
-    return jsonify(result)
+    try:
+        connection = get_flask_database_connection(app)
+        connection_repository = ConnectionRepository(connection)
+        users_repository = UserRepository(connection)
+        username = session.get('user')
+        user = users_repository.find_username(username)
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
+        result = connection_repository.find_by_parent_id(user["id"])
+        return jsonify(result)
+    except Exception as e:
+        # Log the exception for debugging purposes
+        print(f"An error occurred: {e}")
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 @app.route('/connections/reader/<username>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_connection_by_reader(username):
-    connection = get_flask_database_connection(app)
-    connection_repository = ConnectionRepository(connection)
-    users_repository = UserRepository(connection)
-    user = users_repository.find_username(username)
-    result = connection_repository.find_by_reader_id(user["id"])
-    return jsonify(result)
-
+    try:
+        connection = get_flask_database_connection(app)
+        connection_repository = ConnectionRepository(connection)
+        users_repository = UserRepository(connection)
+        username = session.get('user')
+        user = users_repository.find_username(username)
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
+        result = connection_repository.find_by_reader_id(user["id"])
+        return jsonify(result)
+    except Exception as e:
+        # Log the exception for debugging purposes
+        print(f"An error occurred: {e}")
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 # RECORDING REQUESTS START HERE
 
@@ -308,7 +402,7 @@ def post_recording_request():
         return jsonify({'message': 'Recording request created successfully'}), 201  # 201 status code for Created
     except Exception as e:
         # Return failure message
-        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+        return jsonify({'error': "Recording post failed"}), 400  # 400 status code for Bad Request
     
 @app.route('/recording-request', methods=['PUT'])
 @cross_origin(supports_credentials=True)
@@ -322,27 +416,42 @@ def update_recording_request():
         return jsonify({'message': 'Recording updated successfully'}), 200  # 200 status code for OK 
     except Exception as e:
         # Return failure message
-        return jsonify({'error': str(e)}), 400  # 400 status code for Bad Request
+        return jsonify({'error': "Recording update failed"}), 400  # 400 status code for Bad Request
 
 @app.route('/recording-request/parent/<username>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_request_by_parent(username):
-    connection = get_flask_database_connection(app)
-    recording_request_repository = RecordingRequestRepository(connection)
-    users_repository = UserRepository(connection)
-    user = users_repository.find_username(username)
-    result = recording_request_repository.find_by_parent_id(user["id"])
-    return jsonify(result)
+    try:
+        connection = get_flask_database_connection(app)
+        recording_request_repository = RecordingRequestRepository(connection)
+        users_repository = UserRepository(connection)
+        user = users_repository.find_username(username)
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
+        result = recording_request_repository.find_by_parent_id(user["id"])
+        return jsonify(result)
+
+    except Exception as e:
+        # Log the exception for debugging purposes
+        print(f"An error occurred: {e}")
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 @app.route('/recording-request/reader/<username>', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_request_by_reader(username):
-    connection = get_flask_database_connection(app)
-    recording_request_repository = RecordingRequestRepository(connection)
-    users_repository = UserRepository(connection)
-    user = users_repository.find_username(username)
-    result = recording_request_repository.find_by_reader_id(user["id"])
-    return jsonify(result)
+    try:
+        connection = get_flask_database_connection(app)
+        recording_request_repository = RecordingRequestRepository(connection)
+        users_repository = UserRepository(connection)
+        user = users_repository.find_username(username)
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
+        result = recording_request_repository.find_by_reader_id(user["id"])
+        return jsonify(result)
+    except Exception as e:
+        # Log the exception for debugging purposes
+        print(f"An error occurred: {e}")
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 # NOTIFICATION ROUTES
 

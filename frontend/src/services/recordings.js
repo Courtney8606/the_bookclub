@@ -54,14 +54,15 @@ const getRecordingRequestsByReader = async (username) => {
         };
 
 
-const createRecording = async (recording_url, recording_title, parent_username, reader_username) => {
+const createRecording = async (recording_url, recording_title, parent_username, reader_username, public_id) => {
         const payload = {
             audio_file: recording_url,
             title: recording_title,
             parent_username: parent_username,
-            reader_username: reader_username
+            reader_username: reader_username,
+            public_id: public_id
         }
-    console.log(payload)
+    console.log("PAYLOAD: ",payload)
     const requestOptions = {
         method: "POST",
         headers: {
@@ -70,13 +71,33 @@ const createRecording = async (recording_url, recording_title, parent_username, 
         credentials: "include",
         body: JSON.stringify(payload),
         };
+try {
     let response = await fetch(`${BACKEND_URL}/recordings`, requestOptions);
-    if (response.status !== 201) {
-        throw new Error("Error creating recording");
+
+    // Check if the response status is within the success range (200-299)
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    } else {
+        // If the response status is not in the success range, throw an error
+        const responseData = await response.json(); // Parse response body
+        throw new Error(`Error creating recording: ${response.status} - ${responseData.message}`); //here
     }
-    const data = await response.json();
-    return data;
+} catch (error) {
+    console.error("Error creating recording:", error);
+    throw error; // Rethrow the error to be caught by the caller
 }
+};
+
+
+//     let response = await fetch(`${BACKEND_URL}/recordings`, requestOptions); / was at line 72
+//     if (response.status !== 201) {
+//         throw new Error("Error creating recording");
+//     }
+//     const data = await response.json();
+//     return data;
+// }
+
 
 const cloudinaryUpload = async (formData) => {
     const requestOptions = {
@@ -113,7 +134,7 @@ const createRecordingRequest = async (request_description, parent_username, read
     const payload = {
         request_description: request_description,
         parent_username: parent_username,
-        reader_username: reader_username
+        reader_username: reader_username,
     }
 console.log(payload)
 const requestOptions = {
@@ -147,12 +168,33 @@ const requestOptions = {
     };
     let response = await fetch(`${BACKEND_URL}/recording-request`, requestOptions);
     if (response.status !== 200) {
-        throw new Error("Error creating recording");
+        throw new Error("Error updating");
     }
 const data = await response.json();
 return data;
 }
 
+const updateRecordingStatus = async (recording_id, new_status) => {
+    const payload = {
+        recording_id: recording_id,
+        recording_status: new_status
+    }
+    console.log(payload)
+    const requestOptions = {
+        method: "PUT",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+        };
+        let response = await fetch(`${BACKEND_URL}/recordings/status`, requestOptions);
+        if (response.status !== 200) {
+            throw new Error("Error updating");
+        }
+    const data = await response.json();
+    return data;
+}
 const getRecordingsByChild = async () => {
   const requestOptions = {
     method: "GET",
@@ -172,6 +214,51 @@ const getRecordingsByChild = async () => {
   return data;
 };
 
+const deleteRecording = async (
+    recording_id
+  ) => {
+    const payload = {
+      recording_id: recording_id
+    };
+    console.log("HERE IS THE PAYLOAD!!!!", payload);
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    };
+    let response = await fetch(`${BACKEND_URL}/delete-recordings/${recording_id}`, requestOptions);
+    if (response.status !== 201) {
+      throw new Error("Error creating recording");
+    }
+    const data = await response.json();
+    return data;
+  };
+
+const deleteCloudinaryUpload = async (
+    public_id
+  ) => {
+    const payload = {
+      public_id: public_id
+    };
+    console.log("This is the SECOND one", payload);
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    };
+    let response = await fetch(`${BACKEND_URL}/cloudinary-delete`, requestOptions);
+    if (response.status !== 200) {
+      throw new Error("Error deleting cloudinary recording");
+    }
+    const data = await response.json();
+    return data;
+  };
 
 
-export {createRecording, getRecordingsByParent, cloudinaryUpload, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus};
+export {createRecording, getRecordingsByParent, cloudinaryUpload, getRecordingsByChild, getRecordingsByReader, getRecordingRequestsByParent, getRecordingRequestsByReader, createRecordingRequest, updateRecordingRequestStatus, updateRecordingStatus,  deleteCloudinaryUpload, deleteRecording};
