@@ -499,12 +499,19 @@ def update_connections_notifications():
 @app.route('/update-recordings-notifications', methods=['PUT'])
 @cross_origin(supports_credentials=True)
 def update_recordings_notifications():
-    connection = get_flask_database_connection(app)
-    recordings_repository = RecordingRepository(recordings)
-    user_id = get_user_id()
-    recordings_repository.clear_notifications_parent(user_id)
-    recordings_repository.clear_notifications_reader(user_id)
-    return jsonify({'message': 'Notifications successfully cleared'})
+    try:
+        connection = get_flask_database_connection(app)
+        recordings_repository = RecordingRepository(connection)
+        user_id = get_user_id()
+        recordings_repository.clear_notifications_parent(user_id)
+        recordings_repository.clear_notifications_reader(user_id)
+        return jsonify({'message': 'Notifications successfully cleared'}), 200
+    
+    except Exception as e:
+        # Log the exception for debugging purposes
+        print(f"An error occurred: {e}")
+        # Return an error response
+        return jsonify({'error': 'An unexpected error occurred'}), 500
 
 @app.route('/update-requests-notifications', methods=['PUT'])
 @cross_origin(supports_credentials=True)
