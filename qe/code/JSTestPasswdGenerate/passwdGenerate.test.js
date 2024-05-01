@@ -9,7 +9,7 @@ describe('passwdGenerate', () => {
     });
     it('generates two lowercase characters for password length 1 and output number 2', () => {
         result = passwdGenerate( 1, 2 );
-        expect(result).toEqual(expect.arrayContaining(['a']));
+        expect(result).toEqual(expect.arrayContaining(['a', 'a']));
     });
 });
 
