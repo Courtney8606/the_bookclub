@@ -7,24 +7,25 @@ export const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [usernameAvailable, setUsernameAvailable] = useState(true);
-  const [emailAvailable, setEmailAvailable] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const special = /[!@#$%^&*(),.?":{}|<>]/;
   const caps = /[A-Z]/
-  
+  const number = /[0-9]/;
+
+  const isPasswordValid = (password) => {
+
+    return password.length > 12 && special.test(password) && caps.test(password) && number.test(password);
+  };
   
 const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (password.length > 12 && special.test(password) && caps.test(password)) {
+    if (isPasswordValid(password)) {
       try {
         // Check if the username is available
         const usernameAvailable = await checkUsername(username);
         const emailAvailable = await checkEmail(email);
-        setUsernameAvailable(usernameAvailable);
-        setEmailAvailable(emailAvailable);
 
       if (usernameAvailable && emailAvailable) {
           // If username is available, proceed with signup
@@ -119,7 +120,8 @@ const handleSubmit = async (event) => {
         <h3 style={{fontSize: '12px', color: password.length > 12 && special.test(password) && caps.test(password) ? 'green' : 'red', textAlign: 'left'}}>Password requirements:</h3>
         <li style={{ fontSize: '12px', color: password.length > 12 ? 'green' : 'red', textAlign: 'left' }}>Password length must be greater than 12.</li>
         <li style={{ fontSize: '12px', color: special.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain special character.</li>
-        <li style={{ fontSize: '12px', color: caps.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain at least one capital letter character.</li>
+        <li style={{ fontSize: '12px', color: caps.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain at least one capital letter.</li>
+        <li style={{ fontSize: '12px', color: number.test(password) ? 'green' : 'red', textAlign: 'left' }}>Must contain at least one number.</li>
       </ul>
       </ul>
          
