@@ -45,11 +45,7 @@ export const ReaderLandingPage = () => {
                   style={{ width: "18rem" }}
                 >
                   <Link to="/storystudioconnections">
-                    <img
-                      src={connectionsImage}
-                      className="card-img-top-storystudio"
-                      alt="Card image cap"
-                    />
+                    <i className="fa-solid fa-children storystudioicons"></i>
                     <ConnectionsViewButton className="button-storystudio" />
                   </Link>
                 </div>
@@ -60,12 +56,8 @@ export const ReaderLandingPage = () => {
                   style={{ width: "18rem" }}
                   id="custom-card-storystudio"
                 >
-                  <Link to="/storystudioconnections">
-                    <img
-                      src={storyRequestsImage}
-                      className="card-img-top-storystudio"
-                      alt="Card image cap"
-                    />
+                  <Link to="/storystudiostoryrequests">
+                    <i className="fa-brands fa-fort-awesome storystudioicons"></i>
                     <ReaderStoryRequestsButton className="button-storystudio" />
                   </Link>
                 </div>
@@ -76,12 +68,8 @@ export const ReaderLandingPage = () => {
                   style={{ width: "18rem" }}
                   id="custom-card-storystudio"
                 >
-                  <Link to="/storystudioconnections">
-                    <img
-                      src={recordingImage}
-                      className="card-img-top-storystudio"
-                      alt="Card image cap"
-                    />
+                  <Link to="/storystudiostories">
+                    <i className="fa-solid fa-book storystudioicons"></i>
                     <ReaderStoriesButton className="button-storystudio" />
                   </Link>
                 </div>

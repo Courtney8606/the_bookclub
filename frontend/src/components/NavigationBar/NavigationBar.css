@@ -5,6 +5,7 @@
 
 .button-one {
   color: #00215e;
+  padding: none;
 }
 
 img.LogoImage {
@@ -12,4 +13,17 @@ img.LogoImage {
   top: 4px;
   height: 70px;
   width: auto;
+}
+
+#notifications {
+  display: flex;
+  align-items: center;
+}
+
+#message-icon {
+  margin-left: 0.3rem;
+}
+
+.alignment-message {
+  margin: none;
 }

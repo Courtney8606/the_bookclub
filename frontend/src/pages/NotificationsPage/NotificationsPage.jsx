@@ -6,6 +6,7 @@ import {
   updateRecordingRequestsDisplayIcon,
   updateRecordingsDisplayIcon,
 } from "../../services/notifications";
+import "./NotificationsPage.css";
 
 export const NotificationsPage = () => {
   const username = localStorage.getItem("username");
@@ -144,12 +145,14 @@ export const NotificationsPage = () => {
 
   return (
     <>
-      <h3>Notifications</h3>
+      <h3 className="notifications-title">Notifications</h3>
       {notifications.map((notification, index) => (
         <div key={index}>{notification}</div>
       ))}
       {notifications.length > 0 && (
-        <button onClick={handleClearNotifications}>Clear Notifications</button>
+        <button id="notifications-button" onClick={handleClearNotifications}>
+          Clear Notifications
+        </button>
       )}
     </>
   );

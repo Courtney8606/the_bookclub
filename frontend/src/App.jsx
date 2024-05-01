@@ -16,6 +16,8 @@ import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 import { DataProvider } from "./data/data";
 import { Footer } from "./components/Footer/Footer";
 import { ReaderConnectionsPage } from "./pages/ReaderConnectionsPage/ReaderConnectionsPage";
+import { ReaderStoriesPage } from "./pages/ReaderStoriesPage/ReaderStoriesPage";
+import { CreateRecordingPage } from "./pages/CreateRecordingPage/CreateRecordingPage";
 
 function App() {
   const cld = new Cloudinary({
@@ -30,7 +32,7 @@ function App() {
         <DataProvider>
           <NavigationBar />
           <Routes>
-            <Route path="/reader" element={<ReaderPage />} />
+            {/* <Route path="/reader" element={<ReaderPage />} /> */}
             <Route path="/parent" element={<ParentPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<HomePage />} />
@@ -44,7 +46,11 @@ function App() {
               element={<ReaderConnectionsPage />}
             />
             {/* <Route path="/storystudiorequests" element={<ReaderRequestsPage />} /> */}
-            {/* <Route path="/storystudiostories" element={<ReaderStoriesPage />} /> */}
+            <Route path="/storystudiostories" element={<ReaderStoriesPage />} />
+            <Route
+              path="/storystudiorecording"
+              element={<CreateRecordingPage />}
+            />
           </Routes>
           <Footer />
         </DataProvider>
