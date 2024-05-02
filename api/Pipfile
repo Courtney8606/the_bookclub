@@ -15,6 +15,7 @@ cloudinary = "*"
 mocker = "*"
 pytest-mock = "*"
 bcrypt = "*"
+coverage = "*"
 
 [dev-packages]
 

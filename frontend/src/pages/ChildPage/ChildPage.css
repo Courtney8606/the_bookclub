@@ -1,0 +1,14 @@
+html,
+body {
+  padding-top: 50px;
+}
+.recording-title {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  color: #00215e;
+}
+
+.error-message {
+  color: red; /* Change this to the desired color */
+}
+
