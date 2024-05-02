@@ -11,43 +11,45 @@ const ViewConnections = ({ data, view, onUpdate }) => {
   return (
     <>
       <h2 className="connections-heading">Your Connections</h2>
-      <table className="container-fluid connectionstable">
-        <thead>
-          <tr className="row-cols-3 connections-row" id="connections-row-one">
-            {view === "reader" && <th>Your Connections</th>}
-            {view === "parent" && <th>Your Connections</th>}
-            <th>Status</th>
-            {view === "reader" && <th>Update Status</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr
-              className="row-cols-3 connections-row"
-              id="connections-rows"
-              key={index}
-            >
-              {view === "parent" && <td>{item.reader_username}</td>}
-              {view === "reader" && <td>{item.parent_username}</td>}
-              <td>{item.status}</td>
-              {view === "reader" && (
-                <td className="status-update">
-                  <div className="dropdown-box">
-                    {
-                      <UpdateStatusDropdown
-                        options={statusOptions}
-                        item_id={item.id}
-                        updateFunction={updateConnectionStatus}
-                        onSubmit={onUpdate}
-                      />
-                    }
-                  </div>
-                </td>
-              )}
+      <div className="table-container">
+        <table className="connectionstable">
+          <thead>
+            <tr className="row-cols-3 connections-row" id="connections-row-one">
+              {view === "reader" && <th>Your Connections</th>}
+              {view === "parent" && <th>Your Connections</th>}
+              <th>Status</th>
+              {view === "reader" && <th>Update Status</th>}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr
+                className="row-cols-3 connections-row"
+                id="connections-rows"
+                key={index}
+              >
+                {view === "parent" && <td>{item.reader_username}</td>}
+                {view === "reader" && <td>{item.parent_username}</td>}
+                <td>{item.status}</td>
+                {view === "reader" && (
+                  <td className="status-update">
+                    <div className="dropdown-box">
+                      {
+                        <UpdateStatusDropdown
+                          options={statusOptions}
+                          item_id={item.id}
+                          updateFunction={updateConnectionStatus}
+                          onSubmit={onUpdate}
+                        />
+                      }
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

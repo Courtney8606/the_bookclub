@@ -1,0 +1,24 @@
+.childrecordingstable {
+  background-color: #94ffd8;
+  border-radius: 20px;
+  border-collapse: separate !important;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.child-recordings-row th,
+.child-recordings-row td {
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.child-recordings-heading {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}

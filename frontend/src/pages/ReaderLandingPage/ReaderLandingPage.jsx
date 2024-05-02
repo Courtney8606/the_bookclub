@@ -37,6 +37,7 @@ export const ReaderLandingPage = () => {
       ) : (
         <>
           <div style={{ marginTop: "3rem" }} className="container text-center">
+            <h2 style={{ marginBottom: "3rem" }}>Story Studio</h2>
             <div className="row row-cols-3 justify-content-center">
               <div className="col">
                 <div

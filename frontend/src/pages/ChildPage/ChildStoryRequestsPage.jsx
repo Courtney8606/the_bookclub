@@ -12,8 +12,11 @@ import { getConnectionsByParent } from "../../services/connections";
 import CreateRecordingRequestChild from "../../components/RecordingRequests/CreateRecordingRequestChild";
 import ViewRecordingRequestsChild from "../../components/RecordingRequests/ViewRecordingRequestChild";
 import backgroundImage from "../../assets/childmode.png";
+import LogoutButtonChild from "../../components/LogoutButton/LogoutButtonChild";
+import ChildModeStoriesButton from "../../components/ChildViewButton/ChildModeStoriesButton";
+import "./ChildStoryRequestsPage.css";
 
-export const ChildPage = () => {
+export const ChildStoryRequestsPage = () => {
   const username = localStorage.getItem("username");
   const [recordings, setRecordings] = useState([]);
   const [childName, setChildName] = useState("");
@@ -103,15 +106,16 @@ export const ChildPage = () => {
           backgroundColor: "rgba(255, 255, 255, 0.7)",
         }}
       >
-        <h2>Hello{childName ? ` ${childName}!` : `!`}</h2>
-        <ViewRecordingsChild data={recordings} />
         <CreateRecordingRequestChild
           username={username}
           connections={connections}
           onSubmit={getAllRecordingRequestsTrigger}
         />
         <ViewRecordingRequestsChild data={recordingRequests} />
-        <LogoutButton />
+        <div id="buttons-childmode">
+          <ChildModeStoriesButton />
+          <LogoutButtonChild />
+        </div>
       </div>
     </>
   );

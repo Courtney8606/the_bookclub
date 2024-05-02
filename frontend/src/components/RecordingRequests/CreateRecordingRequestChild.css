@@ -1,0 +1,39 @@
+.child-request-form {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  background-color: #94ffd8;
+  padding-top: 40px;
+  color: black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.child-request-input {
+  width: 400px;
+  height: 150px;
+  padding: 12px 8px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.child-request-button {
+  margin-top: 20px;
+}
+
+.child-request-title {
+  margin-top: 30px;
+}
+
+.childmode-text {
+  margin-left: 30px;
+  margin-right: 30px;
+}

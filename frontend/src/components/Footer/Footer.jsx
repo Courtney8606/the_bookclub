@@ -4,9 +4,13 @@ import "./Footer.css";
 
 export const Footer = () => {
   const location = useLocation();
-  const showFooter = !["/signup", "/login", "/child"].includes(
-    location.pathname
-  );
+  const showFooter = ![
+    "/signup",
+    "/login",
+    "/childstories",
+    "/childstoryrequests",
+    "/child",
+  ].includes(location.pathname);
   console.log(location);
 
   if (!showFooter) {
