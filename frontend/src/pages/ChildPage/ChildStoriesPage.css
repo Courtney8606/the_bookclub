@@ -1,0 +1,12 @@
+.buttons-childmode {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 300px;
+}
+
+.recordings-child {
+  display: flex;
+  justify-content: center;
+  padding-top: 300px;
+}

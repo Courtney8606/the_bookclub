@@ -12,8 +12,11 @@ import { getConnectionsByParent } from "../../services/connections";
 import CreateRecordingRequestChild from "../../components/RecordingRequests/CreateRecordingRequestChild";
 import ViewRecordingRequestsChild from "../../components/RecordingRequests/ViewRecordingRequestChild";
 import backgroundImage from "../../assets/childmode.png";
+import ChildModeStoryRequestsButton from "../../components/ChildViewButton/ChildModeStoryRequestsButton";
+import LogoutButtonChild from "../../components/LogoutButton/LogoutButtonChild";
+import "./ChildStoriesPage.css";
 
-export const ChildPage = () => {
+export const ChildStoriesPage = () => {
   const username = localStorage.getItem("username");
   const [recordings, setRecordings] = useState([]);
   const [childName, setChildName] = useState("");
@@ -37,24 +40,6 @@ export const ChildPage = () => {
           (a, b) => new Date(b.date_recorded) - new Date(a.date_recorded)
         );
         setRecordings(allRecordings);
-      }
-    } catch (error) {
-      console.error("Error fetching data");
-      setErrorMessage("Error fetching data");
-    }
-  };
-
-  const getAllRecordingRequestsTrigger = async (username) => {
-    try {
-      const response = await getRecordingRequestsByParent(username);
-      if (response.message === "Unauthorised") {
-        setErrorMessage("Unauthorised");
-      } else {
-        const allRecordingRequests = response;
-        allRecordingRequests.sort(
-          (a, b) => new Date(b.date_requested) - new Date(a.date_requested)
-        );
-        setRecordingRequests(allRecordingRequests);
       }
     } catch (error) {
       console.error("Error fetching data");
@@ -89,7 +74,6 @@ export const ChildPage = () => {
     getAllRecordingsTrigger(username);
     getLoggedInUserDetails();
     getAllConnectionsTrigger(username);
-    getAllRecordingRequestsTrigger(username);
   }, [navigate]);
 
   return (
@@ -103,15 +87,13 @@ export const ChildPage = () => {
           backgroundColor: "rgba(255, 255, 255, 0.7)",
         }}
       >
-        <h2>Hello {childName}!</h2>
-        <ViewRecordingsChild data={recordings} />
-        <CreateRecordingRequestChild
-          username={username}
-          connections={connections}
-          onSubmit={getAllRecordingRequestsTrigger}
-        />
-        <ViewRecordingRequestsChild data={recordingRequests} />
-        <LogoutButton />
+        <div className="recordings-child">
+          <ViewRecordingsChild data={recordings} />
+        </div>
+        <div className="buttons-childmode">
+          <LogoutButtonChild />
+          <ChildModeStoryRequestsButton />
+        </div>
       </div>
     </>
   );

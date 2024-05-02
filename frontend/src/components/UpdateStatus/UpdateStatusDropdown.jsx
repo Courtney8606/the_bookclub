@@ -47,7 +47,7 @@ const UpdateStatusDropdown = ({
           ))}
         </select>
         <button
-          className="custom-button"
+          className="custom-button dropdown-button"
           role="submit-button"
           id="submit"
           type="submit"

@@ -9,13 +9,18 @@ import { useDataContext } from "../../data/data";
 import NotificationsPageButton from "../NotificationsPageButton/NotificationsPageButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./NavigationBar.css";
+import ChildViewButton from "../ChildViewButton/ChildViewButton";
 
 export const NavigationBar = () => {
   const location = useLocation();
   const [showNewMessage, setShowNewMessage] = useState(false);
-  const showNavbar = !["/signup", "/login", "/child"].includes(
-    location.pathname
-  );
+  const showNavbar = ![
+    "/signup",
+    "/login",
+    "/childstories",
+    "/childstoryrequests",
+    "/child",
+  ].includes(location.pathname);
   const {
     connectionsParent,
     connectionsReader,
@@ -134,6 +139,19 @@ export const NavigationBar = () => {
                       New <span id="message-icon">&#9993;</span>
                     </p>
                   )}
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className={
+                    location.pathname === "/child"
+                      ? "nav-link active"
+                      : "nav-link"
+                  }
+                  aria-current="page"
+                  href="/child"
+                >
+                  <ChildViewButton className="button-one" />
                 </a>
               </li>
               <li className="nav-item">

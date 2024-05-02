@@ -2,6 +2,8 @@ import ViewConnections from "../../components/Connections/ViewConnections";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getConnectionsByParent } from "../../services/connections";
+import { createConnectionRequest } from "../../services/connections";
+import RequestConnection from "../../components/Connections/RequestConnection";
 
 export const ParentConnectionsPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -38,6 +40,11 @@ export const ParentConnectionsPage = () => {
       ) : (
         <>
           <div>
+            <RequestConnection
+              username={username}
+              connections={connections}
+              onSubmit={getAllConnectionsTrigger}
+            />
             <ViewConnections
               data={connections}
               view={view}

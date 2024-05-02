@@ -30,6 +30,7 @@ export const ParentLandingPage = () => {
       ) : (
         <>
           <div style={{ marginTop: "3rem" }} className="container text-center">
+            <h2 style={{ marginBottom: "3rem" }}>Family Hub</h2>
             <div className="row row-cols-3 justify-content-center">
               <div className="col">
                 <div

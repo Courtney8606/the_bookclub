@@ -1,0 +1,10 @@
+#buttons-childmode {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.child-request-container {
+  padding-top: 40px;
+}
