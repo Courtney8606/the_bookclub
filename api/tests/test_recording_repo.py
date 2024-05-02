@@ -174,7 +174,7 @@ def test_create_recording(db_connection):
         "parent_id": 1, 
         "reader_id": 2,
         'public_id': 'TESTSTRING',
-        'display_message_icon': False,  
+        'display_message_icon': True,  
         "date_recorded": datetime.now().replace(microsecond=0),
         "recording_status": "pending"
         }

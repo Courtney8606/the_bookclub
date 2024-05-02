@@ -80,8 +80,9 @@ export const SignupPage = () => {
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundColor: "rgba(255, 255, 255, 0.7)",
-      }}
+        backgroundColor: "rgba(255, 200, 255, 10)",
+      }
+    }
     >
       <form className="signup-form" onSubmit={handleSubmit}>
         <div>
@@ -224,7 +225,7 @@ export const SignupPage = () => {
           <Link to="/login">Log in</Link>
         </div>
       </form>
-      <div className="background-container"></div>
+      {/* <div className="background-container"></div> */}
     </div>
   );
 };

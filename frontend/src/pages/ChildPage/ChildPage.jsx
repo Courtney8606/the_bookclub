@@ -103,7 +103,7 @@ export const ChildPage = () => {
           backgroundColor: "rgba(255, 255, 255, 0.7)",
         }}
       >
-        <h2>Hello {childName}!</h2>
+        <h2>Hello{childName ? ` ${childName}!` : `!`}</h2>
         <ViewRecordingsChild data={recordings} />
         <CreateRecordingRequestChild
           username={username}
