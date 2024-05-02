@@ -12,12 +12,14 @@
 
 .footer {
   text-align: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 10px;
   background-color: #8cc0de;
-  margin-top: 100px;
-  /* position: fixed;
-  bottom: 0; */
+  /* position: fixed; */
+  width: 100vw;
+  bottom:0;
+  left:0;
+  right: 0;
 }
 
 a:link {

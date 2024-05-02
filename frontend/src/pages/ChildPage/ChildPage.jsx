@@ -85,7 +85,7 @@ export const ChildPage = () => {
 
   return (
     <>
-      <h2>Hello {childName}!</h2>
+      <h2>Hello{childName ? ` ${childName}!` : `!`}</h2>
       <ViewRecordingsChild 
           data={recordings}/>
       <CreateRecordingRequestChild
