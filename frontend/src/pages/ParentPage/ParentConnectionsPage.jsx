@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getConnectionsByParent } from "../../services/connections";
 import { createConnectionRequest } from "../../services/connections";
 import RequestConnection from "../../components/Connections/RequestConnection";
+import ViewConnectionsCards from "../../components/Connections/ViewConnectionsCards";
 
 export const ParentConnectionsPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -45,7 +46,7 @@ export const ParentConnectionsPage = () => {
               connections={connections}
               onSubmit={getAllConnectionsTrigger}
             />
-            <ViewConnections
+            <ViewConnectionsCards
               data={connections}
               view={view}
               onUpdate={getAllConnectionsTrigger}
