@@ -1,6 +1,10 @@
 .navbar {
   background-color: #8cc0de !important;
   color: #00215e;
+  position: fixed;
+  width: 100%;
+  top:0;
+  left:0
 }
 
 .button-one {
