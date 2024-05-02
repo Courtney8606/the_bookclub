@@ -1,3 +1,6 @@
+// File isPasswordValid.js
+// Code from developer team, Mustafa Yahya
+
 const special = /[!@#$%^&*(),.?":{}|<>]/;
 const caps = /[A-Z]/;
 const number = /[0-9]/;
