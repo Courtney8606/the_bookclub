@@ -29,8 +29,17 @@ const passwdGenerate = ( maxPasswdLength, numberOfTestPasswds ) => {
     return passwds;
 };
 
-console.log("Is password abcdefghijklmnop valid? ", isPasswordValid( "abcdefghijklmnop" ));
-console.log("Is password Ab1:cdefghij valid?", isPasswordValid("Ab1:cdefghij"));
-console.log("Is password Ab1:cdefghijk valid?", isPasswordValid("Ab1:cdefghijk"));
+
+const printRandomTestResults = ( maxPasswdLength, numberOfTestPasswds) => {
+    randomPasswds = passwdGenerate( maxPasswdLength, numberOfTestPasswds );
+    for( passwdNumber = 0; passwdNumber < numberOfTestPasswds; passwdNumber++ ) {
+        currentPasswd = randomPasswds[passwdNumber];
+        currentPasswdValid = isPasswordValid(currentPasswd);
+        console.log("Random password number ", passwdNumber, " is ", currentPasswd, " which is ", currentPasswdValid ? "valid" : "invalid" );
+    }
+
+}
+
+printRandomTestResults( 30, 1000000 );
 
 module.exports = passwdGenerate;
