@@ -1,150 +1,272 @@
 import pytest
-from app import app  # Assuming your Flask application is in a module named app
+from flask import Flask, session, request, jsonify
+from app import app
 from lib.database_connection import get_flask_database_connection
 from lib.user_repository import UserRepository
-from lib.recording_request import *
-from lib.recording_request_repo import *
+import bcrypt
+from unittest.mock import patch 
 
-# The fixture client allows us to make HTTP requests to the routes
 @pytest.fixture
 def client():
+    app.config['TESTING'] = True
     with app.test_client() as client:
         yield client
 
-def test_post_create_recording_request(client, mocker):
-    # Mock dependencies or database calls
-    mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(UserRepository, 'find_username', side_effect=[
-        {"id": 1},  # Mock parent user lookup
-        {"id": 2}   # Mock reader user lookup
-    ])
-    # Simulate a POST request with valid JSON data
-    data = {'request_description': 'Test description', 'parent_username': 'parent_user', 'reader_username': 'reader_user'}
-    response = client.post('/recording-request', json=data)
+def test_login_success(client):
+    user_data = {"id": 1, "username": "test_user", "password": b'password'}    
 
-    # Assert the response status code is 201 (Created) for successful creation
+    with patch('lib.database_connection.get_flask_database_connection'), \
+         patch.object(UserRepository, 'find_username', return_value=user_data):
+        
+        response = client.post('/login', json={"username": "test_user", "password": "password"})
+        
+        assert response.status_code == 200
+        
+        assert 'user' in session
+        
+        expected_response_data = {"id": 1, "username": "test_user"}
+        assert response.json == expected_response_data
+
+
+def test_get_user(client, mocker):
+    mocker.patch('lib.database_connection.get_flask_database_connection')
+    mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user", "email": "test@example.com"})
+
+    with client.session_transaction() as sess:
+        sess['user'] = 'test_user'
+
+    response = client.get('/users/test_user')
+    assert response.status_code == 200
+    assert response.json['username'] == "test_user"
+    assert response.json['email'] == "test@example.com"
+
+def test_signup(client, mocker):
+    mocker.patch('lib.database_connection.get_flask_database_connection')
+    mocker.patch.object(UserRepository, 'create')
+
+    mock_user_data = [
+        {"id": 1, "username": "existing_user", "email": "existing@example.com"},
+        {"id": 2, "username": "new_user", "email": "new@example.com"}
+    ]
+    mocked_find_all = mocker.patch.object(UserRepository, 'find_all', return_value=mock_user_data)
+
+    response = client.post('/signup', json={"username": "new_user", "email": "new@example.com", "password": "new_password"})
+    
     assert response.status_code == 201
+    
+    assert response.json['username'] == "new_user"
+    assert response.json['email'] == "new@example.com"
 
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
+    mocked_find_all.assert_called_once()
 
-    # Assert the response message
-    assert response.json == {'message': 'Recording request created successfully'}
-
-def test_post_recording_request_failure(client, mocker):
-    # Mock dependencies or database calls
-    mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(UserRepository, 'find_username', return_value=None)  # Simulate user not found for both parent and reader
-
-    # Simulate a POST request with invalid JSON data
-    data = {'request_description': 'Test description', 'parent_username': 'non_existing_parent', 'reader_username': 'non_existing_reader'}
-    response = client.post('/recording-request', json=data)
-
-    # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 400
-
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
-
-    # Assert the response error message contains the expected substring
-    assert 'Recording post failed' in response.json['error']
-
-
-def test_update_recording_request(client, mocker):
-    # Mock dependencies or database calls
-    mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(RecordingRequestRepository, 'update_status')
-    # Simulate a PUT request with valid JSON data
-    data = {'recording_request_id': 1, 'reader_status': 'approved'}
-    response = client.put('/recording-request', json=data)
-    # Assert the response status code is 200 (OK) for successful update
-    assert response.status_code == 200
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
-    # Assert the response message
-    assert response.json == {'message': 'Recording updated successfully'}
-
-def test_update_recording_request_failure(client, mocker):
-    # Mock dependencies or database calls
-    mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(UserRepository, 'find_username', side_effect=[{"id": 1}, None])  # Simulate parent found but reader not found
-    # Simulate a PUT request with invalid JSON data
-    data = {'recording_request_id': 1, 'reader_status': 'approved'}
-    response = client.put('/recording-request', json=data)
-    # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 400
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
-    # Assert the response error message
-    assert response.json == {'error': 'Recording update failed'}  # Assuming this is the expected error message
-
-def test_get_request_by_parent(client, mocker):
-    # Mock dependencies or database calls
+def test_check_username_availability(client, mocker):
     mocker.patch('lib.database_connection.get_flask_database_connection')
     mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1})
-    mocker.patch.object(RecordingRequestRepository, 'find_by_parent_id', return_value=[{"id": 1, "request_description": "Test description"}])
 
-    # Simulate a GET request to the route with a dummy username
-    response = client.get('/recording-request/parent/example_parent_username')
-
-    # Assert the response status code is 200 (OK)
+    response = client.post('/check-username', json={"username": "existing_user"})
     assert response.status_code == 200
+    assert not response.json['available']
 
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
-
-    # Assert the response data
-    assert response.json == [{"id": 1, "request_description": "Test description"}]
-
-def test_get_request_by_reader(client, mocker):
-    # Mock dependencies or database calls
+def test_check_email_availability(client, mocker):
     mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1})
-    mocker.patch.object(RecordingRequestRepository, 'find_by_reader_id', return_value=[{"id": 1, "request_description": "Test description"}])
+    mocker.patch.object(UserRepository, 'find_email', return_value={"id": 1})
 
-    # Simulate a GET request to the route with a dummy username
-    response = client.get('/recording-request/reader/example_reader_username')
-
-    # Assert the response status code is 200 (OK)
+    response = client.post('/check-email', json={"email": "existing@example.com"})
     assert response.status_code == 200
+    assert not response.json['available']
 
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
-
-    # Assert the response data
-    assert response.json == [{"id": 1, "request_description": "Test description"}]
-
-def test_get_request_by_parent_failure(client, mocker):
-    # Mock dependencies or database calls
+def test_toggle_child_safety_mode(client, mocker):
     mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(UserRepository, 'find_username', return_value=None)  # Simulate user not found
+    mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user", "role": "parent"})
+    mocker.patch.object(UserRepository, 'update_role', return_value={"role": "child"})
 
-    # Simulate a GET request to the route with a dummy username
-    response = client.get('/recording-request/parent/non_existing_parent')
+    with client.session_transaction() as sess:
+        sess['user'] = 'test_user'
 
-    # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 404
+    response = client.put('/child-safety-mode')
+    assert response.status_code == 200
+    UserRepository.find_username.assert_called_once_with("test_user")
+    UserRepository.update_role.assert_called_once_with("child", "test_user")
 
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
-
-    # Assert the response error message contains the expected substring
-    assert 'User not found' in response.json['message']
-
-def test_get_request_by_reader_failure(client, mocker):
-    # Mock dependencies or database calls
+def test_update_child_name(client, mocker):
     mocker.patch('lib.database_connection.get_flask_database_connection')
-    mocker.patch.object(UserRepository, 'find_username', return_value=None)  # Simulate user not found
+    mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user"})
+    mocker.patch.object(UserRepository, 'update_child_name')
 
-    # Simulate a GET request to the route with a dummy username
-    response = client.get('/recording-request/reader/non_existing_reader')
+    with client.session_transaction() as sess:
+        sess['user'] = 'test_user'
 
-    # Assert the response status code is 400 (Bad Request) for failure
-    assert response.status_code == 404
+    response = client.put('/users/update-child', json={"child_name": "new_child_name"})
+    assert response.status_code == 200
+    UserRepository.find_username.assert_called_once_with("test_user")
+    UserRepository.update_child_name.assert_called_once_with("new_child_name", "test_user")
 
-    # Assert the response content type is JSON
-    assert response.content_type == 'application/json'
+def test_logout(client, mocker):
 
-    # Assert the response error message contains the expected substring
-    assert 'User not found' in response.json['message']
+    mocker.patch('lib.database_connection.get_flask_database_connection')
+    
+    mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user", "role": "child"})
+    
+    mocker.patch.object(UserRepository, 'update_role', return_value={"message": "Role updated successfully"})
+    
+    with client.session_transaction() as sess:
+        sess['user'] = 'test_user'
 
+    response = client.put('/logout')
+    
+    assert response.status_code == 200
+    assert 'user' not in session
+
+
+def test_login_failure(client):
+    expected_response_data = {"id": 2, "username": "test_user"}
+    
+    user_data = {"id": 1, "username": "test_user", "password": b'hello'}    
+
+    with patch('lib.database_connection.get_flask_database_connection'), \
+         patch.object(UserRepository, 'find_username', return_value=user_data):
+        
+        response = client.post('/login', json={"username": "test_user", "password": "password"})
+        
+        assert response.status_code == 401
+        
+        assert 'user' not in session
+        
+        assert response.json['message'] == 'Username or Password Incorrect'
+
+# def test_get_user_failure(client, mocker):
+#     # Intentional failure: Incorrect expected response data
+#     expected_response_data = {"id": 2, "username": "test_user", "email": "test@example.com"}
+    
+#     # Mocking user data
+#     user_data = {"id": 1, "username": "test_user", "email": "test@example.com"}
+
+#     # Mocking UserRepository to return user data
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_username', return_value=user_data)
+
+#     # Setting the user in session
+#     with client.session_transaction() as sess:
+#         sess['user'] = 'test_user'
+
+#     # Making a GET request to /users/test_user route
+#     response = client.get('/users/test_user')
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected username
+#     assert response.json['username'] == "test_user"
+    
+#     # Intentional failure: Asserting with incorrect expected email
+#     assert response.json['email'] == "test@example.com"
+
+
+# def test_signup_failure(client, mocker):
+#     # Intentional failure: Mocking UserRepository to return existing user data
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_all', return_value=[{"id": 1, "username": "existing_user", "email": "existing@example.com"}])
+
+#     # Making a POST request to /signup route with existing user credentials
+#     response = client.post('/signup', json={"username": "existing_user", "email": "existing@example.com", "password": "new_password"})
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected username
+#     assert response.json['username'] == "existing_user"
+    
+#     # Intentional failure: Asserting with incorrect expected email
+#     assert response.json['email'] == "existing@example.com"
+
+
+# def test_check_username_availability_failure(client, mocker):
+#     # Intentional failure: Mocking UserRepository to return existing user data
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1})
+
+#     # Making a POST request to /check-username route with existing username
+#     response = client.post('/check-username', json={"username": "existing_user"})
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected availability
+#     assert not response.json['available']
+
+
+# def test_check_email_availability_failure(client, mocker):
+#     # Intentional failure: Mocking UserRepository to return existing user data
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_email', return_value={"id": 1})
+
+#     # Making a POST request to /check-email route with existing email
+#     response = client.post('/check-email', json={"email": "existing@example.com"})
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected availability
+#     assert not response.json['available']
+
+
+# def test_toggle_child_safety_mode_failure(client, mocker):
+#     # Intentional failure: Mocking UserRepository to return incorrect role
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user", "role": "child"})
+#     mocker.patch.object(UserRepository, 'update_role', return_value={"role": "child"})
+
+#     # Setting the user in session
+#     with client.session_transaction() as sess:
+#         sess['user'] = 'test_user'
+
+#     # Making a PUT request to /child-safety-mode route
+#     response = client.put('/child-safety-mode')
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected role update
+#     UserRepository.find_username.assert_called_once_with("test_user")
+#     UserRepository.update_role.assert_called_once_with("child", "test_user")
+
+
+# def test_update_child_name_failure(client, mocker):
+#     # Intentional failure: Mocking UserRepository to return incorrect user data
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user"})
+#     mocker.patch.object(UserRepository, 'update_child_name')
+
+#     # Setting the user in session
+#     with client.session_transaction() as sess:
+#         sess['user'] = 'test_user'
+
+#     # Making a PUT request to /users/update-child route with incorrect data
+#     response = client.put('/users/update-child', json={"child_name": "new_child_name"})
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected child name update
+#     UserRepository.find_username.assert_called_once_with("test_user")
+#     UserRepository.update_child_name.assert_called_once_with("new_child_name", "test_user")
+
+
+# def test_logout_failure(client, mocker):
+#     # Intentional failure: Mocking UserRepository to return incorrect user data
+#     mocker.patch('lib.database_connection.get_flask_database_connection')
+#     mocker.patch.object(UserRepository, 'find_username', return_value={"id": 1, "username": "test_user", "role": "child"})
+#     mocker.patch.object(UserRepository, 'update_role', return_value={"message": "Role updated successfully"})
+    
+#     # Setting the user in session
+#     with client.session_transaction() as sess:
+#         sess['user'] = 'test_user'
+
+#     # Making a PUT request to /logout route
+#     response = client.put('/logout')
+    
+#     # Checking if the response is a failure (status code 400)
+#     assert response.status_code == 400
+    
+#     # Intentional failure: Asserting with incorrect expected session status
+#     assert 'user' in session
