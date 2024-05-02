@@ -4,10 +4,12 @@
   border-radius: 20px;
   border-collapse: separate !important;
   width: 70%;
-}
-
-#connections-row-one {
-  border-bottom: 1px solid #8a2952;
+  max-width: calc(100vw - 20px);
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin: 0 auto;
 }
 
 .connections-row th,
@@ -21,4 +23,9 @@
 .connections-heading {
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
 }

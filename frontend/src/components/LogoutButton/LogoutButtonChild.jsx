@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { logoutservice } from "../../services/logout";
 
-const LogoutButton = ({ className }) => {
+const LogoutButtonChild = ({ className }) => {
   const navigate = useNavigate();
 
   const logout = () => {
@@ -17,9 +17,12 @@ const LogoutButton = ({ className }) => {
         className={`logout-button ${className}`}
         onClick={logout}
         style={{
-          backgroundColor: "transparent",
-          border: "None",
-          color: "#00215e",
+          backgroundColor: "white",
+          border: "2px solid #e72ba5",
+          color: "#e72ba5",
+          height: "70px",
+          width: "200px",
+          fontSize: "20px",
         }}
       >
         Logout
@@ -28,4 +31,4 @@ const LogoutButton = ({ className }) => {
   );
 };
 
-export default LogoutButton;
+export default LogoutButtonChild;

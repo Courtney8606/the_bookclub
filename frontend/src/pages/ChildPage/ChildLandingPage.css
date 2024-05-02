@@ -1,0 +1,64 @@
+#custom-button {
+  /* background-color: #8cc0de; Change to the desired color */
+  background-color: #8a2952;
+  /* border-color: #8cc0de; Change to the desired color */
+  /* border-color: #faf0d7; */
+  border-color: #8a2952;
+  /* color: #00215e; Change to the desired color */
+}
+
+#custom-button:hover {
+  background-color: #00215e;
+  border-color: #00215e;
+}
+
+#custom-card-child {
+  /* border: 7px solid rgba(204, 238, 188, 0.5); */
+  border: 7px solid #94ffd8;
+  width: 300px; /* Adjust as needed */
+  height: 300px; /* Adjust as needed */
+  background-color: white;
+  border-radius: 60px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+}
+
+.card {
+  padding: none;
+}
+
+@media screen and (max-width: 1000px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+}
+
+.childstoriesicons {
+  color: #123ee6;
+  font-size: 130px;
+  padding-bottom: 20px;
+}
+
+.childstoriesicons:hover {
+  color: #e72ba5;
+  font-size: 130px;
+  padding-bottom: 20px;
+}
+
+.logout-child-landing {
+  padding-bottom: 150px;
+  padding-top: 20px;
+}
+
+.test {
+  padding-top: 150px;
+}

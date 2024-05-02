@@ -1,0 +1,34 @@
+.connection-form {
+  border: 5px solid #ffd9c0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: 70%;
+  padding-bottom: 40px;
+  background-color: #ffd9c0;
+  padding-top: 40px;
+  color: #00215e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.connection-input {
+  width: 200px;
+  padding: 12px 8px;
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.connection-button {
+  margin-top: 20px;
+}
+
+.connection-title {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}

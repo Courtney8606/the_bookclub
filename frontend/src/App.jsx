@@ -22,6 +22,9 @@ import { ParentLandingPage } from "./pages/ParentPage/ParentLandingPage";
 import { ParentStoriesPage } from "./pages/ParentPage/ParentStoriesPage";
 import { ParentConnectionsPage } from "./pages/ParentPage/ParentConnectionsPage";
 import { ReaderStoryRequestsPage } from "./pages/ReaderStoryRequestsPage/ReaderStoryRequestsPage";
+import { ChildStoriesPage } from "./pages/ChildPage/ChildStoriesPage";
+import { ChildStoryRequestsPage } from "./pages/ChildPage/ChildStoryRequestsPage";
+import { ChildLandingPage } from "./pages/ChildPage/ChildLandingPage";
 
 function App() {
   const cld = new Cloudinary({
@@ -41,7 +44,12 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/child" element={<ChildPage />} />
+            <Route path="/child" element={<ChildLandingPage />} />
+            <Route path="/childstories" element={<ChildStoriesPage />} />
+            <Route
+              path="/childstoryrequests"
+              element={<ChildStoryRequestsPage />}
+            />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/storystudio" element={<ReaderLandingPage />} />
             <Route path="/familyhubrequests" element={<ParentRequestsPage />} />
