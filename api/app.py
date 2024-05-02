@@ -56,7 +56,7 @@ def get_user_id():
     user = user_repository.find_username(username)
     return user['id']
 
-def get_user():
+def get_user_method():
     username = session.get('user')
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
@@ -74,7 +74,7 @@ def check_permission(role, action):
     connection = get_flask_database_connection(app)
     row = connection.execute('SELECT * from permissions WHERE role = %s AND action = %s', [role, action])
     if len(row) > 0:
-        return True, print("This is the permission row:", row)
+        return True
     else:
         return False
 
@@ -88,7 +88,7 @@ def login():
     password = data.get('password')
     # Retrieve user from database by username
     user = user_repository.find_username(username)
-    print(user)
+          
     # Check if user exists and password is correct
     if user['id'] <= 3:
         # For test users (IDs 1-3), compare passwords directly
@@ -127,12 +127,14 @@ def post_user():
     username = request.json['username']
     email = request.json['email']
     password = request.json['password']
+
     # take plain text password and hash using bcrypt and a randomly generated salt
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     user = User(None, username, email, hashed_password, None, None, None)
     user_repository.create(user)
     result = user_repository.find_all()[-1]
     response_data = {key: value for key, value in result.items() if key != 'password'}
+
     return jsonify(response_data), 201
 
 @app.route('/check-username', methods=['POST'])
@@ -160,9 +162,7 @@ def toggle_child_safety_mode():
     connection = get_flask_database_connection(app)
     user_repository = UserRepository(connection)
     role = 'child'
-    print("Session:", session)
     username = session.get('user')
-    print("Username:", username)
     user_repository.update_role(role, username)
     user = user_repository.find_username(username)
     return jsonify({key: value for key, value in user.items() if key != 'password'}), 200
