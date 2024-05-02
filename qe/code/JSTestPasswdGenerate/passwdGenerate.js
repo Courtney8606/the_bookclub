@@ -40,6 +40,6 @@ const printRandomTestResults = ( maxPasswdLength, numberOfTestPasswds) => {
 
 }
 
-printRandomTestResults( 30, 1000000 );
+printRandomTestResults( 30, 100000 );
 
 module.exports = passwdGenerate;
