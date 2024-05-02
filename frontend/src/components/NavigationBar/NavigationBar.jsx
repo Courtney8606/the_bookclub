@@ -11,7 +11,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./NavigationBar.css";
 
 export const NavigationBar = () => {
-  // const username = localStorage.getItem("username");
   const location = useLocation();
   const [showNewMessage, setShowNewMessage] = useState(false);
   const showNavbar = !["/signup", "/login", "/child"].includes(
@@ -23,7 +22,7 @@ export const NavigationBar = () => {
     recordingRequestsParent,
     recordingRequestsReader,
     recordingsReader,
-    recordingsParent
+    recordingsParent,
   } = useDataContext();
 
   useEffect(() => {
@@ -50,9 +49,10 @@ export const NavigationBar = () => {
       ) ||
       recordingsReader.some(
         (request) =>
-          request.display_message_icon && (request.recording_status === "accepted" ||
-          request.recording_status === "rejected")
-      )||
+          request.display_message_icon &&
+          (request.recording_status === "accepted" ||
+            request.recording_status === "rejected")
+      ) ||
       recordingRequestsParent.some(
         (request) =>
           request.display_message_icon && request.reader_status === "pending"
@@ -64,23 +64,15 @@ export const NavigationBar = () => {
     recordingRequestsParent,
     recordingRequestsReader,
     recordingsReader,
-    recordingsParent
+    recordingsParent,
   ]);
 
   if (!showNavbar) {
-    return null; // Return null to not render the navbar
+    return null;
   }
 
   return (
     <div>
-      {/* <Helmet>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous"
-        />
-      </Helmet> */}
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
@@ -107,12 +99,12 @@ export const NavigationBar = () => {
               <li className="nav-item">
                 <a
                   className={
-                    location.pathname === "/parent"
+                    location.pathname === "/familyhub"
                       ? "nav-link active"
                       : "nav-link"
                   }
                   aria-current="page"
-                  href="/parent"
+                  href="/familyhub"
                 >
                   <ParentViewButton className="button-one" />
                 </a>

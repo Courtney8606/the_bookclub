@@ -15,7 +15,7 @@ const ChildViewButton = ({ className }) => {
         type="button"
         className={`child-view-button ${className}`}
         onClick={handleSubmit}
-        // style={{ backgroundColor: "transparent", border: "None" }}
+        style={{ backgroundColor: "transparent", border: "None" }}
       >
         Child Mode
       </button>

@@ -15,7 +15,7 @@ body {
 }
 
 .login-input {
-  width: 200px;
+  width: 270px;
   padding: 12px 8px;
   margin: 4px 0;
   display: inline-block;
@@ -65,3 +65,8 @@ body {
   color: red; /* Change this to the desired color */
 }
 
+.loginlogo {
+  height: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

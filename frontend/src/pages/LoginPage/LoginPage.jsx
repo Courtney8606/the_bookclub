@@ -3,13 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import "./LoginPage.css";
 import { login } from "../../services/authentication";
 import backgroundImage from "../../assets/background.jpg";
+import logoImage from "../../assets/logo.png";
 
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState('');
-  //   const [errorMessage, setErrorMessage] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -18,7 +17,7 @@ export const LoginPage = () => {
       const response = await login(username, password);
       if (response.status != 200) {
         console.log("Error returning data");
-        setErrorMessage('Username or Password is incorrect!')
+        setErrorMessage("Username or Password is incorrect!");
       } else {
         const data = await response.json();
         localStorage.setItem("username", data["username"]);
@@ -52,8 +51,13 @@ export const LoginPage = () => {
       >
         <form className="login-form" onSubmit={handleSubmit}>
           <div>
-            <h2>Book Club</h2>
-            <h4>Enter details below to login</h4>
+            <img
+              className="loginlogo"
+              role="logoImg"
+              alt="logo"
+              src={logoImage}
+            />
+            <h4>Log in below: </h4>
           </div>
           <label htmlFor="username">Username:</label>
           <input
