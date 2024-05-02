@@ -2,6 +2,7 @@ import ViewConnections from "../../components/Connections/ViewConnections";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getConnectionsByReader } from "../../services/connections";
+import ViewConnectionsCards from "../../components/Connections/ViewConnectionsCards";
 
 export const ReaderConnectionsPage = () => {
   const username = localStorage.getItem("username");
@@ -40,7 +41,7 @@ export const ReaderConnectionsPage = () => {
       ) : (
         <>
           <div>
-            <ViewConnections
+            <ViewConnectionsCards
               data={connections}
               view={view}
               onUpdate={getAllConnectionsTrigger}

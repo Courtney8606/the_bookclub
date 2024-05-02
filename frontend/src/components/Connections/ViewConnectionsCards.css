@@ -1,0 +1,18 @@
+#custom-card.card {
+  border: 7px solid #ffd9c0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+  background-color: #ffd9c0;
+}
+
+@media screen and (max-width: 1000px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+.connections-card {
+  height: 50px;
+}
